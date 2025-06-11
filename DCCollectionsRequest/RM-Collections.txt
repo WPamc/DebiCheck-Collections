@@ -1,0 +1,850 @@
+000L2025052907675AFRICAN UNITY LIFE LIMITED C  000087800000                                                                                                                       Billing DC          
+080L04D4570014200878COLLREQ 2025-05-29T12:00:00000000000000282878/2025-06-01      Y                                                                                                                   
+080L08D45700142001AFRICAN UNITY LIFE LIMITED         677936/777573/2025-06-01/39        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202202240881753578250655              
+0800142003KAGISO BOWANE DN                   0000000062052597443CURRENT                            677936        2025-06-01                                                                           
+080L08D45700142101AFRICAN UNITY LIFE LIMITED         698797/777591/2025-06-01/35        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0010202207253A13850DA5470010              
+0800142103JANE NYONI DN                      0000000001649504509SAVINGS                            698797        2025-06-01                                                                           
+080L08D45700142201AFRICAN UNITY LIFE LIMITED         722151/777623/2025-06-01/27        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV001020230306B644BFFE3F470010              
+0800142203REFILOE MOLLO DN                   0000000001449974811SAVINGS                            722151        2025-06-01                                                                           
+080L08D45700142301AFRICAN UNITY LIFE LIMITED         763187/777659/2025-06-01/18        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV001020240205A668FB2382470010              
+0800142303THABANG LEKENO DN                  0000000001421849168SAVINGS                            763187        2025-06-01                                                                           
+080L08D45700142401AFRICAN UNITY LIFE LIMITED         177671/777473/2025-06-01/73        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0002202110040000008772198765              
+0800142403ZOLISWA NOHLANGA MAFILIKA DN       0000000001079260250CURRENT                            177671        2025-06-01                                                                           
+080L08D45700142501AFRICAN UNITY LIFE LIMITED         704033/777598/2025-06-01/33        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202409040617161372250655              
+0800142503JODI DE ALLENDE DN                 0000000063005242233CURRENT                            704033        2025-06-01                                                                           
+080L08D45700142601AFRICAN UNITY LIFE LIMITED         838522/777727/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202504050966029629250655              
+0800142603THAKASILE NSELE DN                 0000000063135083002SAVINGS                            838522        2025-06-01                                                                           
+080L08D45700142701AFRICAN UNITY LIFE LIMITED         833419/777716/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV00102025022685EA2E1096470010              
+0800142703LINDOKUHLE VILAKAZI DN             0000000001451166492SAVINGS                            833419        2025-06-01                                                                           
+080L08D45700142801AFRICAN UNITY LIFE LIMITED         664976/777559/2025-06-01/42        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202112140026198278250655              
+0800142803CORNELIUS SAUERMAN DN              0000000062811417105CURRENT                            664976        2025-06-01                                                                           
+080L08D45700142901AFRICAN UNITY LIFE LIMITED         718065/777616/2025-06-01/28        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800142902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020230130472A2F600E470010              
+0800142903LINDI BESTER DN                    0000000001858567961SAVINGS                            718065        2025-06-01                                                                           
+080L08D45700143001AFRICAN UNITY LIFE LIMITED         737812/777641/2025-06-01/23        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202307200824530100250655              
+0800143003ZANE LE ROUX DN                    0000000062832489795CURRENT                            737812        2025-06-01                                                                           
+080L08D45700143101AFRICAN UNITY LIFE LIMITED         671315/777566/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202212108648353022632005              
+0800143103KELLIANNE ROOS DN                  0000000009215718114SAVINGS                            671315        2025-06-01                                                                           
+080L08D45700143201AFRICAN UNITY LIFE LIMITED         134748/777459/2025-06-01/82        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234078094250655              
+0800143203JUANITA  OLEEN  ENGELBRECHT DN     0000000062396749552CURRENT                            134748        2025-06-01                                                                           
+080L08D45700143301AFRICAN UNITY LIFE LIMITED         595484/777523/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020240416CFFA3ACCA0470010              
+0800143303MOEGAMAT JAMIEL PETERSEN DN        0000000001293933854SAVINGS                            595484        2025-06-01                                                                           
+080L08D45700143401AFRICAN UNITY LIFE LIMITED         823134/777702/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202501210964930374250655              
+0800143403NEIL DORMEHL DN                    0000000063048204878CURRENT                            823134        2025-06-01                                                                           
+080L08D45700143501AFRICAN UNITY LIFE LIMITED         159468/777466/2025-06-01/79        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0010202110042ED9CC3D32470010              
+0800143503LEONIE  VAN WYK DN                 0000000001552688060SAVINGS                            159468        2025-06-01                                                                           
+080L08D45700143601AFRICAN UNITY LIFE LIMITED         808970/777691/2025-06-01/6         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0002202411290000025065198765              
+0800143603ZEKHETHELO MKHWANAZI DN            0000000001124372733CURRENT                            808970        2025-06-01                                                                           
+080L08D45700143701AFRICAN UNITY LIFE LIMITED         778132/777677/2025-06-01/14        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202404230929310569250655              
+0800143703ZOETJE BENEKE DN                   0000000062937513423CURRENT                            778132        2025-06-01                                                                           
+080L08D45700143801AFRICAN UNITY LIFE LIMITED         845246/777741/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0001202505020000001298051001              
+0800143803MTOKOZISI MAYIBUTHE DN             0000000010127594998CURRENT                            845246        2025-06-01                                                                           
+080L08D45700143901AFRICAN UNITY LIFE LIMITED         125278/777441/2025-06-01/98        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800143902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0010202110048D6856EDA2470010              
+0800143903JOHANNA PARDY DN                   0000000001513237444SAVINGS                            125278        2025-06-01                                                                           
+080L08D45700144001AFRICAN UNITY LIFE LIMITED         793759/777684/2025-06-01/9         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202408270000009987051001              
+0800144003AQEELA MAJIET DN                   0000000010144479026CURRENT                            793759        2025-06-01                                                                           
+080L08D45700144101AFRICAN UNITY LIFE LIMITED         626380/777541/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV001020210614C32F857822470010              
+0800144103NICHOLAS BROWN DN                  0000000001498359076SAVINGS                            626380        2025-06-01                                                                           
+080L08D45700144201AFRICAN UNITY LIFE LIMITED         732831/777634/2025-06-01/24        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV001020230609187E934F70470010              
+0800144203WASEEMA SCHOEMAN DN                0000000001309245817SAVINGS                            732831        2025-06-01                                                                           
+080L08D45700144301AFRICAN UNITY LIFE LIMITED         817301/777698/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202505150501990714250655              
+0800144303BONGANI MAHLANGU DN                0000000062830288529CURRENT                            817301        2025-06-01                                                                           
+080L08D45700144401AFRICAN UNITY LIFE LIMITED         131110/777449/2025-06-01/88        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202110044903018280632005              
+0800144403MICHELLE ROWE DN                   0000000000711558314CURRENT                            131110        2025-06-01                                                                           
+080L08D45700144501AFRICAN UNITY LIFE LIMITED         810135/777692/2025-06-01/7         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202501230138478484250655              
+0800144503JURIE CLAASSENS DN                 0000000062375536699CURRENT                            810135        2025-06-01                                                                           
+080L08D45700144601AFRICAN UNITY LIFE LIMITED         199837/777481/2025-06-01/70        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234094118250655              
+0800144603CHRISTINA JOHANNA ELS DN           0000000062306738438CURRENT                            199837        2025-06-01                                                                           
+080L08D45700144701AFRICAN UNITY LIFE LIMITED         602129/777526/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234196054250655              
+0800144703GUSTAV  JACOBS DN                  0000000062507465418CURRENT                            602129        2025-06-01                                                                           
+080L08D45700144801AFRICAN UNITY LIFE LIMITED         688945/777583/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0002202205140000001283198765              
+0800144803MAGGIE MONTOEDI DN                 0000000001092491244CURRENT                            688945        2025-06-01                                                                           
+080L08D45700144901AFRICAN UNITY LIFE LIMITED         751907/777649/2025-06-01/18        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800144902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202311290728438923250655              
+0800144903TAMLYN HUNTLEY DN                  0000000062492512415CURRENT                            751907        2025-06-01                                                                           
+080L08D45700145001AFRICAN UNITY LIFE LIMITED         634815/777549/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV00102021072956959399BE470010              
+0800145003IRENE LE TOURNEUR DN               0000000001228397625SAVINGS                            634815        2025-06-01                                                                           
+080L08D45700145101AFRICAN UNITY LIFE LIMITED         715488/777615/2025-06-01/29        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202301275F512FD7CB470010              
+0800145103BOIPELO MODIBEDI DN                0000000001474694339SAVINGS                            715488        2025-06-01                                                                           
+080L08D45700145201AFRICAN UNITY LIFE LIMITED         692641/777585/2025-06-01/36        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0001202206090000001549051001              
+0800145203NOMATEMBA SONANDI DN               0000000000071777385CURRENT                            692641        2025-06-01                                                                           
+080L08D45700145301AFRICAN UNITY LIFE LIMITED         757897/777651/2025-06-01/17        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202401080159418162250655              
+0800145303DION GOVINDASAMI DN                0000000062593750568CURRENT                            757897        2025-06-01                                                                           
+080L08D45700145401AFRICAN UNITY LIFE LIMITED         833359/777715/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202503170093831943250655              
+0800145403THANDO LUTHULI DN                  0000000062877873606CURRENT                            833359        2025-06-01                                                                           
+080L08D45700145501AFRICAN UNITY LIFE LIMITED         762946/777658/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202402128C2F0E87BB470010              
+0800145503ADIEL JACOBS DN                    0000000001538031017SAVINGS                            762946        2025-06-01                                                                           
+080L08D45700145601AFRICAN UNITY LIFE LIMITED         833628/777717/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV001020250301F6858B73EF470010              
+0800145603KERRY GROVE DN                     0000000002342195288SAVINGS                            833628        2025-06-01                                                                           
+080L08D45700145701AFRICAN UNITY LIFE LIMITED         697359/777590/2025-06-01/35        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202311138612134972632005              
+0800145703AUGUSTINE LUKAS DN                 0000000004085024637CURRENT                            697359        2025-06-01                                                                           
+080L08D45700145801AFRICAN UNITY LIFE LIMITED         639812/777551/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0016202108107952260736632005              
+0800145803NEVILLE KOERT DN                   0000000009426021616CURRENT                            639812        2025-06-01                                                                           
+080L08D45700145901AFRICAN UNITY LIFE LIMITED         718238/777617/2025-06-01/28        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800145902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202301310992808680250655              
+0800145903NELISIWE OSWIN DN                  0000000062529853451CURRENT                            718238        2025-06-01                                                                           
+080L08D45700146001AFRICAN UNITY LIFE LIMITED         134084/777456/2025-06-01/84        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0001202110040000019078051001              
+0800146003JASPAR VUSUMUZI MAZIBUKO DN        0000000000428354262SAVINGS                            134084        2025-06-01                                                                           
+080L08D45700146101AFRICAN UNITY LIFE LIMITED         200762/777483/2025-06-01/69        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234094215250655              
+0800146103ALVIN OSCAR MALYON DN              0000000054820775898CURRENT                            200762        2025-06-01                                                                           
+080L08D45700146201AFRICAN UNITY LIFE LIMITED         838298/777726/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0016202503284018159958632005              
+0800146203DUNAZILE SHEZI DN                  0000000009326990283SAVINGS                            838298        2025-06-01                                                                           
+080L08D45700146301AFRICAN UNITY LIFE LIMITED         503452/777490/2025-06-01/66        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0002202110040000008417198765              
+0800146303MAXINE  FRESWICK DN                0000000001062664892CURRENT                            503452        2025-06-01                                                                           
+080L08D45700146401AFRICAN UNITY LIFE LIMITED         699296/777592/2025-06-01/34        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202208019496848484632005              
+0800146403NICOLETTE DE BEER DN               0000000000570140590CURRENT                            699296        2025-06-01                                                                           
+080L08D45700146501AFRICAN UNITY LIFE LIMITED         764589/777660/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202406070000002425051001              
+0800146503THULANI MASUKU DN                  0000000010224827705CURRENT                            764589        2025-06-01                                                                           
+080L08D45700146601AFRICAN UNITY LIFE LIMITED         837918/777724/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202503178318028376632005              
+0800146603NOLIN VANWYK DN                    0000000009362326739CURRENT                            837918        2025-06-01                                                                           
+080L08D45700146701AFRICAN UNITY LIFE LIMITED         655262/777558/2025-06-01/44        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202211179028073668632005              
+0800146703MR PETER DEVEREUX DN               0000000009044304532CURRENT                            655262        2025-06-01                                                                           
+080L08D45700146801AFRICAN UNITY LIFE LIMITED         132574/777453/2025-06-01/86        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202110040000016914051001              
+0800146803FLIP  LINNERT DN                   0000000000082160619CURRENT                            132574        2025-06-01                                                                           
+080L08D45700146901AFRICAN UNITY LIFE LIMITED         737213/777639/2025-06-01/23        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800146902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020230711DA3DF63513470010              
+0800146903CHUENE SEMENYA DN                  0000000001549180361SAVINGS                            737213        2025-06-01                                                                           
+080L08D45700147001AFRICAN UNITY LIFE LIMITED         845021/777739/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0002202504240000020364198765              
+0800147003MARVIN SIBISI DN                   0000000001198403039CURRENT                            845021        2025-06-01                                                                           
+080L08D45700147101AFRICAN UNITY LIFE LIMITED         618523/777535/2025-06-01/49        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202105140739774750250655              
+0800147103TSHEGOFACO PALESA SEIPOBI DN       0000000062866622436CURRENT                            618523        2025-06-01                                                                           
+080L08D45700147201AFRICAN UNITY LIFE LIMITED         824110/777704/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202501250352183947250655              
+0800147203CHADLEE SWARTBOOI DN               0000000063123691817SAVINGS                            824110        2025-06-01                                                                           
+080L08D45700147301AFRICAN UNITY LIFE LIMITED         594974/777522/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000252800ZARSLEV00102021100430D3CDDD56470010              
+0800147303ROBYN ALISON CROUS DN              0000000001561578671SAVINGS                            594974        2025-06-01                                                                           
+080L08D45700147401AFRICAN UNITY LIFE LIMITED         692879/777586/2025-06-01/36        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202304070000000743051001              
+0800147403CORNELIA MEYER DN                  0000000010126127296CURRENT                            692879        2025-06-01                                                                           
+080L08D45700147501AFRICAN UNITY LIFE LIMITED         806285/777689/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV001020250421FF9DA402F6470010              
+0800147503ZANDILE MASENGENI DN               0000000001373939808SAVINGS                            806285        2025-06-01                                                                           
+080L08D45700147601AFRICAN UNITY LIFE LIMITED         202053/777485/2025-06-01/69        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0016202110049543016942632005              
+0800147603CYNTHIA NONHLANHLA NGOMA DN        0000000004081358585CURRENT                            202053        2025-06-01                                                                           
+080L08D45700147701AFRICAN UNITY LIFE LIMITED         706303/777603/2025-06-01/32        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202406080000002278198765              
+0800147703RIEDWAAN DAVIDS DN                 0000000001141640546CURRENT                            706303        2025-06-01                                                                           
+080L08D45700147801AFRICAN UNITY LIFE LIMITED         594812/777521/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0016202110049843015932632005              
+0800147803MARIO LEANDRO PAPADAKIS DN         0000000009301892711CURRENT                            594812        2025-06-01                                                                           
+080L08D45700147901AFRICAN UNITY LIFE LIMITED         836105/777722/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800147902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202503100517989901250655              
+0800147903BRANDON MYBURGH DN                 0000000063115254970CURRENT                            836105        2025-06-01                                                                           
+080L08D45700148001AFRICAN UNITY LIFE LIMITED         759986/777653/2025-06-01/17        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202501204117252525632005              
+0800148003CHIPO SIBANDA DN                   0000000009351688401SAVINGS                            759986        2025-06-01                                                                           
+080L08D45700148101AFRICAN UNITY LIFE LIMITED         677346/777572/2025-06-01/40        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV00102022042500A08F62F8470010              
+0800148103MOGAMMED EBRAHIM DN                0000000001361145259SAVINGS                            677346        2025-06-01                                                                           
+080L08D45700148201AFRICAN UNITY LIFE LIMITED         844770/777736/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV00102025042271C9089534470010              
+0800148203NADINE PILLAY DN                   0000000001513267432SAVINGS                            844770        2025-06-01                                                                           
+080L08D45700148301AFRICAN UNITY LIFE LIMITED         642985/777554/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV001020210820AB3C078876470010              
+0800148303NADIA WEYERS DN                    0000000001726156247SAVINGS                            642985        2025-06-01                                                                           
+080L08D45700148401AFRICAN UNITY LIFE LIMITED         835069/777721/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202503066317890998632005              
+0800148403JASON GERMANIS DN                  0000000004080217974CURRENT                            835069        2025-06-01                                                                           
+080L08D45700148501AFRICAN UNITY LIFE LIMITED         772299/777671/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0010202403255246D96A5A470010              
+0800148503FUNDILE BALA DN                    0000000001562915000SAVINGS                            772299        2025-06-01                                                                           
+080L08D45700148601AFRICAN UNITY LIFE LIMITED         175634/777471/2025-06-01/75        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202110040000012838051001              
+0800148603JOAN CHRISTINE LEUKES DN           0000000000370609948CURRENT                            175634        2025-06-01                                                                           
+080L08D45700148701AFRICAN UNITY LIFE LIMITED         546587/777503/2025-06-01/63        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202110040234183009250655              
+0800148703ILONA  VALATKAITE DN               0000000062626847498CURRENT                            546587        2025-06-01                                                                           
+080L08D45700148801AFRICAN UNITY LIFE LIMITED         547919/777504/2025-06-01/63        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0003202110040234183106250655              
+0800148803JOSIAS VAN ZYL DIPPENAAR DN        0000000062856719730CURRENT                            547919        2025-06-01                                                                           
+080L08D45700148901AFRICAN UNITY LIFE LIMITED         622297/777539/2025-06-01/50        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800148902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0001202211210000000785051001              
+0800148903ANITA BROOKS DN                    0000000010120954417CURRENT                            622297        2025-06-01                                                                           
+080L08D45700149001AFRICAN UNITY LIFE LIMITED         706856/777604/2025-06-01/32        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0016202210187177732433632005              
+0800149003NATALIE TATTON DN                  0000000000628088624SAVINGS                            706856        2025-06-01                                                                           
+080L08D45700149101AFRICAN UNITY LIFE LIMITED         697111/777589/2025-06-01/35        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202207180248525866250655              
+0800149103NAADHIRAH GASANT DN                0000000062933243230SAVINGS                            697111        2025-06-01                                                                           
+080L08D45700149201AFRICAN UNITY LIFE LIMITED         760462/777654/2025-06-01/17        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202401230269457391250655              
+0800149203IDAH TEELE DN                      0000000063065774698CURRENT                            760462        2025-06-01                                                                           
+080L08D45700149301AFRICAN UNITY LIFE LIMITED         708404/777610/2025-06-01/32        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202211170000002085051001              
+0800149303DICK SIBANDA DN                    0000000000001175637CURRENT                            708404        2025-06-01                                                                           
+080L08D45700149401AFRICAN UNITY LIFE LIMITED         768722/777665/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202403150753770288250655              
+0800149403POLITE SITHOLE DN                  0000000062413867956CURRENT                            768722        2025-06-01                                                                           
+080L08D45700149501AFRICAN UNITY LIFE LIMITED         113764/777433/2025-06-01/116       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202110040234072740250655              
+0800149503GEZINA  KIES DN                    0000000062615945427CURRENT                            113764        2025-06-01                                                                           
+080L08D45700149601AFRICAN UNITY LIFE LIMITED         678045/777574/2025-06-01/39        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV0003202406240092703456250655              
+0800149603NIEL VALENTYN DN                   0000000063105171621CURRENT                            678045        2025-06-01                                                                           
+080L08D45700149701AFRICAN UNITY LIFE LIMITED         737689/777640/2025-06-01/23        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202307200824530069250655              
+0800149703JUSTIN ANDREWS DN                  0000000062057451785CURRENT                            737689        2025-06-01                                                                           
+080L08D45700149801AFRICAN UNITY LIFE LIMITED         178681/777474/2025-06-01/77        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV0002202206110000006121198765              
+0800149803MARVIN EDDIE NGOMANE DN            0000000001071833588CURRENT                            178681        2025-06-01                                                                           
+080L08D45700149901AFRICAN UNITY LIFE LIMITED         616728/777533/2025-06-01/49        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800149902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202105110000000389051001              
+0800149903EMILE  BARNARD DN                  0000000000332564061CURRENT                            616728        2025-06-01                                                                           
+080L08D45700150001AFRICAN UNITY LIFE LIMITED         733137/777635/2025-06-01/24        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0002202306120000001400198765              
+0800150003YVONNE BANTHAM DN                  0000000001171752717SAVINGS                            733137        2025-06-01                                                                           
+080L08D45700150101AFRICAN UNITY LIFE LIMITED         817844/777699/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV001020250113928F08966A470010              
+0800150103MICHAEL SELONA DN                  0000000001128668341CURRENT                            817844        2025-06-01                                                                           
+080L08D45700150201AFRICAN UNITY LIFE LIMITED         563018/777508/2025-06-01/58        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202110043883D5EF2C470010              
+0800150203CHERYL RUTH PATEL DN               0000000001238108200SAVINGS                            563018        2025-06-01                                                                           
+080L08D45700150301AFRICAN UNITY LIFE LIMITED         147060/777465/2025-06-01/79        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202110047963018334632005              
+0800150303MARYNA MAGDALENA NIEUWENHUIS DN    0000000009053423476SAVINGS                            147060        2025-06-01                                                                           
+080L08D45700150401AFRICAN UNITY LIFE LIMITED         627128/777542/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0003202106210817917606250655              
+0800150403TASWELL FLORENCE DN                0000000062869461097CURRENT                            627128        2025-06-01                                                                           
+080L08D45700150501AFRICAN UNITY LIFE LIMITED         544660/777501/2025-06-01/64        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020211004BA1BD87387470010              
+0800150503ELEONOR CHRISTINE THERON DN        0000000001435301976SAVINGS                            544660        2025-06-01                                                                           
+080L08D45700150601AFRICAN UNITY LIFE LIMITED         671177/777565/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202201180296697191250655              
+0800150603IZAK VAN NIEKERK DN                0000000062781909191CURRENT                            671177        2025-06-01                                                                           
+080L08D45700150701AFRICAN UNITY LIFE LIMITED         768909/777667/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0016202403156313520443632005              
+0800150703CHUENE MATLWA DN                   0000000009374986797SAVINGS                            768909        2025-06-01                                                                           
+080L08D45700150801AFRICAN UNITY LIFE LIMITED         113020/777431/2025-06-01/118       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0002202110040000012718198765              
+0800150803NIENIE  PIENAAR DN                 0000000001585514950CURRENT                            113020        2025-06-01                                                                           
+080L08D45700150901AFRICAN UNITY LIFE LIMITED         843893/777735/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800150902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020250414E7A5E55031470010              
+0800150903JOLIN WANIE DN                     0000000001693077904SAVINGS                            843893        2025-06-01                                                                           
+080L08D45700151001AFRICAN UNITY LIFE LIMITED         672448/777567/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202201286144847996632005              
+0800151003MATSEPO RAMABOLI DN                0000000009333653571CURRENT                            672448        2025-06-01                                                                           
+080L08D45700151101AFRICAN UNITY LIFE LIMITED         730742/777633/2025-06-01/24        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0003202306140036675286250655              
+0800151103ANDRIES KRUGER DN                  0000000062685565867CURRENT                            730742        2025-06-01                                                                           
+080L08D45700151201AFRICAN UNITY LIFE LIMITED         542392/777499/2025-06-01/64        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234182525250655              
+0800151203JOHANNES MINNIE DN                 0000000062460235461CURRENT                            542392        2025-06-01                                                                           
+080L08D45700151301AFRICAN UNITY LIFE LIMITED         773805/777674/2025-06-01/13        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202405270823458106250655              
+0800151303HENDRIK KOEN DN                    0000000062257227936CURRENT                            773805        2025-06-01                                                                           
+080L08D45700151401AFRICAN UNITY LIFE LIMITED         843253/777733/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202504110474587022250655              
+0800151403SABRINA GUNNING DN                 0000000062926279672SAVINGS                            843253        2025-06-01                                                                           
+080L08D45700151501AFRICAN UNITY LIFE LIMITED         187733/777476/2025-06-01/69        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202406270000032432198765              
+0800151503ROBYN ROSE PETERSEN DN             0000000001261403037CURRENT                            187733        2025-06-01                                                                           
+080L08D45700151601AFRICAN UNITY LIFE LIMITED         624161/777540/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202106033525871616632005              
+0800151603JOHANNES SAAYMAN SAAYMAN DN        0000000009258669118CURRENT                            624161        2025-06-01                                                                           
+080L08D45700151701AFRICAN UNITY LIFE LIMITED         705410/777601/2025-06-01/32        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0010202210070DC016AAF9470010              
+0800151703STEFANUS VAN JAARSVELD DN          0000000001461011890SAVINGS                            705410        2025-06-01                                                                           
+080L08D45700151801AFRICAN UNITY LIFE LIMITED         173192/777470/2025-06-01/75        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234092821250655              
+0800151803SANDISIWE ATHLONE MYANGA DN        0000000062213956800CURRENT                            173192        2025-06-01                                                                           
+080L08D45700151901AFRICAN UNITY LIFE LIMITED         172839/777469/2025-06-01/72        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800151902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234092780250655              
+0800151903NOMVUYO GLADYS NJOBE DN            0000000052721064039CURRENT                            172839        2025-06-01                                                                           
+080L08D45700152001AFRICAN UNITY LIFE LIMITED         761382/777656/2025-06-01/17        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV0016202401230512897655632005              
+0800152003ROBERT CHAMPION DN                 0000000004087472800CURRENT                            761382        2025-06-01                                                                           
+080L08D45700152101AFRICAN UNITY LIFE LIMITED         801185/777687/2025-06-01/8         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0002202410090000008416198765              
+0800152103ESTIAAN VENTER DN                  0000000001292914750CURRENT                            801185        2025-06-01                                                                           
+080L08D45700152201AFRICAN UNITY LIFE LIMITED         836393/777723/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202503100517990018250655              
+0800152203MINENHLE MKHIZE DN                 0000000062935212423SAVINGS                            836393        2025-06-01                                                                           
+080L08D45700152301AFRICAN UNITY LIFE LIMITED         588829/777519/2025-06-01/53        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202110040234193250250655              
+0800152303DEMI STEYN DN                      0000000062834808563CURRENT                            588829        2025-06-01                                                                           
+080L08D45700152401AFRICAN UNITY LIFE LIMITED         758481/777652/2025-06-01/18        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV001020241129F1040A05CA470010              
+0800152403MBONGENI NENE DN                   0000000001634201556SAVINGS                            758481        2025-06-01                                                                           
+080L08D45700152501AFRICAN UNITY LIFE LIMITED         550110/777505/2025-06-01/63        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234183228250655              
+0800152503KHAYLIN GORTON DN                  0000000062203419222CURRENT                            550110        2025-06-01                                                                           
+080L08D45700152601AFRICAN UNITY LIFE LIMITED         673692/777569/2025-06-01/40        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV001020220207236FC87883470010              
+0800152603MARTHA  VAN NIEKERK DN             0000000001510613178SAVINGS                            673692        2025-06-01                                                                           
+080L08D45700152701AFRICAN UNITY LIFE LIMITED         620797/777538/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000300200ZARSLEV00102025052679F727AFBB470010              
+0800152703NATASHA FORTUIN DN                 0000000001616377915SAVINGS                            620797        2025-06-01                                                                           
+080L08D45700152801AFRICAN UNITY LIFE LIMITED         826731/777705/2025-06-01/4         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0002202502060000010720198765              
+0800152803GAMIEM MOSES DN                    0000000001279163577CURRENT                            826731        2025-06-01                                                                           
+080L08D45700152901AFRICAN UNITY LIFE LIMITED         546571/777502/2025-06-01/63        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800152902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020211004332F6286C4470010              
+0800152903AZOLA THUTHANI DN                  0000000001270505619SAVINGS                            546571        2025-06-01                                                                           
+080L08D45700153001AFRICAN UNITY LIFE LIMITED         735428/777638/2025-06-01/23        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202306300000011192198765              
+0800153003GERDA STEPHENS DN                  0000000001142437590SAVINGS                            735428        2025-06-01                                                                           
+080L08D45700153101AFRICAN UNITY LIFE LIMITED         760799/777655/2025-06-01/17        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0002202408270000004161198765              
+0800153103EMIHLE MAUNDE DN                   0000000001278430032CURRENT                            760799        2025-06-01                                                                           
+080L08D45700153201AFRICAN UNITY LIFE LIMITED         834858/777719/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0010202503033403F2C59A470010              
+0800153203RICCARDO TEMANE DN                 0000000001191246602SAVINGS                            834858        2025-06-01                                                                           
+080L08D45700153301AFRICAN UNITY LIFE LIMITED         133537/777455/2025-06-01/85        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202312054D0F3F9213470010              
+0800153303JUANMARIE VAN ROOYEN DN            0000000002196392312SAVINGS                            133537        2025-06-01                                                                           
+080L08D45700153401AFRICAN UNITY LIFE LIMITED         501492/777488/2025-06-01/68        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234158792250655              
+0800153403VANAI RABOTILE TJATJI DN           0000000062314051179CURRENT                            501492        2025-06-01                                                                           
+080L08D45700153501AFRICAN UNITY LIFE LIMITED         640460/777552/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202108110852686096250655              
+0800153503AMBER MOJET DN                     0000000062676928925CURRENT                            640460        2025-06-01                                                                           
+080L08D45700153601AFRICAN UNITY LIFE LIMITED         720998/777620/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202504226563126376470010              
+0800153603NAUDIA GAFFOOR DN                  0000000001397582527SAVINGS                            720998        2025-06-01                                                                           
+080L08D45700153701AFRICAN UNITY LIFE LIMITED         619610/777537/2025-06-01/49        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202105100516112219250655              
+0800153703LEIZEL FRANCIS DN                  0000000062067515141SAVINGS                            619610        2025-06-01                                                                           
+080L08D45700153801AFRICAN UNITY LIFE LIMITED         706197/777602/2025-06-01/11        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202407250864426346250655              
+0800153803JANET LAUBSCHER DN                 0000000062889510593CURRENT                            706197        2025-06-01                                                                           
+080L08D45700153901AFRICAN UNITY LIFE LIMITED         706950/777606/2025-06-01/32        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800153902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0002202210190000008566198765              
+0800153903GARETH DINGLEY DN                  0000000001221428969CURRENT                            706950        2025-06-01                                                                           
+080L08D45700154001AFRICAN UNITY LIFE LIMITED         803453/777688/2025-06-01/7         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0001202410300000019061051001              
+0800154003KYLE KISTEN DN                     0000000010088089698SAVINGS                            803453        2025-06-01                                                                           
+080L08D45700154101AFRICAN UNITY LIFE LIMITED         844977/777738/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202504240487792440250655              
+0800154103ELDEAN BAKKER DN                   0000000062591343084CURRENT                            844977        2025-06-01                                                                           
+080L08D45700154201AFRICAN UNITY LIFE LIMITED         770826/777669/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202403150000002645198765              
+0800154203STHEMBISO CHAOTSANE DN             0000000001236020022CURRENT                            770826        2025-06-01                                                                           
+080L08D45700154301AFRICAN UNITY LIFE LIMITED         112674/777430/2025-06-01/118       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0001202110040000018283051001              
+0800154303VICTORIA JOY ISAACS DN             0000000000078976359CURRENT                            112674        2025-06-01                                                                           
+080L08D45700154401AFRICAN UNITY LIFE LIMITED         668884/777562/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0001202202190000000670051001              
+0800154403JODI RHODES DN                     0000000010166247357CURRENT                            668884        2025-06-01                                                                           
+080L08D45700154501AFRICAN UNITY LIFE LIMITED         727264/777628/2025-06-01/27        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0002202304100000001600198765              
+0800154503GARY KING DN                       0000000001009843559CURRENT                            727264        2025-06-01                                                                           
+080L08D45700154601AFRICAN UNITY LIFE LIMITED         631264/777545/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202107140000000941051001              
+0800154603FERIAL ISMAIL DN                   0000000000272267953CURRENT                            631264        2025-06-01                                                                           
+080L08D45700154701AFRICAN UNITY LIFE LIMITED         702775/777594/2025-06-01/34        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV001020220825C3B6C1BA80470010              
+0800154703XILUVA MABUNDA DN                  0000000001751470200SAVINGS                            702775        2025-06-01                                                                           
+080L08D45700154801AFRICAN UNITY LIFE LIMITED         832536/777713/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0001202502240000002315051001              
+0800154803WILLIAM PIETERSEN DN               0000000000022633804CURRENT                            832536        2025-06-01                                                                           
+080L08D45700154901AFRICAN UNITY LIFE LIMITED         778486/777679/2025-06-01/13        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800154902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0010202405069E73B1A0F5470010              
+0800154903MASELATELA SEBESHO DN              0000000001483301476SAVINGS                            778486        2025-06-01                                                                           
+080L08D45700155001AFRICAN UNITY LIFE LIMITED         193508/777479/2025-06-01/70        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020211004CC05495455470010              
+0800155003BELINDA SAAYMAN DN                 0000000001727608575SAVINGS                            193508        2025-06-01                                                                           
+080L08D45700155101AFRICAN UNITY LIFE LIMITED         569566/777511/2025-06-01/57        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0010202110049E3C55FBE1470010              
+0800155103SHAMILLA  SNYDERS DN               0000000001406288800SAVINGS                            569566        2025-06-01                                                                           
+080L08D45700155201AFRICAN UNITY LIFE LIMITED         814324/777696/2025-06-01/6         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV00102024121145DC2A9AC7470010              
+0800155203PETRUS SCOTT DN                    0000000001218051025SAVINGS                            814324        2025-06-01                                                                           
+080L08D45700155301AFRICAN UNITY LIFE LIMITED         605030/777528/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202110040234196464250655              
+0800155303MCKENNAH HARROWER DN               0000000062736351652SAVINGS                            605030        2025-06-01                                                                           
+080L08D45700155401AFRICAN UNITY LIFE LIMITED         782428/777681/2025-06-01/12        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202406017414401970632005              
+0800155403BRONWYN HAJWANIE DN                0000000004081646976CURRENT                            782428        2025-06-01                                                                           
+080L08D45700155501AFRICAN UNITY LIFE LIMITED         845824/777745/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020250509182A7EFE4F470010              
+0800155503TIISETSO SLINGER DN                0000000001440998017SAVINGS                            845824        2025-06-01                                                                           
+080L08D45700155601AFRICAN UNITY LIFE LIMITED         632686/777547/2025-06-01/48        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV00102021071660F22C3400470010              
+0800155603ROXANNE WILSON DN                  0000000001449686182SAVINGS                            632686        2025-06-01                                                                           
+080L08D45700155701AFRICAN UNITY LIFE LIMITED         712590/777613/2025-06-01/29        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202502170467290623250655              
+0800155703CARMEN SWARTZ DN                   0000000063126919125CURRENT                            712590        2025-06-01                                                                           
+080L08D45700155801AFRICAN UNITY LIFE LIMITED         765875/777662/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0002202402140000015390198765              
+0800155803CHARNEL LIGHTFOOT DN               0000000001172210802CURRENT                            765875        2025-06-01                                                                           
+080L08D45700155901AFRICAN UNITY LIFE LIMITED         612124/777530/2025-06-01/50        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800155902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202212270000001144051001              
+0800155903MRS WENDY ELVERA CLARKE DN         0000000000425957179SAVINGS                            612124        2025-06-01                                                                           
+080L08D45700156001AFRICAN UNITY LIFE LIMITED         573306/777513/2025-06-01/56        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000252800ZARSLEV0016202110045183016642632005              
+0800156003MLINDELI KINGWELL  MIYO DN         0000000009360042343SAVINGS                            573306        2025-06-01                                                                           
+080L08D45700156101AFRICAN UNITY LIFE LIMITED         682377/777577/2025-06-01/38        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202203310518262389250655              
+0800156103ANUSHCA CLAASSENS DN               0000000062937717299CURRENT                            682377        2025-06-01                                                                           
+080L08D45700156201AFRICAN UNITY LIFE LIMITED         519845/777494/2025-06-01/67        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV0003202412130717786805250655              
+0800156203SYDNEY MATHEBULA DN                0000000062761438863CURRENT                            519845        2025-06-01                                                                           
+080L08D45700156301AFRICAN UNITY LIFE LIMITED         135160/777460/2025-06-01/83        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202202010000004710198765              
+0800156303HENDRIK JOHANNES SANDERS DN        0000000001129349918CURRENT                            135160        2025-06-01                                                                           
+080L08D45700156401AFRICAN UNITY LIFE LIMITED         536126/777496/2025-06-01/65        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202110040234182095250655              
+0800156403TSIBANE RIBA DN                    0000000062803409061CURRENT                            536126        2025-06-01                                                                           
+080L08D45700156501AFRICAN UNITY LIFE LIMITED         687105/777579/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0003202205050997705938250655              
+0800156503FLORENCE DREYER DN                 0000000062016149925CURRENT                            687105        2025-06-01                                                                           
+080L08D45700156601AFRICAN UNITY LIFE LIMITED         741882/777645/2025-06-01/21        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202309060771952655250655              
+0800156603NKULULEKO NDHLOVU DN               0000000062870406561SAVINGS                            741882        2025-06-01                                                                           
+080L08D45700156701AFRICAN UNITY LIFE LIMITED         727558/777630/2025-06-01/26        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV00102023052631374D83F8470010              
+0800156703KENNETH CONSTABLE DN               0000000001510030210SAVINGS                            727558        2025-06-01                                                                           
+080L08D45700156801AFRICAN UNITY LIFE LIMITED         131628/777450/2025-06-01/88        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0002202110040000008625195605              
+0800156803TRACEY LEIGH BROWN DN              0000000001956726837CURRENT                            131628        2025-06-01                                                                           
+080L08D45700156901AFRICAN UNITY LIFE LIMITED         774148/777675/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800156902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0010202403281BCEB9AB0E470010              
+0800156903CAYLIN JULIUS DN                   0000000001670683638SAVINGS                            774148        2025-06-01                                                                           
+080L08D45700157001AFRICAN UNITY LIFE LIMITED         704886/777600/2025-06-01/33        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0001202209200000005794051001              
+0800157003DALE BADENHORST DN                 0000000000301428166CURRENT                            704886        2025-06-01                                                                           
+080L08D45700157101AFRICAN UNITY LIFE LIMITED         113513/777432/2025-06-01/117       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202412160937270584250655              
+0800157103LIZELLE WENTZEL DN                 0000000063130825566CURRENT                            113513        2025-06-01                                                                           
+080L08D45700157201AFRICAN UNITY LIFE LIMITED         513638/777493/2025-06-01/65        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202110040234180818250655              
+0800157203NHLAKANIPHO WISEMAN MBELE DN       0000000062453825542CURRENT                            513638        2025-06-01                                                                           
+080L08D45700157301AFRICAN UNITY LIFE LIMITED         655185/777557/2025-06-01/44        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV001020211018752FED6F5A470010              
+0800157303THEMBI RADEBE DN                   0000000001718040111SAVINGS                            655185        2025-06-01                                                                           
+080L08D45700157401AFRICAN UNITY LIFE LIMITED         200084/777482/2025-06-01/69        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234094178250655              
+0800157403ALVIN A DN                         0000000054820775898CURRENT                            200084        2025-06-01                                                                           
+080L08D45700157501AFRICAN UNITY LIFE LIMITED         638965/777550/2025-06-01/46        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0002202108050000004232198765              
+0800157503TSHOLOFELO KOBUE DN                0000000001192352521CURRENT                            638965        2025-06-01                                                                           
+080L08D45700157601AFRICAN UNITY LIFE LIMITED         141893/777464/2025-06-01/71        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000127900ZARSLEV0016202110046893018330632005              
+0800157603THEUNS STANDER DN                  0000000009078579470CURRENT                            141893        2025-06-01                                                                           
+080L08D45700157701AFRICAN UNITY LIFE LIMITED         845477/777743/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202505120226405441250655              
+0800157703LUNGISA ZULU DN                    0000000063076945452SAVINGS                            845477        2025-06-01                                                                           
+080L08D45700157801AFRICAN UNITY LIFE LIMITED         769601/777668/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202403150753770352250655              
+0800157803YOLANDA SCHNEIDER DN               0000000063053018842CURRENT                            769601        2025-06-01                                                                           
+080L08D45700157901AFRICAN UNITY LIFE LIMITED         843107/777732/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800157902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0003202504070109811896250655              
+0800157903MODI MARISHANE DN                  0000000062510653935CURRENT                            843107        2025-06-01                                                                           
+080L08D45700158001AFRICAN UNITY LIFE LIMITED         729068/777632/2025-06-01/26        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202304270344323796250655              
+0800158003DUAN NEL DN                        0000000062899289485CURRENT                            729068        2025-06-01                                                                           
+080L08D45700158101AFRICAN UNITY LIFE LIMITED         700318/777593/2025-06-01/34        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0001202208110000015551051001              
+0800158103KEZIAH PETERSEN DN                 0000000010070499622CURRENT                            700318        2025-06-01                                                                           
+080L08D45700158201AFRICAN UNITY LIFE LIMITED         126540/777443/2025-06-01/92        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV0010202503116AF2550701470010              
+0800158203ADEL EKSTEEN DN                    0000000001372420264SAVINGS                            126540        2025-06-01                                                                           
+080L08D45700158301AFRICAN UNITY LIFE LIMITED         596744/777525/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0016202411128416442664632005              
+0800158303MERCIA ROBERTS DN                  0000000009259040036SAVINGS                            596744        2025-06-01                                                                           
+080L08D45700158401AFRICAN UNITY LIFE LIMITED         720549/777618/2025-06-01/28        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV00102023022061C41569E2470010              
+0800158403LEONIE VAN WYK DN                  0000000001552688060SAVINGS                            720549        2025-06-01                                                                           
+080L08D45700158501AFRICAN UNITY LIFE LIMITED         782606/777682/2025-06-01/12        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0001202406080000001509051001              
+0800158503ANELE MKHIZE DN                    0000000010130950775CURRENT                            782606        2025-06-01                                                                           
+080L08D45700158601AFRICAN UNITY LIFE LIMITED         170763/777468/2025-06-01/77        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202110040000012776051001              
+0800158603MELISSA NATUS DN                   0000000000032334915CURRENT                            170763        2025-06-01                                                                           
+080L08D45700158701AFRICAN UNITY LIFE LIMITED         612735/777532/2025-06-01/50        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0001202110040000010339051001              
+0800158703HESTER ALETTA  BESTER DN           0000000000240837177CURRENT                            612735        2025-06-01                                                                           
+080L08D45700158801AFRICAN UNITY LIFE LIMITED         761826/777657/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202408196415355503632005              
+0800158803NKOSINATHI THUPANA DN              0000000004109137734CURRENT                            761826        2025-06-01                                                                           
+080L08D45700158901AFRICAN UNITY LIFE LIMITED         588424/777518/2025-06-01/53        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800158902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202110040234193195250655              
+0800158903TASHWIN NOLIN CLAASEN DN           0000000062764327667CURRENT                            588424        2025-06-01                                                                           
+080L08D45700159001AFRICAN UNITY LIFE LIMITED         688764/777582/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202205110000010006051001              
+0800159003SEITHATI MOGAPI DN                 0000000000019137672CURRENT                            688764        2025-06-01                                                                           
+080L08D45700159101AFRICAN UNITY LIFE LIMITED         739776/777643/2025-06-01/22        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202308070000010833051001              
+0800159103GARREN SIMMONS DN                  0000000000070221391CURRENT                            739776        2025-06-01                                                                           
+080L08D45700159201AFRICAN UNITY LIFE LIMITED         673246/777568/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020231002F0A2006F59470010              
+0800159203VILLI RHEEDER DN                   0000000002164753034SAVINGS                            673246        2025-06-01                                                                           
+080L08D45700159301AFRICAN UNITY LIFE LIMITED         136511/777461/2025-06-01/59        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0016202202056294940011632005              
+0800159303GERTRURDA SUSANA NIENABER DN       0000000009153706675CURRENT                            136511        2025-06-01                                                                           
+080L08D45700159401AFRICAN UNITY LIFE LIMITED         190589/777478/2025-06-01/65        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020240430346FC63F33470010              
+0800159403VICKY LOUISE MEYER DN              0000000001988244801SAVINGS                            190589        2025-06-01                                                                           
+080L08D45700159501AFRICAN UNITY LIFE LIMITED         840174/777729/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0010202504070F6F66D8B9470010              
+0800159503SHANE NEPHAWE DN                   0000000001438947486SAVINGS                            840174        2025-06-01                                                                           
+080L08D45700159601AFRICAN UNITY LIFE LIMITED         631716/777546/2025-06-01/47        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0016202107150571861622632005              
+0800159603MADINGAKA MOHLAPING DN             0000000001890144450CURRENT                            631716        2025-06-01                                                                           
+080L08D45700159701AFRICAN UNITY LIFE LIMITED         611049/777529/2025-06-01/50        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV00102021100411F4AFEA06470010              
+0800159703CANDICE ROSEMARY  OSLER DN         0000000001642779251SAVINGS                            611049        2025-06-01                                                                           
+080L08D45700159801AFRICAN UNITY LIFE LIMITED         563340/777510/2025-06-01/58        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202110042A5D864E9E470010              
+0800159803ADRIANA NEL DN                     0000000001618022405SAVINGS                            563340        2025-06-01                                                                           
+080L08D45700159901AFRICAN UNITY LIFE LIMITED         768568/777663/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800159902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV00102024031899CAE5617E470010              
+0800159903ESTHER KHEZA DN                    0000000001514384351SAVINGS                            768568        2025-06-01                                                                           
+080L08D45700160001AFRICAN UNITY LIFE LIMITED         141346/777463/2025-06-01/82        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202110040000016901051001              
+0800160003MBALENHLE PRETTY  SIMELANE DN      0000000000031910424SAVINGS                            141346        2025-06-01                                                                           
+080L08D45700160101AFRICAN UNITY LIFE LIMITED         529883/777495/2025-06-01/62        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202110040000008493198765              
+0800160103MADELEINE THERON DN                0000000001091085218CURRENT                            529883        2025-06-01                                                                           
+080L08D45700160201AFRICAN UNITY LIFE LIMITED         781681/777680/2025-06-01/13        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV00102024052274EC90802F470010              
+0800160203JOHANNES SNEYDERS DN               0000000001536081742SAVINGS                            781681        2025-06-01                                                                           
+080L08D45700160301AFRICAN UNITY LIFE LIMITED         576366/777514/2025-06-01/56        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234191612250655              
+0800160303RUWAYDA ROBERTS DN                 0000000062616838548CURRENT                            576366        2025-06-01                                                                           
+080L08D45700160401AFRICAN UNITY LIFE LIMITED         686521/777578/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202204260264606934250655              
+0800160403DEWALD KRUGER DN                   0000000062786011644CURRENT                            686521        2025-06-01                                                                           
+080L08D45700160501AFRICAN UNITY LIFE LIMITED         741548/777644/2025-06-01/21        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202308310243211037250655              
+0800160503HENRY JANSE VAN RENSBURG DN        0000000062632567527CURRENT                            741548        2025-06-01                                                                           
+080L08D45700160601AFRICAN UNITY LIFE LIMITED         540053/777497/2025-06-01/65        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0016202110042183016673632005              
+0800160603LIAN VICTOR  VAN NIEKERK DN        0000000009325166835SAVINGS                            540053        2025-06-01                                                                           
+080L08D45700160701AFRICAN UNITY LIFE LIMITED         667395/777561/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202504264918547178632005              
+0800160703CHRISLYN DE BRUIN DN               0000000004101660042CURRENT                            667395        2025-06-01                                                                           
+080L08D45700160801AFRICAN UNITY LIFE LIMITED         727187/777627/2025-06-01/25        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202305230249342733250655              
+0800160803NAEEMA POROMANO DN                 0000000062014887303CURRENT                            727187        2025-06-01                                                                           
+080L08D45700160901AFRICAN UNITY LIFE LIMITED         845842/777746/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800160902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV001020250513492F53046E470010              
+0800160903BERNICE HERMAN DN                  0000000001498952699SAVINGS                            845842        2025-06-01                                                                           
+080L08D45700161001AFRICAN UNITY LIFE LIMITED         703980/777597/2025-06-01/33        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202209125197340790632005              
+0800161003DAVID WIKBERG DN                   0000000009117444249SAVINGS                            703980        2025-06-01                                                                           
+080L08D45700161101AFRICAN UNITY LIFE LIMITED         812627/777695/2025-06-01/6         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV00102024120656DE95BF10470010              
+0800161103CHRISTO ASPELING DN                0000000001352075979SAVINGS                            812627        2025-06-01                                                                           
+080L08D45700161201AFRICAN UNITY LIFE LIMITED         847334/777748/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0010202505264D1DCAAE77470010              
+0800161203SIKELELA MAJNAGAZA DN              0000000002245324761SAVINGS                            847334        2025-06-01                                                                           
+080L08D45700161301AFRICAN UNITY LIFE LIMITED         842676/777731/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202504070109811776250655              
+0800161303LANE ESTERHUYSE DN                 0000000063143287745SAVINGS                            842676        2025-06-01                                                                           
+080L08D45700161401AFRICAN UNITY LIFE LIMITED         603236/777527/2025-06-01/54        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0002202110040000006623198765              
+0800161403CHARMAINE JOUBERT DN               0000000002930009888SAVINGS                            603236        2025-06-01                                                                           
+080L08D45700161501AFRICAN UNITY LIFE LIMITED         832517/777712/2025-06-01/4         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0001202502240000002310051001              
+0800161503RONALD VIVIERS DN                  0000000010232338955CURRENT                            832517        2025-06-01                                                                           
+080L08D45700161601AFRICAN UNITY LIFE LIMITED         703475/777595/2025-06-01/34        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202209090443396895250655              
+0800161603DOMINIQUE SKINNER DN               0000000062597821901SAVINGS                            703475        2025-06-01                                                                           
+080L08D45700161701AFRICAN UNITY LIFE LIMITED         812367/777694/2025-06-01/4         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV0001202501300000002411051001              
+0800161703MELANIE PADAYACHEE DN              0000000000420414592CURRENT                            812367        2025-06-01                                                                           
+080L08D45700161801AFRICAN UNITY LIFE LIMITED         842525/777730/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202504070000001372051001              
+0800161803JULIAN DUARTE DN                   0000000010105157641CURRENT                            842525        2025-06-01                                                                           
+080L08D45700161901AFRICAN UNITY LIFE LIMITED         745491/777647/2025-06-01/19        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800161902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000195400ZARSLEV001020250113F40CDB7990470010              
+0800161903WALTER AGBOR DN                    0000000001705298158SAVINGS                            745491        2025-06-01                                                                           
+080L08D45700162001AFRICAN UNITY LIFE LIMITED         832499/777711/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV001020250322F22DC6F586470010              
+0800162003KIM VORSTER DN                     0000000002349542056SAVINGS                            832499        2025-06-01                                                                           
+080L08D45700162101AFRICAN UNITY LIFE LIMITED         128883/777447/2025-06-01/89        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202110040000010164198765              
+0800162103THERESA CHANTEL THOMPSON DN        0000000001268051659CURRENT                            128883        2025-06-01                                                                           
+080L08D45700162201AFRICAN UNITY LIFE LIMITED         768589/777664/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV0010202403058AD2492613470010              
+0800162203NICOLAAS DE KLERK DN               0000000001747539323SAVINGS                            768589        2025-06-01                                                                           
+080L08D45700162301AFRICAN UNITY LIFE LIMITED         838609/777728/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0003202503190267695045250655              
+0800162303THANDO LUTHULI DN                  0000000062877873606CURRENT                            838609        2025-06-01                                                                           
+080L08D45700162401AFRICAN UNITY LIFE LIMITED         128555/777445/2025-06-01/90        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202110041063018307632005              
+0800162403PAUL WOOLLEY DN                    0000000004084217384CURRENT                            128555        2025-06-01                                                                           
+080L08D45700162501AFRICAN UNITY LIFE LIMITED         136727/777462/2025-06-01/82        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202110048463018337632005              
+0800162503JAMES MARTIN ACKERMANN DN          0000000004085055747CURRENT                            136727        2025-06-01                                                                           
+080L08D45700162601AFRICAN UNITY LIFE LIMITED         724865/777624/2025-06-01/27        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202303220623587301250655              
+0800162603SANDISWA GWELE DN                  0000000062004196938CURRENT                            724865        2025-06-01                                                                           
+080L08D45700162701AFRICAN UNITY LIFE LIMITED         595819/777524/2025-06-01/52        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0016202110048203015923632005              
+0800162703LIZELLE BOTHMA DN                  0000000000625856515SAVINGS                            595819        2025-06-01                                                                           
+080L08D45700162801AFRICAN UNITY LIFE LIMITED         667274/777560/2025-06-01/42        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0001202112210000000494051001              
+0800162803THEMBEKA THOBELA DN                0000000010075386249CURRENT                            667274        2025-06-01                                                                           
+080L08D45700162901AFRICAN UNITY LIFE LIMITED         808425/777690/2025-06-01/7         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800162902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020241122ED2D6EFCE4470010              
+0800162903JOLENE VAN NIEKERK DN              0000000001312165020SAVINGS                            808425        2025-06-01                                                                           
+080L08D45700163001AFRICAN UNITY LIFE LIMITED         795251/777685/2025-06-01/9         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202409020405880764250655              
+0800163003LISAMARIE MYBURGH DN               0000000062395217203CURRENT                            795251        2025-06-01                                                                           
+080L08D45700163101AFRICAN UNITY LIFE LIMITED         132347/777451/2025-06-01/87        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202110040000009149198765              
+0800163103VASILLKI  BERSELLA DN              0000000001009759930CURRENT                            132347        2025-06-01                                                                           
+080L08D45700163201AFRICAN UNITY LIFE LIMITED         580152/777515/2025-06-01/55        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0003202110040234192521250655              
+0800163203SITHETHELELO SIBEKEZELO NCANANE DN 0000000062337074554SAVINGS                            580152        2025-06-01                                                                           
+080L08D45700163301AFRICAN UNITY LIFE LIMITED         587599/777517/2025-06-01/54        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV00102025030887AFB9C429470010              
+0800163303JAYJAY KRUGER DN                   0000000001732623536SAVINGS                            587599        2025-06-01                                                                           
+080L08D45700163401AFRICAN UNITY LIFE LIMITED         688478/777581/2025-06-01/38        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202205160698935823250655              
+0800163403YVONNE MODIAKGOTLA DN              0000000062243749134CURRENT                            688478        2025-06-01                                                                           
+080L08D45700163501AFRICAN UNITY LIFE LIMITED         791777/777683/2025-06-01/10        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0001202408120000008219051001              
+0800163503ABIGAIL GOVENDER DN                0000000000053451236CURRENT                            791777        2025-06-01                                                                           
+080L08D45700163601AFRICAN UNITY LIFE LIMITED         506537/777492/2025-06-01/68        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202110040013016944632005              
+0800163603DEIDRE ILENE DN                    0000000009159884138SAVINGS                            506537        2025-06-01                                                                           
+080L08D45700163701AFRICAN UNITY LIFE LIMITED         655152/777556/2025-06-01/44        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020211012A659E27BB5470010              
+0800163703CHRISTIAAN JACOBSZ DN              0000000001684836814SAVINGS                            655152        2025-06-01                                                                           
+080L08D45700163801AFRICAN UNITY LIFE LIMITED         115463/777434/2025-06-01/114       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202110040000018308051001              
+0800163803DARRYLL LUIS PINTO DN              0000000000021300755CURRENT                            115463        2025-06-01                                                                           
+080L08D45700163901AFRICAN UNITY LIFE LIMITED         201047/777484/2025-06-01/70        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800163902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0001202110040000012882051001              
+0800163903JOHANNA SANDRA  BRITS DN           0000000000020081170CURRENT                            201047        2025-06-01                                                                           
+080L08D45700164001AFRICAN UNITY LIFE LIMITED         633222/777548/2025-06-01/47        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0003202107190412342092250655              
+0800164003CHARLTON ARENDSE DN                0000000062374348251CURRENT                            633222        2025-06-01                                                                           
+080L08D45700164101AFRICAN UNITY LIFE LIMITED         707825/777609/2025-06-01/31        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202211073637958581632005              
+0800164103AMANDA PETERSEN DN                 0000000000712921463CURRENT                            707825        2025-06-01                                                                           
+080L08D45700164201AFRICAN UNITY LIFE LIMITED         504505/777491/2025-06-01/65        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202110044313017003632005              
+0800164203ARNO  VERMEULEN DN                 0000000009153630676SAVINGS                            504505        2025-06-01                                                                           
+080L08D45700164301AFRICAN UNITY LIFE LIMITED         843566/777734/2025-06-01/1         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV001020250414015EA6EDDF470010              
+0800164303NORMAN PIKIE DN                    0000000001125584090SAVINGS                            843566        2025-06-01                                                                           
+080L08D45700164401AFRICAN UNITY LIFE LIMITED         689633/777584/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV00102022051622E861A45E470010              
+0800164403OWEN TAUATSOALA DN                 0000000001575281544SAVINGS                            689633        2025-06-01                                                                           
+080L08D45700164501AFRICAN UNITY LIFE LIMITED         768807/777666/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0001202403080000022541051001              
+0800164503BATSIRAI MUFANDAEDZA DN            0000000000375532250CURRENT                            768807        2025-06-01                                                                           
+080L08D45700164601AFRICAN UNITY LIFE LIMITED         585709/777516/2025-06-01/53        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020211004243259CB30470010              
+0800164603FAYADA SULLIMAN DN                 0000000001690412796SAVINGS                            585709        2025-06-01                                                                           
+080L08D45700164701AFRICAN UNITY LIFE LIMITED         772901/777673/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0010202403255DD685B6BB470010              
+0800164703BONGI MGIDI DN                     0000000001678999197SAVINGS                            772901        2025-06-01                                                                           
+080L08D45700164801AFRICAN UNITY LIFE LIMITED         618307/777534/2025-06-01/49        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0010202105135069E3C8DF470010              
+0800164803JOHANNES STEPHANUS MOOLMAN DN      0000000001628157052SAVINGS                            618307        2025-06-01                                                                           
+080L08D45700164901AFRICAN UNITY LIFE LIMITED         129321/777448/2025-06-01/93        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800164902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0001202406210000002014051001              
+0800164903ADRIAN LE ROUX DN                  0000000000422297062CURRENT                            129321        2025-06-01                                                                           
+080L08D45700165001AFRICAN UNITY LIFE LIMITED         166031/777467/2025-06-01/77        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV001020211004176F3B16FC470010              
+0800165003JADE CHARNAY  JULIES DN            0000000001355565349SAVINGS                            166031        2025-06-01                                                                           
+080L08D45700165101AFRICAN UNITY LIFE LIMITED         612211/777531/2025-06-01/50        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0001202110040000010388051001              
+0800165103RICHARD ALAN DN                    0000000000070920109CURRENT                            612211        2025-06-01                                                                           
+080L08D45700165201AFRICAN UNITY LIFE LIMITED         832055/777710/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV00102025022792ADAD9BA4470010              
+0800165203NOMSA JELE DN                      0000000001425888214SAVINGS                            832055        2025-06-01                                                                           
+080L08D45700165301AFRICAN UNITY LIFE LIMITED         558301/777506/2025-06-01/59        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0010202110040CD94A99B5470010              
+0800165303LOGANDHREE MOONLEY DN              0000000001397882121SAVINGS                            558301        2025-06-01                                                                           
+080L08D45700165401AFRICAN UNITY LIFE LIMITED         707702/777608/2025-06-01/31        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV001020221101B4DF4CE05D470010              
+0800165403KRISTEN BOWERS DN                  0000000001514434391SAVINGS                            707702        2025-06-01                                                                           
+080L08D45700165501AFRICAN UNITY LIFE LIMITED         704833/777599/2025-06-01/33        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020230828B79AEDC482470010              
+0800165503MICHAEL OWENS DN                   0000000002161062154SAVINGS                            704833        2025-06-01                                                                           
+080L08D45700165601AFRICAN UNITY LIFE LIMITED         678876/777576/2025-06-01/39        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202204075355574222632005              
+0800165603FABIAN PLAATJIES DN                0000000009121378836CURRENT                            678876        2025-06-01                                                                           
+080L08D45700165701AFRICAN UNITY LIFE LIMITED         737868/777642/2025-06-01/22        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV001020230731F353F74ED1470010              
+0800165703CANDICE WENTZELL DN                0000000001483439583SAVINGS                            737868        2025-06-01                                                                           
+080L08D45700165801AFRICAN UNITY LIFE LIMITED         126539/777442/2025-06-01/95        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0010202110048B05106D02470010              
+0800165803SAMANTHA ALISON JUBILIUS DN        0000000001269968244SAVINGS                            126539        2025-06-01                                                                           
+080L08D45700165901AFRICAN UNITY LIFE LIMITED         822136/777701/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800165902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000252800ZARSLEV0003202501220051157072250655              
+0800165903GAVIN SOLOMONS DN                  0000000062524495951CURRENT                            822136        2025-06-01                                                                           
+080L08D45700166001AFRICAN UNITY LIFE LIMITED         811967/777693/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV00102025041786D2002015470010              
+0800166003EROLL KENNY DN                     0000000001412346167SAVINGS                            811967        2025-06-01                                                                           
+080L08D45700166101AFRICAN UNITY LIFE LIMITED         180017/777475/2025-06-01/74        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV001020211004A4FD92F518470010              
+0800166103KIRSTIN  VAN ZANTEN DN             0000000001660740841SAVINGS                            180017        2025-06-01                                                                           
+080L08D45700166201AFRICAN UNITY LIFE LIMITED         834123/777718/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV00102025032050A34E85D2470010              
+0800166203MALIXOLE NGQE DN                   0000000001691616425SAVINGS                            834123        2025-06-01                                                                           
+080L08D45700166301AFRICAN UNITY LIFE LIMITED         753992/777650/2025-06-01/18        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202312110834523681250655              
+0800166303HARMONY MOUSSOUNDI DN              0000000062736318579CURRENT                            753992        2025-06-01                                                                           
+080L08D45700166401AFRICAN UNITY LIFE LIMITED         838085/777725/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV001020250320A75B5DF62E470010              
+0800166403GRACE CHILWANE DN                  0000000001432702112SAVINGS                            838085        2025-06-01                                                                           
+080L08D45700166501AFRICAN UNITY LIFE LIMITED         134254/777457/2025-06-01/83        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234077807250655              
+0800166503MEGAN LEE STARBUCK DN              0000000062387911847CURRENT                            134254        2025-06-01                                                                           
+080L08D45700166601AFRICAN UNITY LIFE LIMITED         818016/777700/2025-06-01/5         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202501070839093659250655              
+0800166603MONTENIQUE BEUKES DN               0000000062613758161CURRENT                            818016        2025-06-01                                                                           
+080L08D45700166701AFRICAN UNITY LIFE LIMITED         628885/777543/2025-06-01/47        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0001202106300000000416051001              
+0800166703LINDA VAN RYNEVELD DN              0000000000011095229CURRENT                            628885        2025-06-01                                                                           
+080L08D45700166801AFRICAN UNITY LIFE LIMITED         815166/777697/2025-06-01/6         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV00102024121907F8A3A5C2470010              
+0800166803DINGAAN MATIA DN                   0000000002170904065SAVINGS                            815166        2025-06-01                                                                           
+080L08D45700166901AFRICAN UNITY LIFE LIMITED         669316/777563/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800166902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0016202201059144645847632005              
+0800166903ETTIENNE VAN ZYL DN                0000000009308491081SAVINGS                            669316        2025-06-01                                                                           
+080L08D45700167001AFRICAN UNITY LIFE LIMITED         727266/777629/2025-06-01/26        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202304100093660056250655              
+0800167003NONDUMISO KHUMALO DN               0000000062741312227CURRENT                            727266        2025-06-01                                                                           
+080L08D45700167101AFRICAN UNITY LIFE LIMITED         713415/777614/2025-06-01/29        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202301164088661727632005              
+0800167103CHANTAL STEYN DN                   0000000009107583647CURRENT                            713415        2025-06-01                                                                           
+080L08D45700167201AFRICAN UNITY LIFE LIMITED         195613/777480/2025-06-01/23        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0010202307218C8BFFFE0E470010              
+0800167203JUDY RAKOENA DN                    0000000001573711177SAVINGS                            195613        2025-06-01                                                                           
+080L08D45700167301AFRICAN UNITY LIFE LIMITED         629546/777544/2025-06-01/47        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0002202107050000001244198765              
+0800167303VASILLKI BERSELLA DN               0000000001009759930CURRENT                            629546        2025-06-01                                                                           
+080L08D45700167401AFRICAN UNITY LIFE LIMITED         833342/777714/2025-06-01/3         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0003202502250152734345250655              
+0800167403KABELO MONAISE DN                  0000000063139334196CURRENT                            833342        2025-06-01                                                                           
+080L08D45700167501AFRICAN UNITY LIFE LIMITED         765048/777661/2025-06-01/16        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0002202402240000003613198765              
+0800167503JEVONIA FORTUIN DN                 0000000001229295275CURRENT                            765048        2025-06-01                                                                           
+080L08D45700167601AFRICAN UNITY LIFE LIMITED         687147/777580/2025-06-01/37        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0016202205028585800408632005              
+0800167603MINI YENI DN                       0000000004091723964CURRENT                            687147        2025-06-01                                                                           
+080L08D45700167701AFRICAN UNITY LIFE LIMITED         744716/777646/2025-06-01/21        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0001202502060000010032051001              
+0800167703NELLY MALAKWANE DN                 0000000000743425138SAVINGS                            744716        2025-06-01                                                                           
+080L08D45700167801AFRICAN UNITY LIFE LIMITED         571910/777512/2025-06-01/57        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000129400ZARSLEV0044202110040000666282462005              
+0800167803JACQUELINE DE LORME DN             0000000020465239001SAVINGS                            571910        2025-06-01                                                                           
+080L08D45700167901AFRICAN UNITY LIFE LIMITED         128698/777446/2025-06-01/92        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800167902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV00102021100485BFD46EB1470010              
+0800167903GLEN  NGOVENI DN                   0000000001553178317SAVINGS                            128698        2025-06-01                                                                           
+080L08D45700168001AFRICAN UNITY LIFE LIMITED         653519/777555/2025-06-01/44        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0002202110080000000689198765              
+0800168003VINCENT CLARKE DN                  0000000001073406253CURRENT                            653519        2025-06-01                                                                           
+080L08D45700168101AFRICAN UNITY LIFE LIMITED         771744/777670/2025-06-01/15        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0016202403150913522326632005              
+0800168103MARKO NAUDE DN                     0000000009255639564CURRENT                            771744        2025-06-01                                                                           
+080L08D45700168201AFRICAN UNITY LIFE LIMITED         590605/777520/2025-06-01/53        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202110044313015953632005              
+0800168203DEIDRE SONJA BARROS DN             0000000000625877857CURRENT                            590605        2025-06-01                                                                           
+080L08D45700168301AFRICAN UNITY LIFE LIMITED         132537/777452/2025-06-01/89        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202110040234077330250655              
+0800168303ALFRED SIYABONGA MGWENYANA DN      0000000062515971879SAVINGS                            132537        2025-06-01                                                                           
+080L08D45700168401AFRICAN UNITY LIFE LIMITED         674126/777570/2025-06-01/41        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0003202201310255171257250655              
+0800168403EDUARD ENGELBRECHT DN              0000000062537531809CURRENT                            674126        2025-06-01                                                                           
+080L08D45700168501AFRICAN UNITY LIFE LIMITED         720759/777619/2025-06-01/27        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202304180648090648250655              
+0800168503JOSE IMACULADO VILANDY JAMBUCA DN  0000000062129753077CURRENT                            720759        2025-06-01                                                                           
+080L08D45700168601AFRICAN UNITY LIFE LIMITED         844946/777737/2025-06-01/2         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000081300ZARSLEV0010202504280B91A8EF2E470010              
+0800168603SANDY MNGUMEZULU DN                0000000001184010542SAVINGS                            844946        2025-06-01                                                                           
+080L08D45700168701AFRICAN UNITY LIFE LIMITED         828806/777706/2025-06-01/4         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202502110974897207250655              
+0800168703MARYANN SEMBER DN                  0000000062409017292CURRENT                            828806        2025-06-01                                                                           
+080L08D45700168801AFRICAN UNITY LIFE LIMITED         734492/777637/2025-06-01/24        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0003202306220581847703250655              
+0800168803ABONGILE MANZANI DN                0000000062890261979CURRENT                            734492        2025-06-01                                                                           
+080L08D45700168901AFRICAN UNITY LIFE LIMITED         118884/777437/2025-06-01/106       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800168902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000047300ZARSLEV0010202310102A1CE8FD63470010              
+0800168903JUAN ANDRE BRITZ DN                0000000001293828430SAVINGS                            118884        2025-06-01                                                                           
+080L08D45700169001AFRICAN UNITY LIFE LIMITED         721116/777621/2025-06-01/28        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0002202302250000002168198765              
+0800169003WESLEY BARON DN                    0000000001219967521CURRENT                            721116        2025-06-01                                                                           
+080L08D45700169101AFRICAN UNITY LIFE LIMITED         117800/777435/2025-06-01/109       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000062000ZARSLEV0002202110040000012666198765              
+0800169103CAMERON ADENDORFF DN               0000000001956936238CURRENT                            117800        2025-06-01                                                                           
+080L08D45700169201AFRICAN UNITY LIFE LIMITED         177394/777472/2025-06-01/75        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169202TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0016202110041973016954632005              
+0800169203ANNELISE  FOLEY DN                 0000000004082047523CURRENT                            177394        2025-06-01                                                                           
+080L08D45700169301AFRICAN UNITY LIFE LIMITED         618703/777536/2025-06-01/49        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169302TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV0001202105130000029207051001              
+0800169303COLIN SHANNON PIKE DN              0000000000032900368CURRENT                            618703        2025-06-01                                                                           
+080L08D45700169401AFRICAN UNITY LIFE LIMITED         733881/777636/2025-06-01/24        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169402TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000119500ZARSLEV0001202402060000002551051001              
+0800169403MOEGAMAT ADAMS DN                  0000000000073306444CURRENT                            733881        2025-06-01                                                                           
+080L08D45700169501AFRICAN UNITY LIFE LIMITED         502111/777489/2025-06-01/68        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169502TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0016202110040373016990632005              
+0800169503SODEEQAH THOMAS DN                 0000000009218526326CURRENT                            502111        2025-06-01                                                                           
+080L08D45700169601AFRICAN UNITY LIFE LIMITED         642864/777553/2025-06-01/38        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169602TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000097700ZARSLEV0003202111190226061291250655              
+0800169603NADIA MYNHARDT DN                  0000000062921656271SAVINGS                            642864        2025-06-01                                                                           
+080L08D45700169701AFRICAN UNITY LIFE LIMITED         677039/777571/2025-06-01/40        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169702TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000128300ZARSLEV001020220217CB797F213A470010              
+0800169703WISANI ZWANE DN                    0000000001383060485SAVINGS                            677039        2025-06-01                                                                           
+080L08D45700169801AFRICAN UNITY LIFE LIMITED         721922/777622/2025-06-01/27        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169802TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000083900ZARSLEV0010202408271879C39038470010              
+0800169803RAYVILLE STRYDOM DN                0000000001110463489SAVINGS                            721922        2025-06-01                                                                           
+080L08D45700169901AFRICAN UNITY LIFE LIMITED         800618/777686/2025-06-01/8         2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800169902TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV001020241012D451C54B47470010              
+0800169903CHANTAL ABRAHAMS DN                0000000001361739795CURRENT                            800618        2025-06-01                                                                           
+080L08D45700170001AFRICAN UNITY LIFE LIMITED         133139/777454/2025-06-01/86        2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800170002TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000103100ZARSLEV0003202110040234077614250655              
+0800170003STEPHEN  EARLE DN                  0000000060420375483CURRENT                            133139        2025-06-01                                                                           
+080L08D45700170101AFRICAN UNITY LIFE LIMITED         118867/777436/2025-06-01/106       2025-06-01T12:00:00AFRICAN UNITY LIFE LIMITED         +27-0861189202                AUL                       
+0800170102TALKTOUS@GETSAVVI.CO.ZA                                                                   000000000409777252963200503RCUR002100000000150100ZARSLEV0003202404030328210571250655              
+0800170103CHANTAL LOUISE MANUEL DN           0000000062248883622CURRENT                            118867        2025-06-01                                                                           
+080L92D457001420001701000000000000282000005887964427770                                                                                                                                               
+999L000000850                                                                                                                                                                                         
