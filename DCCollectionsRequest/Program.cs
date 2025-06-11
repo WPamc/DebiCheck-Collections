@@ -1,4 +1,4 @@
-﻿using FileHelpers;
+using FileHelpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,12 +13,31 @@ namespace RMCollectionProcessor
         static void Main(string[] args)
         {
             Console.WriteLine("--- RM Collection File Processor ---");
+            Console.WriteLine("1) Parse existing file");
+            Console.WriteLine("2) Generate sample file");
+            Console.Write("Select option: ");
+            var key = Console.ReadLine();
 
-            // Step 1: Determine the input file path. If a command line argument
-            // is supplied, use it; otherwise fall back to the default file name.
+            if (key == "1")
+            {
+                ParseFile(args);
+            }
+            else if (key == "2")
+            {
+                GenerateFile();
+            }
+            else
+            {
+                Console.WriteLine("Invalid selection.");
+            }
+
+            Console.WriteLine("\nPress any key to exit.");
+            Console.ReadKey();
+        }
+
+        private static void ParseFile(string[] args)
+        {
             string filePath = args.Length > 0 ? args[0] : "RM-Collections.txt";
-            
-
             if (!File.Exists(filePath))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -30,13 +49,11 @@ namespace RMCollectionProcessor
             }
 
             Console.WriteLine($"Processing file: {filePath}\n");
-
             try
             {
-                // Step 2: Process and parse the file into a structured object.
                 var fileProcessor = new FileProcessor();
                 RMCollectionFile collectionFile = fileProcessor.ProcessFile(filePath);
-
+                Console.WriteLine($"Parsed {collectionFile.Transactions.Count} transactions.");
             }
             catch (Exception ex)
             {
@@ -44,15 +61,79 @@ namespace RMCollectionProcessor
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
                 Console.ResetColor();
             }
-            finally
-            {
-              
-                Console.WriteLine("\nPress any key to exit.");
-                Console.ReadKey();
-            }
         }
 
-      
+        private static void GenerateFile()
+        {
+            var collections = GetSampleCollections();
+            if (!collections.Any())
+            {
+                Console.WriteLine("No collections to process.");
+                return;
+            }
+
+            var staticData = new StaticDataProvider(
+                recordStatus: "L",
+                transmissionNumber: "0000878",
+                userGenerationNumber: "0878",
+                paymentInfoId: "2878/2025-06-01");
+
+            var records = new List<object>();
+            var recordBuilder = new RecordBuilder();
+
+            records.Add(recordBuilder.BuildTransmissionHeader(staticData));
+            records.Add(recordBuilder.BuildCollectionHeader(staticData, 1));
+
+            int sequenceNumber = 1;
+            foreach (var debtorData in collections)
+            {
+                var (line1, line2, line3) = recordBuilder.BuildTransactionLines(staticData, debtorData, sequenceNumber);
+                records.Add(line1);
+                records.Add(line2);
+                records.Add(line3);
+                sequenceNumber++;
+            }
+
+            int firstSeq = 1;
+            int lastSeq = collections.Count;
+            int totalLines = 2 + (collections.Count * 3) + 2;
+            records.Add(recordBuilder.BuildCollectionTrailer(staticData, collections, firstSeq, lastSeq));
+            records.Add(recordBuilder.BuildTransmissionTrailer(staticData, totalLines));
+
+            var engine = new MultiRecordEngine(
+                typeof(TransmissionHeader000),
+                typeof(CollectionHeader080),
+                typeof(CollectionTxLine01),
+                typeof(CollectionTxLine02),
+                typeof(CollectionTxLine03),
+                typeof(CollectionTrailer080),
+                typeof(TransmissionTrailer999));
+
+            engine.WriteFile("RM-Collections-Generated.txt", records);
+            Console.WriteLine("RM Collection file generated successfully.");
+        }
+
+        private static List<DebtorCollectionData> GetSampleCollections()
+        {
+            return new List<DebtorCollectionData>
+            {
+                new DebtorCollectionData {
+                    PaymentInformation = "677936/777573/2025-06-01/39",
+                    RequestedCollectionDate = new DateTime(2025, 6, 1, 12, 0, 0),
+                    TrackingPeriod = 0,
+                    DebitSequence = "RCUR",
+                    EntryClass = "0021",
+                    InstructedAmount = 1501.00m,
+                    MandateReference = "00032022022408817535",
+                    DebtorBankBranch = "677936",
+                    DebtorName = "KAGISO BOWANE DN",
+                    DebtorAccountNumber = "62052597443",
+                    AccountType = "CURRENT",
+                    ContractReference = "78250655",
+                    RelatedCycleDate = new DateTime(2025, 6, 1)
+                }
+            };
+        }
     }
 
     #region File Processor
@@ -130,7 +211,6 @@ namespace RMCollectionProcessor
                 else if (record is TransmissionTrailer999 tt) collectionFile.TransmissionTrailer = tt;
                 else if (record is CollectionTxLine01 l1)
                 {
-                    // Start of a new transaction
                     currentTransaction = new RMCollectionTransaction
                     {
                         L1_DataSetStatus = l1.DataSetStatus,
@@ -166,7 +246,6 @@ namespace RMCollectionProcessor
                     currentTransaction.L3_ContractReference = l3.ContractReference;
                     currentTransaction.L3_RelatedCycleDate = l3.RelatedCycleDate;
 
-                    // End of the transaction, add it to the list
                     collectionFile.Transactions.Add(currentTransaction);
                 }
             }
@@ -174,5 +253,4 @@ namespace RMCollectionProcessor
         }
     }
     #endregion
-
 }
