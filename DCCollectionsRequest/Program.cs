@@ -14,15 +14,17 @@ namespace RMCollectionProcessor
         {
             Console.WriteLine("--- RM Collection File Processor ---");
 
-            // Step 1: Simulate reading a file.
-            // In a real app, you would get the file path from args or a config file.
-            string filePath = "RM-Collections.txt";
+            // Step 1: Determine the input file path. If a command line argument
+            // is supplied, use it; otherwise fall back to the default file name.
+            string filePath = args.Length > 0 ? args[0] : "RM-Collections.txt";
             
 
             if (!File.Exists(filePath))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Error: File not found at '{filePath}'");
+                Console.WriteLine(args.Length > 0
+                    ? $"Error: File '{filePath}' not found."
+                    : $"Error: Default file '{filePath}' not found.");
                 Console.ResetColor();
                 return;
             }
