@@ -36,41 +36,32 @@ public class StaticDataProvider
         string transmissionNumber,
         string userGenerationNumber,
         string paymentInfoId,
-        // --- Your company's config values would be passed in here ---
-        string userCode = "07675",
-        string userName = "AFRICAN UNITY LIFE LIMITED C",
-        string bankServUserCode = "D457",
-        string creditorName = "AFRICAN UNITY LIFE LIMITED",
-        string creditorContact = "+27-0861189202",
-        string creditorShortName = "AUL",
-        string creditorEmail = "TALKTOUS@GETSAVVI.CO.ZA",
-        string creditorAccount = "0000000004097772529",
-        string creditorBranch = "632005"
+        CreditorDefaults creditorDefaults
         )
     {
         // Transmission Info
         RecordStatus = recordStatus; // "L" or "T"
         TransmissionDate = DateTime.Now.ToString("yyyyMMdd");
-        UserCode = userCode;
-        UserName = userName.PadRight(30);
+        UserCode = creditorDefaults.UserCode;
+        UserName = creditorDefaults.UserName.PadRight(30);
         TransmissionNumber = transmissionNumber.PadLeft(7, '0');
         Destination = "00000";
         ForLdUsersUse = "Billing DC".PadRight(20);
 
         // User-Set Info
-        BankServUserCode = bankServUserCode;
+        BankServUserCode = creditorDefaults.BankServUserCode;
         UserGenerationNumber = userGenerationNumber.PadLeft(4, '0');
         CreationDateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
         PaymentInfoId = paymentInfoId.PadRight(20);
 
         // Creditor Info
-        InitiatingParty = creditorName.PadRight(35);
-        CreditorName = creditorName.PadRight(35);
-        CreditorContactDetails = creditorContact.PadRight(30);
-        CreditorAbbreviatedShortName = creditorShortName.PadRight(10);
-        CreditorEmail = creditorEmail.PadRight(90);
-        CreditorAccountNumber = creditorAccount.PadLeft(19, '0');
-        CreditorBankBranch = creditorBranch.PadLeft(6, '0');
+        InitiatingParty = creditorDefaults.InitiatingParty.PadRight(35);
+        CreditorName = creditorDefaults.CreditorName.PadRight(35);
+        CreditorContactDetails = creditorDefaults.CreditorContactDetails.PadRight(30);
+        CreditorAbbreviatedShortName = creditorDefaults.CreditorAbbreviatedShortName.PadRight(10);
+        CreditorEmail = creditorDefaults.CreditorEmail.PadRight(90);
+        CreditorAccountNumber = creditorDefaults.CreditorAccountNumber.PadLeft(19, '0');
+        CreditorBankBranch = creditorDefaults.CreditorBankBranch.PadLeft(6, '0');
     }
 }
 
