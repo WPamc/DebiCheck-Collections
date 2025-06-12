@@ -32,7 +32,7 @@ Create an `appsettings.json` file inside the `DCCollectionsRequest` directory. I
 
 ## Running
 
-The executable expects a fixed width file named `RM-Collections.txt` in the `DCCollectionsRequest` directory. The sample file is included and is copied to the output folder during the build.
+The executable expects a fixed width file following the pattern `ZRcode.AUL.DATA.DATE` in the `DCCollectionsRequest` directory. A sample named `ZR07675.AUL.DATA.250529.122006` is included and copied to the output folder during the build.
 
 Run the application from the repository root with:
 
@@ -40,4 +40,4 @@ Run the application from the repository root with:
  dotnet run --project DCCollectionsRequest/DCCollectionsRequest.csproj
 ```
 
-This will parse `RM-Collections.txt` and output information about the file.
+This will parse `ZR07675.AUL.DATA.250529.122006` and output information about the file.
