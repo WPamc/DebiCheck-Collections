@@ -43,7 +43,7 @@ public class StaticDataProvider
         string creditorName = "AFRICAN UNITY LIFE LIMITED",
         string creditorContact = "+27-0861189202",
         string creditorShortName = "AUL",
-        string creditorEmail = "TALKTOUS@GETSAVVI.CO.ZA",
+        string creditorEmail = "MEMBERSHIP@PAMC.CO.ZA",
         string creditorAccount = "0000000004097772529",
         string creditorBranch = "632005"
         )
@@ -124,12 +124,13 @@ public class RecordBuilder
     /// Creates all three lines for a single RM Collection Transaction.
     /// </summary>
     public (CollectionTxLine01, CollectionTxLine02, CollectionTxLine03) BuildTransactionLines(
-        StaticDataProvider staticData,
-        DebtorCollectionData debtorData,
-        int sequenceNumber)
+      StaticDataProvider staticData,
+      DebtorCollectionData debtorData,
+      int sequenceNumber)
     {
         string seqStr = sequenceNumber.ToString().PadLeft(6, '0');
 
+        // Line 1 is already correct
         var line1 = new CollectionTxLine01
         {
             RecordIdentifier = "080",
@@ -147,12 +148,10 @@ public class RecordBuilder
             Filler = new string(' ', 16)
         };
 
+        // Corrected Line 2
         var line2 = new CollectionTxLine02
         {
-            RecordIdentifier = "080",
-            DataSetStatus = staticData.RecordStatus,
-            BankServRecordId = "08",
-            BankServUserCode = staticData.BankServUserCode,
+            RecordIdentifier = "08 ", // <-- CORRECTED: "08" plus a space
             RecordSequenceNumber = seqStr,
             LineCount = "02",
             CreditorEmail = staticData.CreditorEmail,
@@ -169,12 +168,10 @@ public class RecordBuilder
             Filler = new string(' ', 14)
         };
 
+        // Corrected Line 3
         var line3 = new CollectionTxLine03
         {
-            RecordIdentifier = "080",
-            DataSetStatus = staticData.RecordStatus,
-            BankServRecordId = "08",
-            BankServUserCode = staticData.BankServUserCode,
+            RecordIdentifier = "08 ", // <-- CORRECTED: "08" plus a space
             RecordSequenceNumber = seqStr,
             LineCount = "03",
             DebtorName = debtorData.DebtorName.PadRight(35),

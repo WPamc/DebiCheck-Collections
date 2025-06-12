@@ -52,8 +52,8 @@ namespace RMCollectionProcessor
             try
             {
                 var fileProcessor = new FileProcessor();
-                RMCollectionFile collectionFile = fileProcessor.ProcessFile(filePath);
-                Console.WriteLine($"Parsed {collectionFile.Transactions.Count} transactions.");
+                var collectionsFile = fileProcessor.ProcessFile(filePath);
+                Console.WriteLine($"Parsed {collectionsFile.Length} transactions.");
             }
             catch (Exception ex)
             {
@@ -73,10 +73,10 @@ namespace RMCollectionProcessor
             }
 
             var staticData = new StaticDataProvider(
-                recordStatus: "L",
+                recordStatus: "T",
                 transmissionNumber: "0000878",
                 userGenerationNumber: "0878",
-                paymentInfoId: "2878/2025-06-01");
+                paymentInfoId: "878/2025-06-01");
 
             var records = new List<object>();
             var recordBuilder = new RecordBuilder();
@@ -139,7 +139,7 @@ namespace RMCollectionProcessor
     #region File Processor
     public class FileProcessor
     {
-        public RMCollectionFile ProcessFile(string filePath)
+        public object[] ProcessFile(string filePath)
         {
             var engine = new MultiRecordEngine(
                 typeof(TransmissionHeader000),
@@ -165,7 +165,7 @@ namespace RMCollectionProcessor
                 throw new InvalidDataException(errorDetails.ToString());
             }
 
-            return StitchRecords(parsedRecords);
+            return parsedRecords;
         }
 
         private Type CustomRecordSelector(MultiRecordEngine engine, string recordLine)
@@ -180,77 +180,25 @@ namespace RMCollectionProcessor
 
             if (recordId == "080")
             {
+                // This handles Headers, Trailers, and Transaction Line 01
                 string bankservId = recordLine.Substring(4, 2);
                 if (bankservId == "04") return typeof(CollectionHeader080);
                 if (bankservId == "92") return typeof(CollectionTrailer080);
+                if (bankservId == "08") return typeof(CollectionTxLine01); // Assumes line count is 01
+            }
 
-                if (bankservId == "08")
-                {
-                    string lineCount = recordLine.Substring(16, 2);
-                    if (lineCount == "01") return typeof(CollectionTxLine01);
-                    if (lineCount == "02") return typeof(CollectionTxLine02);
-                    if (lineCount == "03") return typeof(CollectionTxLine03);
-                }
+            // Handle Transaction Lines 02 and 03
+            // We check the first two characters now
+            if (recordLine.StartsWith("08"))
+            {
+                string lineCount = recordLine.Substring(16, 2);
+                if (lineCount == "02") return typeof(CollectionTxLine02);
+                if (lineCount == "03") return typeof(CollectionTxLine03);
             }
 
             return null; // Unknown record type
         }
 
-        private RMCollectionFile StitchRecords(object[] records)
-        {
-            var collectionFile = new RMCollectionFile();
-            var currentTransaction = new RMCollectionTransaction();
-
-            for (int i = 0; i < records.Length; i++)
-            {
-                var record = records[i];
-
-                if (record is TransmissionHeader000 th) collectionFile.TransmissionHeader = th;
-                else if (record is CollectionHeader080 ch) collectionFile.CollectionHeader = ch;
-                else if (record is CollectionTrailer080 ct) collectionFile.CollectionTrailer = ct;
-                else if (record is TransmissionTrailer999 tt) collectionFile.TransmissionTrailer = tt;
-                else if (record is CollectionTxLine01 l1)
-                {
-                    currentTransaction = new RMCollectionTransaction
-                    {
-                        L1_DataSetStatus = l1.DataSetStatus,
-                        L1_BankServUserCode = l1.BankServUserCode,
-                        L1_RecordSequenceNumber = l1.RecordSequenceNumber,
-                        L1_InitiatingParty = l1.InitiatingParty,
-                        L1_PaymentInformation = l1.PaymentInformation,
-                        L1_RequestedCollectionDate = l1.RequestedCollectionDate,
-                        L1_CreditorName = l1.CreditorName,
-                        L1_CreditorContactDetails = l1.CreditorContactDetails,
-                        L1_CreditorAbbreviatedShortName = l1.CreditorAbbreviatedShortName
-                    };
-                }
-                else if (record is CollectionTxLine02 l2)
-                {
-                    currentTransaction.L2_CreditorEmail = l2.CreditorEmail;
-                    currentTransaction.L2_CreditorAccountNumber = l2.CreditorAccountNumber;
-                    currentTransaction.L2_CreditorBankBranch = l2.CreditorBankBranch;
-                    currentTransaction.L2_TrackingPeriod = l2.TrackingPeriod;
-                    currentTransaction.L2_DebitSequence = l2.DebitSequence;
-                    currentTransaction.L2_EntryClass = l2.EntryClass;
-                    currentTransaction.L2_InstructedAmount = l2.InstructedAmount;
-                    currentTransaction.L2_Currency = l2.Currency;
-                    currentTransaction.L2_ChargeBearer = l2.ChargeBearer;
-                    currentTransaction.L2_MandateReference = l2.MandateReference;
-                    currentTransaction.L2_DebtorBankBranch = l2.DebtorBankBranch;
-                }
-                else if (record is CollectionTxLine03 l3)
-                {
-                    currentTransaction.L3_DebtorName = l3.DebtorName;
-                    currentTransaction.L3_DebtorAccountNumber = l3.DebtorAccountNumber;
-                    currentTransaction.L3_AccountType = l3.AccountType;
-                    currentTransaction.L3_ContractReference = l3.ContractReference;
-                    currentTransaction.L3_RelatedCycleDate = l3.RelatedCycleDate;
-
-                    collectionFile.Transactions.Add(currentTransaction);
-                }
-            }
-            return collectionFile;
-        }
     }
     #endregion
 }

@@ -5,52 +5,10 @@ using System.Globalization;
 using System.Linq;
 
 // A logical representation of a single transaction, combining all 3 lines.
-public class RMCollectionTransaction
-{
-    // --- Line 01 Data ---
-    public string L1_DataSetStatus { get; set; }
-    public string L1_BankServUserCode { get; set; }
-    public string L1_RecordSequenceNumber { get; set; }
-    public string L1_InitiatingParty { get; set; }
-    public string L1_PaymentInformation { get; set; }
-    public string L1_RequestedCollectionDate { get; set; }
-    public string L1_CreditorName { get; set; }
-    public string L1_CreditorContactDetails { get; set; }
-    public string L1_CreditorAbbreviatedShortName { get; set; }
 
-    // --- Line 02 Data ---
-    public string L2_CreditorEmail { get; set; }
-    public string L2_CreditorAccountNumber { get; set; }
-    public string L2_CreditorBankBranch { get; set; }
-    public string L2_TrackingPeriod { get; set; }
-    public string L2_DebitSequence { get; set; }
-    public string L2_EntryClass { get; set; }
-    public string L2_InstructedAmount { get; set; }
-    public string L2_Currency { get; set; }
-    public string L2_ChargeBearer { get; set; }
-    public string L2_MandateReference { get; set; }
-    public string L2_DebtorBankBranch { get; set; }
-
-    // --- Line 03 Data ---
-    public string L3_DebtorName { get; set; }
-    public string L3_DebtorAccountNumber { get; set; }
-    public string L3_AccountType { get; set; }
-    public string L3_ContractReference { get; set; }
-    public string L3_RelatedCycleDate { get; set; }
-
-    // Helper property to easily access the sequence number for validation
-    public int SequenceNumber => int.TryParse(L1_RecordSequenceNumber, out int seq) ? seq : -1;
-}
 
 // Wrapper class to hold the entire parsed file content
-public class RMCollectionFile
-{
-    public TransmissionHeader000 TransmissionHeader { get; set; }
-    public CollectionHeader080 CollectionHeader { get; set; }
-    public List<RMCollectionTransaction> Transactions { get; set; } = new List<RMCollectionTransaction>();
-    public CollectionTrailer080 CollectionTrailer { get; set; }
-    public TransmissionTrailer999 TransmissionTrailer { get; set; }
-}
+
 
 
 // --- FileHelpers Models for Parsing Individual Lines ---
@@ -105,13 +63,14 @@ public class CollectionTxLine01
     [FieldFixedLength(16)] public string Filler;
 }
 
+/// <summary>
+/// Represents Line "02" of a Collection Request User Set Transaction Record.
+/// Conforms to the specification on page 54.
+/// </summary>
 [FixedLengthRecord] // 198 bytes (spec page 54)
 public class CollectionTxLine02
 {
-    [FieldFixedLength(3)] public string RecordIdentifier;      // "080"
-    [FieldFixedLength(1)] public string DataSetStatus;         // L / T
-    [FieldFixedLength(2)] public string BankServRecordId;      // "08"
-    [FieldFixedLength(4)] public string BankServUserCode;
+    [FieldFixedLength(2)] public string RecordIdentifier;      // "08"
     [FieldFixedLength(6)] public string RecordSequenceNumber;
     [FieldFixedLength(2)] public string LineCount;             // "02"
     [FieldFixedLength(90)] public string CreditorEmail;
@@ -124,17 +83,18 @@ public class CollectionTxLine02
     [FieldFixedLength(3)] public string Currency;              // "ZAR"
     [FieldFixedLength(4)] public string ChargeBearer;          // "SLEV"
     [FieldFixedLength(22)] public string MandateReference;
-    [FieldFixedLength(6)] public string DebtorBankBranch;
+    [FieldFixedLength(6)] public string DebtorBankBranch;      // This field was missing in the original request's model for TxLine02 but is present in the spec for Line "02" (page 54, "Debtor Bank Branch Number")
     [FieldFixedLength(14)] public string Filler;
 }
 
+/// <summary>
+/// Represents Line "03" of a Collection Request User Set Transaction Record.
+/// Conforms to the specification on page 55.
+/// </summary>
 [FixedLengthRecord] // 198 bytes (spec page 55)
 public class CollectionTxLine03
 {
-    [FieldFixedLength(3)] public string RecordIdentifier;      // "080"
-    [FieldFixedLength(1)] public string DataSetStatus;         // L / T
-    [FieldFixedLength(2)] public string BankServRecordId;      // "08"
-    [FieldFixedLength(4)] public string BankServUserCode;
+    [FieldFixedLength(2)] public string RecordIdentifier;      // "08"
     [FieldFixedLength(6)] public string RecordSequenceNumber;
     [FieldFixedLength(2)] public string LineCount;             // "03"
     [FieldFixedLength(35)] public string DebtorName;
