@@ -25,7 +25,7 @@ namespace RMCollectionProcessor
             }
             else if (key == "2")
             {
-                GenerateFile();
+                GenerateFile(args);
             }
             else
             {
@@ -64,8 +64,14 @@ namespace RMCollectionProcessor
             }
         }
 
-        private static void GenerateFile()
+        private static void GenerateFile(string[] args)
         {
+            if (args.Length == 0 || !int.TryParse(args[0], out int deductionDay) || deductionDay < 1 || deductionDay > 31)
+            {
+                Console.WriteLine("Please supply a valid deduction day (1-31) as the first command line argument.");
+                return;
+            }
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
@@ -73,7 +79,7 @@ namespace RMCollectionProcessor
 
             var dbService = new DatabaseService(configuration);
 
-            var collections = dbService.GetCollectionsAsync().GetAwaiter().GetResult();
+            var collections = dbService.GetCollectionsAsync(deductionDay).GetAwaiter().GetResult();
             if (!collections.Any())
             {
                 Console.WriteLine("No collections to process.");
