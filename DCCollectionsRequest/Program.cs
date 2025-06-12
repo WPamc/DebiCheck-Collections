@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace RMCollectionProcessor
 {
@@ -65,14 +66,23 @@ namespace RMCollectionProcessor
 
         private static void GenerateFile()
         {
-            var collections = GetSampleCollections();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("DCCollectionsRequest/appsettings.json")
+                .Build();
+
+            var dbService = new DatabaseService(configuration);
+
+            var collections = dbService.GetCollectionsAsync().GetAwaiter().GetResult();
             if (!collections.Any())
             {
                 Console.WriteLine("No collections to process.");
                 return;
             }
 
-            var creditorDefaults = new CreditorDefaults();
+            var creditorDefaults = dbService.GetCreditorDefaultsAsync(1).GetAwaiter().GetResult()
+                                   ?? new CreditorDefaults();
+
             var staticData = new StaticDataProvider(
                 recordStatus: "L",
                 transmissionNumber: "0000878",
