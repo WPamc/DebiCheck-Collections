@@ -38,7 +38,7 @@ namespace RMCollectionProcessor
 
         private static void ParseFile(string[] args)
         {
-            string filePath = args.Length > 0 ? args[0] : "RM-Collections.txt";
+            string filePath = args.Length > 0 ? args[0] : "ZR07675.AUL.DATA.250529.122006";
             if (!File.Exists(filePath))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -129,8 +129,9 @@ namespace RMCollectionProcessor
                 typeof(CollectionTrailer080),
                 typeof(TransmissionTrailer999));
 
-            engine.WriteFile("RM-Collections-Generated.txt", records);
-            Console.WriteLine("RM Collection file generated successfully.");
+            string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
+            engine.WriteFile(fileName, records);
+            Console.WriteLine($"RM Collection file generated successfully: {fileName}");
         }
 
         private static List<DebtorCollectionData> GetSampleCollections()
