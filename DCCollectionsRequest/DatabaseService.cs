@@ -14,7 +14,7 @@ public class CreditorDefaults
     public string CreditorName { get; set; } = "AFRICAN UNITY LIFE LIMITED";
     public string CreditorContactDetails { get; set; } = "+27-0861189202";
     public string CreditorAbbreviatedShortName { get; set; } = "AUL";
-    public string CreditorEmail { get; set; } = "TALKTOUS@GETSAVVI.CO.ZA";
+    public string CreditorEmail { get; set; } = "MEMBERSHIP@PAMC.CO.ZA";
     public string CreditorAccountNumber { get; set; } = "0000000004097772529";
     public string CreditorBankBranch { get; set; } = "632005";
 }
