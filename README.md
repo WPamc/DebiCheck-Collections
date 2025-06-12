@@ -40,3 +40,10 @@ Run the application from the repository root with:
 ```
 
 This will parse `ZR07675.AUL.DATA.250529.122006` and output information about the file.
+
+To generate a collection file for a specific deduction day, provide the day as
+the first command line argument and choose option `2` when prompted:
+
+```bash
+ dotnet run --project DCCollectionsRequest/DCCollectionsRequest.csproj 15
+```

@@ -39,11 +39,12 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
-    public async Task<List<DebtorCollectionData>> GetCollectionsAsync()
+    public async Task<List<DebtorCollectionData>> GetCollectionsAsync(int deductionDay)
     {
         var results = new List<DebtorCollectionData>();
         await using var conn = new SqlConnection(_connectionString);
         await using var cmd = new SqlCommand(_collectionsSql, conn);
+        cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
         await conn.OpenAsync();
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
