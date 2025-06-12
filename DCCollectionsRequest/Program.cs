@@ -97,6 +97,9 @@ namespace RMCollectionProcessor
 
             int firstSeq = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
 
+            string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
+            int fileRowId = dbService.CreateBankFileRecordAsync(fileName, genNumber, firstSeq).GetAwaiter().GetResult();
+
             records.Add(recordBuilder.BuildTransmissionHeader(staticData));
             records.Add(recordBuilder.BuildCollectionHeader(staticData, firstSeq));
 
@@ -113,8 +116,11 @@ namespace RMCollectionProcessor
                 if (i < collections.Count - 1)
                 {
                     sequenceNumber = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                    dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, sequenceNumber).GetAwaiter().GetResult();
                 }
             }
+
+            dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, lastSeq).GetAwaiter().GetResult();
 
             int totalLines = 2 + (collections.Count * 3) + 2;
             records.Add(recordBuilder.BuildCollectionTrailer(staticData, collections, firstSeq, lastSeq));
@@ -129,9 +135,18 @@ namespace RMCollectionProcessor
                 typeof(CollectionTrailer080),
                 typeof(TransmissionTrailer999));
 
-            string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
-            engine.WriteFile(fileName, records);
-            Console.WriteLine($"RM Collection file generated successfully: {fileName}");
+            try
+            {
+                engine.WriteFile(fileName, records);
+                dbService.MarkBankFileGenerationCompleteAsync(fileRowId).GetAwaiter().GetResult();
+                Console.WriteLine($"RM Collection file generated successfully: {fileName}");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"An error occurred generating the file: {ex.Message}");
+                Console.ResetColor();
+            }
         }
 
         private static List<DebtorCollectionData> GetSampleCollections()

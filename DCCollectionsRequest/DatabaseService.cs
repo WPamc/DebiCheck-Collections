@@ -127,5 +127,65 @@ END", conn);
 
     public Task<int> GetNextDailyCounterAsync(DateTime date)
         => GetNextCounterAsync("DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
+
+    public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        await using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
+                (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
+                 GENERATIONCOMPLETE, DELIVERED, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
+             VALUES (@desc, @file, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
+             SELECT SCOPE_IDENTITY();", conn);
+
+        cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
+        cmd.Parameters.Add(new SqlParameter("@file", SqlDbType.VarChar, 100) { Value = fileName });
+        cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
+        cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.Int) { Value = dailyCounterStart });
+
+        var result = await cmd.ExecuteScalarAsync();
+        return Convert.ToInt32(result);
+    }
+
+    public async Task UpdateBankFileDailyCounterEndAsync(int rowId, int dailyCounterEnd)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+   SET DAILYCOUNTEREND = @end,
+       LASTCHANGEBY = 99,
+       LASTCHANGEDATE = GETDATE()
+ WHERE ROWID = @id;", conn);
+        cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
+        cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.Int) { Value = dailyCounterEnd });
+        await conn.OpenAsync();
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    public async Task MarkBankFileGenerationCompleteAsync(int rowId)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+   SET GENERATIONCOMPLETE = 1,
+       LASTCHANGEBY = 99,
+       LASTCHANGEDATE = GETDATE()
+ WHERE ROWID = @id;", conn);
+        cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
+        await conn.OpenAsync();
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    public async Task MarkBankFileDeliveredAsync(int rowId)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+   SET DELIVERED = 1,
+       LASTCHANGEBY = 99,
+       LASTCHANGEDATE = GETDATE()
+ WHERE ROWID = @id;", conn);
+        cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
+        await conn.OpenAsync();
+        await cmd.ExecuteNonQueryAsync();
+    }
 }
 
