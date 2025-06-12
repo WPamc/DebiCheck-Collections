@@ -72,11 +72,13 @@ namespace RMCollectionProcessor
                 return;
             }
 
+            var creditorDefaults = new CreditorDefaults();
             var staticData = new StaticDataProvider(
                 recordStatus: "L",
                 transmissionNumber: "0000878",
                 userGenerationNumber: "0878",
-                paymentInfoId: "2878/2025-06-01");
+                paymentInfoId: "2878/2025-06-01",
+                creditorDefaults: creditorDefaults);
 
             var records = new List<object>();
             var recordBuilder = new RecordBuilder();

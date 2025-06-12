@@ -7,13 +7,16 @@ using Microsoft.Extensions.Configuration;
 
 public class CreditorDefaults
 {
-    public string InitiatingParty { get; set; } = string.Empty;
-    public string CreditorName { get; set; } = string.Empty;
-    public string CreditorContactDetails { get; set; } = string.Empty;
-    public string CreditorAbbreviatedShortName { get; set; } = string.Empty;
-    public string CreditorEmail { get; set; } = string.Empty;
-    public string CreditorAccountNumber { get; set; } = string.Empty;
-    public string CreditorBankBranch { get; set; } = string.Empty;
+    public string UserCode { get; set; } = "07675";
+    public string UserName { get; set; } = "AFRICAN UNITY LIFE LIMITED C";
+    public string BankServUserCode { get; set; } = "D457";
+    public string InitiatingParty { get; set; } = "AFRICAN UNITY LIFE LIMITED";
+    public string CreditorName { get; set; } = "AFRICAN UNITY LIFE LIMITED";
+    public string CreditorContactDetails { get; set; } = "+27-0861189202";
+    public string CreditorAbbreviatedShortName { get; set; } = "AUL";
+    public string CreditorEmail { get; set; } = "TALKTOUS@GETSAVVI.CO.ZA";
+    public string CreditorAccountNumber { get; set; } = "0000000004097772529";
+    public string CreditorBankBranch { get; set; } = "632005";
 }
 
 public class DatabaseService
