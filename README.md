@@ -14,6 +14,22 @@
    dotnet build
    ```
 
+## Configuration
+
+Create an `appsettings.json` file inside the `DCCollectionsRequest` directory. It should provide the database connection and SQL queries used by the application. Example:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=CollectionsDb;User Id=username;Password=password;"
+  },
+  "SqlQueries": {
+    "Collections": "SELECT * FROM Collections WHERE Processed = 0;",
+    "CreditorDefaults": "SELECT * FROM CreditorDefaults WHERE CreditorId = @CreditorId;"
+  }
+}
+```
+
 ## Running
 
 The executable expects a fixed width file named `RM-Collections.txt` in the `DCCollectionsRequest` directory. The sample file is included and is copied to the output folder during the build.
