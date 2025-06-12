@@ -83,31 +83,39 @@ namespace RMCollectionProcessor
             var creditorDefaults = dbService.GetCreditorDefaultsAsync(1).GetAwaiter().GetResult()
                                    ?? new CreditorDefaults();
 
+            int genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
+
             var staticData = new StaticDataProvider(
                 recordStatus: "L",
-                transmissionNumber: "0000878",
-                userGenerationNumber: "0878",
-                paymentInfoId: "2878/2025-06-01",
+                transmissionNumber: genNumber.ToString(),
+                userGenerationNumber: genNumber.ToString(),
+                paymentInfoId: $"2878/{DateTime.Today:yyyy-MM-dd}",
                 creditorDefaults: creditorDefaults);
 
             var records = new List<object>();
             var recordBuilder = new RecordBuilder();
 
-            records.Add(recordBuilder.BuildTransmissionHeader(staticData));
-            records.Add(recordBuilder.BuildCollectionHeader(staticData, 1));
+            int firstSeq = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
 
-            int sequenceNumber = 1;
-            foreach (var debtorData in collections)
+            records.Add(recordBuilder.BuildTransmissionHeader(staticData));
+            records.Add(recordBuilder.BuildCollectionHeader(staticData, firstSeq));
+
+            int sequenceNumber = firstSeq;
+            int lastSeq = firstSeq;
+            for (int i = 0; i < collections.Count; i++)
             {
+                var debtorData = collections[i];
                 var (line1, line2, line3) = recordBuilder.BuildTransactionLines(staticData, debtorData, sequenceNumber);
                 records.Add(line1);
                 records.Add(line2);
                 records.Add(line3);
-                sequenceNumber++;
+                lastSeq = sequenceNumber;
+                if (i < collections.Count - 1)
+                {
+                    sequenceNumber = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                }
             }
 
-            int firstSeq = 1;
-            int lastSeq = collections.Count;
             int totalLines = 2 + (collections.Count * 3) + 2;
             records.Add(recordBuilder.BuildCollectionTrailer(staticData, collections, firstSeq, lastSeq));
             records.Add(recordBuilder.BuildTransmissionTrailer(staticData, totalLines));

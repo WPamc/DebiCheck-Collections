@@ -21,6 +21,7 @@ public class CreditorDefaults
 
 public class DatabaseService
 {
+    private const string CounterDescription = "SANLAM MULTIDATA";
     private readonly string _connectionString;
     private readonly string _collectionsSql;
     private readonly string _creditorDefaultsSql;
@@ -89,5 +90,42 @@ public class DatabaseService
         }
         return null;
     }
+
+    private async Task<int> GetNextCounterAsync(string subclass1, string? subclass2)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        await using var cmd = new SqlCommand(@"SET NOCOUNT ON;
+UPDATE dbo.EDI_GENERICCOUNTERS
+   SET COUNTER = COUNTER + 1,
+       LASTCHANGEBY = 99,
+       LASTCHANGEDATE = GETDATE()
+ OUTPUT INSERTED.COUNTER
+ WHERE DESCRIPTION = @desc
+   AND SUBCLASS1 = @sub1
+   AND ((@sub2 IS NULL AND SUBCLASS2 IS NULL) OR SUBCLASS2 = @sub2);
+
+IF @@ROWCOUNT = 0
+BEGIN
+    INSERT INTO dbo.EDI_GENERICCOUNTERS
+        (DESCRIPTION, SUBCLASS1, SUBCLASS2, COUNTER, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
+    VALUES (@desc, @sub1, @sub2, 1, 99, GETDATE(), 99, GETDATE());
+    SELECT 1;
+END", conn);
+
+        cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
+        cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
+        cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
+
+        var result = await cmd.ExecuteScalarAsync();
+        return Convert.ToInt32(result);
+    }
+
+    public Task<int> GetNextGenerationNumberAsync()
+        => GetNextCounterAsync("GENERATIONNUMBER", null);
+
+    public Task<int> GetNextDailyCounterAsync(DateTime date)
+        => GetNextCounterAsync("DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
 }
 
