@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DCCollectionsRequest": {
+      "commandName": "Project",
+      "commandLineArgs": "15"
+    }
+  }
+}
