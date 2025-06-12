@@ -16,19 +16,18 @@
 
 ## Configuration
 
-Create an `appsettings.json` file inside the `DCCollectionsRequest` directory. It should provide the database connection and SQL queries used by the application. Example:
+Create an `appsettings.json` file inside the `DCCollectionsRequest` directory. It should provide the database connection and the path to the SQL query files used by the application. Example:
 
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=CollectionsDb;User Id=username;Password=password;"
   },
-  "SqlQueries": {
-    "Collections": "SELECT * FROM Collections WHERE Processed = 0;",
-    "CreditorDefaults": "SELECT * FROM CreditorDefaults WHERE CreditorId = @CreditorId;"
-  }
+  "SqlQueriesPath": "SqlQueries"
 }
 ```
+
+Create a folder named `SqlQueries` next to `appsettings.json` and place the queries inside `Collections.sql` and `CreditorDefaults.sql`. These files support normal line breaks for readability.
 
 ## Running
 

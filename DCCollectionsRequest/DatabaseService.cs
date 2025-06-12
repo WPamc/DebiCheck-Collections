@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 public class CreditorDefaults
 {
@@ -32,10 +33,10 @@ public class DatabaseService
 
         _connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("DefaultConnection missing");
-        _collectionsSql = configuration["SqlQueries:Collections"]
-            ?? throw new InvalidOperationException("Collections SQL missing");
-        _creditorDefaultsSql = configuration["SqlQueries:CreditorDefaults"]
-            ?? throw new InvalidOperationException("CreditorDefaults SQL missing");
+
+        var queriesPath = configuration["SqlQueriesPath"] ?? "SqlQueries";
+        _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "Collections.sql"));
+        _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
     public async Task<List<DebtorCollectionData>> GetCollectionsAsync()
