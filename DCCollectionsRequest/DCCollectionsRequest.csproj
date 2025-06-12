@@ -17,6 +17,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="SqlQueries\*.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ZR07675.AUL.DATA.250529.122006">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
