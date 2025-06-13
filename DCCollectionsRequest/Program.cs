@@ -86,16 +86,15 @@ namespace RMCollectionProcessor
                 return;
             }
 
-            var creditorDefaults = dbService.GetCreditorDefaultsAsync(1).GetAwaiter().GetResult()
-                                   ?? new CreditorDefaults();
+            var creditorDefaults =  new CreditorDefaults();
 
             int genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
 
             var staticData = new StaticDataProvider(
-                recordStatus: "L",
+                recordStatus: "T",
                 transmissionNumber: genNumber.ToString(),
                 userGenerationNumber: genNumber.ToString(),
-                paymentInfoId: $"2878/{DateTime.Today:yyyy-MM-dd}",
+                paymentInfoId: $"{genNumber}/{DateTime.Today:yyyy-MM-dd}",
                 creditorDefaults: creditorDefaults);
 
             var records = new List<object>();

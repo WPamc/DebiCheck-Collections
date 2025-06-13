@@ -1,9 +1,11 @@
-SELECT mmb.MANDATEUSERREF AS PaymentInformation,
-       CONVERT(char(10), DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
+SELECT 
+
+mmb.MANDATEUSERREF AS PaymentInformation,
+       CONVERT(datetime, DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
               CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month))
                    THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23) AS RequestedCollectionDate,
        DEDUCTIONDAY,
-       GETDATE() AS TrackingPeriod,
+       3 AS TrackingPeriod,
        'RCUR' AS DebitSequence,
        '0021' AS EntryClass,
        1501 AS InstructedAmount,

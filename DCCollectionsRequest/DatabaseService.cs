@@ -56,7 +56,7 @@ public class DatabaseService
                 TrackingPeriod = reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))),
                 DebitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty,
                 EntryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty,
-                InstructedAmount = reader.GetDecimal(reader.GetOrdinal(nameof(DebtorCollectionData.InstructedAmount))),
+                InstructedAmount = Convert.ToDecimal( reader["InstructedAmount"]),
                 MandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty,
                 DebtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty,
                 DebtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty,
@@ -70,27 +70,28 @@ public class DatabaseService
         return results;
     }
 
-    public async Task<CreditorDefaults?> GetCreditorDefaultsAsync(int creditorId)
+    public  CreditorDefaults GetCreditorDefaultsAsync(int creditorId)
     {
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(_creditorDefaultsSql, conn);
-        cmd.Parameters.Add(new SqlParameter("@CreditorId", SqlDbType.Int) { Value = creditorId });
-        await conn.OpenAsync();
-        await using var reader = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow);
-        if (await reader.ReadAsync())
-        {
-            return new CreditorDefaults
-            {
-                InitiatingParty = reader[nameof(CreditorDefaults.InitiatingParty)].ToString() ?? string.Empty,
-                CreditorName = reader[nameof(CreditorDefaults.CreditorName)].ToString() ?? string.Empty,
-                CreditorContactDetails = reader[nameof(CreditorDefaults.CreditorContactDetails)].ToString() ?? string.Empty,
-                CreditorAbbreviatedShortName = reader[nameof(CreditorDefaults.CreditorAbbreviatedShortName)].ToString() ?? string.Empty,
-                CreditorEmail = reader[nameof(CreditorDefaults.CreditorEmail)].ToString() ?? string.Empty,
-                CreditorAccountNumber = reader[nameof(CreditorDefaults.CreditorAccountNumber)].ToString() ?? string.Empty,
-                CreditorBankBranch = reader[nameof(CreditorDefaults.CreditorBankBranch)].ToString() ?? string.Empty
-            };
-        }
-        return null;
+    //    await using var conn = new SqlConnection(_connectionString);
+    //    await using var cmd = new SqlCommand(_creditorDefaultsSql, conn);
+    //    cmd.Parameters.Add(new SqlParameter("@CreditorId", SqlDbType.Int) { Value = creditorId });
+    //    await conn.OpenAsync();
+    //    await using var reader = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow);
+    //    if (await reader.ReadAsync())
+    //    {
+    //        return new CreditorDefaults
+    //        {
+    //            InitiatingParty = reader[nameof(CreditorDefaults.InitiatingParty)].ToString() ?? string.Empty,
+    //            CreditorName = reader[nameof(CreditorDefaults.CreditorName)].ToString() ?? string.Empty,
+    //            CreditorContactDetails = reader[nameof(CreditorDefaults.CreditorContactDetails)].ToString() ?? string.Empty,
+    //            CreditorAbbreviatedShortName = reader[nameof(CreditorDefaults.CreditorAbbreviatedShortName)].ToString() ?? string.Empty,
+    //            CreditorEmail = reader[nameof(CreditorDefaults.CreditorEmail)].ToString() ?? string.Empty,
+    //            CreditorAccountNumber = reader[nameof(CreditorDefaults.CreditorAccountNumber)].ToString() ?? string.Empty,
+    //            CreditorBankBranch = reader[nameof(CreditorDefaults.CreditorBankBranch)].ToString() ?? string.Empty
+    //        };
+    //    }
+        return 
+        new CreditorDefaults();
     }
 
     private async Task<int> GetNextCounterAsync(string subclass1, string? subclass2)
