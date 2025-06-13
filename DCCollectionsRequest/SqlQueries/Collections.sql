@@ -1,14 +1,18 @@
 SELECT 
 
-mmb.MANDATEUSERREF AS PaymentInformation,
+
        CONVERT(datetime, DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
               CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month))
                    THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23) AS RequestedCollectionDate,
        DEDUCTIONDAY,
+	   mmb.MANDATEUSERREF+'/'+   convert( varchar(10),
+	   CONVERT(datetime, DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
+              CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month))
+                   THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23),23)  AS PaymentInformation,
        3 AS TrackingPeriod,
        'RCUR' AS DebitSequence,
        '0021' AS EntryClass,
-       1501 AS InstructedAmount,
+       InstructedAmount AS InstructedAmount,
        mmb.AUTHORISATIONREF AS MandateReference,
        mmb.BRANCHCODE AS DebtorBankBranch,
        mm.FIRSTNM,
@@ -25,4 +29,6 @@ FROM (
     FROM MEMBMANDATE_BANKHIST
 ) AS mmb
 INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID
-WHERE DEDUCTIONDAY = @DEDUCTIONDAY;
+inner join    GetsavviDEBICheck dbc
+ on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-15 12:00:00')
+WHERE DEDUCTIONDAY =@DEDUCTIONDAY and [day]=@DEDUCTIONDAY
