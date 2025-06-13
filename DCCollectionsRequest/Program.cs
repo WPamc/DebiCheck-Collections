@@ -106,7 +106,7 @@ namespace RMCollectionProcessor
             int fileRowId = dbService.CreateBankFileRecordAsync(fileName, genNumber, firstSeq).GetAwaiter().GetResult();
 
             records.Add(recordBuilder.BuildTransmissionHeader(staticData));
-            records.Add(recordBuilder.BuildCollectionHeader(staticData, firstSeq));
+           
 
             int sequenceNumber = firstSeq;
             int lastSeq = firstSeq;
@@ -126,6 +126,11 @@ namespace RMCollectionProcessor
             }
 
             dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, lastSeq).GetAwaiter().GetResult();
+
+            // Now that the loop is finished, we know the total count.
+            // Build the header and insert it at the correct position (index 1, after the transmission header).
+            var collectionHeader = recordBuilder.BuildCollectionHeader(staticData, firstSeq, collections.Count);
+            records.Insert(1, collectionHeader); // <-- FIX APPLIED
 
             int totalLines = 2 + (collections.Count * 3) + 2;
             records.Add(recordBuilder.BuildCollectionTrailer(staticData, collections, firstSeq, lastSeq));

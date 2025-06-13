@@ -44,6 +44,7 @@ public class StaticDataProvider
         TransmissionDate = DateTime.Now.ToString("yyyyMMdd");
         UserCode = creditorDefaults.UserCode;
         UserName = creditorDefaults.UserName.PadRight(30);
+
         TransmissionNumber = transmissionNumber.PadLeft(7, '0');
         Destination = "00000";
         ForLdUsersUse = "Billing DC".PadRight(20);
@@ -92,7 +93,8 @@ public class RecordBuilder
     /// <summary>
     /// Creates the Collection User-Set Header record (080/04).
     /// </summary>
-    public CollectionHeader080 BuildCollectionHeader(StaticDataProvider staticData, int firstSequenceNumber)
+    public CollectionHeader080 BuildCollectionHeader(StaticDataProvider staticData, int firstSequenceNumber 
+                                                        , int totalTransactions)
     {
         return new CollectionHeader080
         {
@@ -104,7 +106,8 @@ public class RecordBuilder
             UserGenerationNumber = staticData.UserGenerationNumber,
             ServiceType = "COLLREQ".PadRight(8),
             CreationDateTime = staticData.CreationDateTime,
-            TotalTransactions = "0".PadLeft(15, '0'),
+            TotalTransactions = totalTransactions.ToString().PadLeft(15, '0'),
+            
             PaymentInfoId = staticData.PaymentInfoId,
             AccountTypeCorrection = "Y",
             Filler = new string(' ', 115)
