@@ -29,12 +29,16 @@
         private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.ListBox lstFiles;
 
         private void InitializeComponent()
         {
             this.btnParse = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.nudDay = new System.Windows.Forms.NumericUpDown();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.lstFiles = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudDay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +61,7 @@
             this.btnGenerate.Text = "Generate File";
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
-            // 
+            //
             // nudDay
             // 
             this.nudDay.Location = new System.Drawing.Point(12, 41);
@@ -68,12 +72,35 @@
             this.nudDay.TabIndex = 1;
             this.nudDay.Value = new decimal(new int[] {1,0,0,0});
 
+            //
+            // btnBrowse
+            //
+            this.btnBrowse.Location = new System.Drawing.Point(150, 12);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(120, 23);
+            this.btnBrowse.TabIndex = 3;
+            this.btnBrowse.Text = "Browse Folder";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+
+            //
+            // lstFiles
+            //
+            this.lstFiles.FormattingEnabled = true;
+            this.lstFiles.ItemHeight = 15;
+            this.lstFiles.Location = new System.Drawing.Point(150, 41);
+            this.lstFiles.Name = "lstFiles";
+            this.lstFiles.Size = new System.Drawing.Size(220, 184);
+            this.lstFiles.TabIndex = 4;
+
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(150, 105);
+            this.ClientSize = new System.Drawing.Size(382, 237);
+            this.Controls.Add(this.lstFiles);
+            this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.nudDay);
             this.Controls.Add(this.btnParse);

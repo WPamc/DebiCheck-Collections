@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace DCCollections.Gui
 {
@@ -46,6 +47,26 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    lstFiles.Items.Clear();
+                    foreach (var file in Directory.GetFiles(fbd.SelectedPath))
+                    {
+                        lstFiles.Items.Add(Path.GetFileName(file));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
             }
         }
     }
