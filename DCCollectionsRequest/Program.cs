@@ -91,7 +91,7 @@ namespace RMCollectionProcessor
             int genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
 
             var staticData = new StaticDataProvider(
-                recordStatus: "T",
+                recordStatus: "L",
                 transmissionNumber: genNumber.ToString(),
                 userGenerationNumber: genNumber.ToString(),
                 paymentInfoId: $"{genNumber}/{DateTime.Today:yyyy-MM-dd}",
