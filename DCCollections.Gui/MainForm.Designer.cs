@@ -1,6 +1,6 @@
 ﻿namespace DCCollections.Gui
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,6 +30,7 @@
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
         private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.Button btnShowCurrent;
         private System.Windows.Forms.ListBox lstFiles;
 
         private void InitializeComponent()
@@ -38,6 +39,7 @@
             this.btnGenerate = new System.Windows.Forms.Button();
             this.nudDay = new System.Windows.Forms.NumericUpDown();
             this.btnBrowse = new System.Windows.Forms.Button();
+            this.btnShowCurrent = new System.Windows.Forms.Button();
             this.lstFiles = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudDay)).BeginInit();
             this.SuspendLayout();
@@ -84,6 +86,17 @@
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
 
             //
+            // btnShowCurrent
+            //
+            this.btnShowCurrent.Location = new System.Drawing.Point(12, 99);
+            this.btnShowCurrent.Name = "btnShowCurrent";
+            this.btnShowCurrent.Size = new System.Drawing.Size(120, 23);
+            this.btnShowCurrent.TabIndex = 4;
+            this.btnShowCurrent.Text = "Show App Files";
+            this.btnShowCurrent.UseVisualStyleBackColor = true;
+            this.btnShowCurrent.Click += new System.EventHandler(this.btnShowCurrent_Click);
+
+            //
             // lstFiles
             //
             this.lstFiles.FormattingEnabled = true;
@@ -91,22 +104,23 @@
             this.lstFiles.Location = new System.Drawing.Point(150, 41);
             this.lstFiles.Name = "lstFiles";
             this.lstFiles.Size = new System.Drawing.Size(220, 184);
-            this.lstFiles.TabIndex = 4;
+            this.lstFiles.TabIndex = 5;
 
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 237);
             this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.btnShowCurrent);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.nudDay);
             this.Controls.Add(this.btnParse);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Collections";
             ((System.ComponentModel.ISupportInitialize)(this.nudDay)).EndInit();
             this.ResumeLayout(false);
