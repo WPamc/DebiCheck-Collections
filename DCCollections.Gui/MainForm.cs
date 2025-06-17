@@ -3,12 +3,12 @@ using System.IO;
 
 namespace DCCollections.Gui
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private readonly RMCollectionProcessor.CollectionService _service;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -67,6 +67,22 @@ namespace DCCollections.Gui
                 {
                     MessageBox.Show(ex.Message, "Error");
                 }
+            }
+        }
+
+        private void btnShowCurrent_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lstFiles.Items.Clear();
+                foreach (var file in Directory.GetFiles(AppContext.BaseDirectory))
+                {
+                    lstFiles.Items.Add(Path.GetFileName(file));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
             }
         }
     }
