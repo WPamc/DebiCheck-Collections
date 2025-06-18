@@ -1,18 +1,9 @@
-﻿using FileHelpers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using FileHelpers;
 
-// A logical representation of a single transaction, combining all 3 lines.
-
-
-// Wrapper class to hold the entire parsed file content
-
-
-
+namespace RMCollectionProcessor.Models
+{
 // --- FileHelpers Models for Parsing Individual Lines ---
-// These should ideally be private nested classes within your file processing logic.
+// These classes are used when parsing and generating RM collection files.
 
 [FixedLengthRecord] // 198 bytes (spec page 14)
 public class TransmissionHeader000
@@ -126,4 +117,5 @@ public class TransmissionTrailer999
     [FieldFixedLength(1)] public string DataSetStatus;         // L / T
     [FieldFixedLength(9)] public string NumberOfRecords;
     [FieldFixedLength(185)] public string Filler;
+}
 }

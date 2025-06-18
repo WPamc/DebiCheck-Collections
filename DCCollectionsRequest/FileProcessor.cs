@@ -2,6 +2,7 @@ using FileHelpers;
 using System;
 using System.IO;
 using System.Text;
+using RMCollectionProcessor.Models;
 
 namespace RMCollectionProcessor
 {
