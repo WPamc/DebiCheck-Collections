@@ -116,11 +116,36 @@ END", conn);
         return Convert.ToInt32(result);
     }
 
+    private async Task<int> GetCurrentCounterAsync(string subclass1, string? subclass2)
+    {
+        await using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        await using var cmd = new SqlCommand(@"SELECT COUNTER
+  FROM dbo.EDI_GENERICCOUNTERS
+ WHERE DESCRIPTION = @desc
+   AND SUBCLASS1 = @sub1
+   AND ((@sub2 IS NULL AND SUBCLASS2 IS NULL) OR SUBCLASS2 = @sub2);", conn);
+
+        cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
+        cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
+        cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
+
+        var result = cmd.ExecuteScalar();
+        return result == null ? 0 : Convert.ToInt32(result);
+    }
+
     public Task<int> GetNextGenerationNumberAsync()
         => GetNextCounterAsync("DC GENERATIONNUMBER", null);
 
+    public Task<int> GetCurrentGenerationNumberAsync()
+        => GetCurrentCounterAsync("DC GENERATIONNUMBER", null);
+
     public Task<int> GetNextDailyCounterAsync(DateTime date)
         => GetNextCounterAsync("DC DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
+
+    public Task<int> GetCurrentDailyCounterAsync(DateTime date)
+        => GetCurrentCounterAsync("DC DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
 
     public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
     {

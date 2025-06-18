@@ -41,7 +41,8 @@ namespace DCCollections.Gui
             try
             {
                 int day = (int)nudDay.Value;
-                var file = _service.GenerateFile(day, _config);
+                bool test = chkTest.Checked;
+                var file = _service.GenerateFile(day, _config, test);
                 MessageBox.Show($"File generated: {file}", "Success");
             }
             catch (Exception ex)

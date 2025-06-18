@@ -18,7 +18,7 @@ namespace RMCollectionProcessor
             return processor.ProcessFile(filePath);
         }
 
-        public string GenerateFile(int deductionDay, IConfiguration configuration)
+        public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
@@ -56,10 +56,18 @@ namespace RMCollectionProcessor
 
 
             var creditorDefaults = new CreditorDefaults();
-            int genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
+            int genNumber;
+            if (isTest)
+            {
+                genNumber = dbService.GetCurrentGenerationNumberAsync().GetAwaiter().GetResult() + 1;
+            }
+            else
+            {
+                genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
+            }
 
             var staticData = new StaticDataProvider(
-                recordStatus: "L",
+                recordStatus: isTest ? "T" : "L",
                 transmissionNumber: genNumber.ToString(),
                 userGenerationNumber: genNumber.ToString(),
                 paymentInfoId: $"{genNumber}/{DateTime.Today:yyyy-MM-dd}",
@@ -68,7 +76,15 @@ namespace RMCollectionProcessor
             var records = new List<object>();
             var recordBuilder = new RecordBuilder();
 
-            int firstSeq = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+            int firstSeq;
+            if (isTest)
+            {
+                firstSeq = dbService.GetCurrentDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult() + 1;
+            }
+            else
+            {
+                firstSeq = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+            }
 
             string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
             int fileRowId = dbService.CreateBankFileRecordAsync(fileName, genNumber, firstSeq).GetAwaiter().GetResult();
@@ -87,7 +103,14 @@ namespace RMCollectionProcessor
                 lastSeq = sequenceNumber;
                 if (i < collections.Count - 1)
                 {
-                    sequenceNumber = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                    if (isTest)
+                    {
+                        sequenceNumber += 1;
+                    }
+                    else
+                    {
+                        sequenceNumber = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                    }
                     dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, sequenceNumber).GetAwaiter().GetResult();
                 }
             }
