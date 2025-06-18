@@ -139,5 +139,11 @@ namespace RMCollectionProcessor
 
             return fileName;
         }
+
+        public BillingCollectionRequest? GetRequestByReference(string reference, IConfiguration configuration)
+        {
+            var dbService = new DatabaseService(configuration);
+            return dbService.GetCollectionRequestByReference(reference);
+        }
     }
 }
