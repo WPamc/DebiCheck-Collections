@@ -8,6 +8,17 @@ namespace DCCollections.Gui
         private readonly RMCollectionProcessor.CollectionService _service;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
 
+        private class FileListItem
+        {
+            public string Path { get; }
+            public FileListItem(string path) => Path = path;
+            public override string ToString()
+            {
+                var info = new FileInfo(Path);
+                return $"{info.Name} | C:{info.CreationTime:yyyy-MM-dd} M:{info.LastWriteTime:yyyy-MM-dd} | {info.Length} bytes";
+            }
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -84,6 +95,54 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void btnFolderBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtFolder.Text = fbd.SelectedPath;
+                LoadFolderFiles(fbd.SelectedPath);
+            }
+        }
+
+        private void LoadFolderFiles(string path)
+        {
+            try
+            {
+                lstFolderFiles.Items.Clear();
+                foreach (var file in Directory.GetFiles(path))
+                {
+                    lstFolderFiles.Items.Add(new FileListItem(file));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void lstFolderFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnParseSelected.Enabled = lstFolderFiles.SelectedItem != null;
+        }
+
+        private void btnParseSelected_Click(object sender, EventArgs e)
+        {
+            if (lstFolderFiles.SelectedItem is FileListItem item)
+            {
+                try
+                {
+                    var result = _service.ParseFile(item.Path);
+                    txtRaw.Text = File.ReadAllText(item.Path);
+                    MessageBox.Show($"Parsed {result.Length} records.", "Success");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
             }
         }
     }
