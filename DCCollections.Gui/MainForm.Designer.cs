@@ -32,6 +32,7 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Button btnShowCurrent;
         private System.Windows.Forms.ListBox lstFiles;
+        private System.Windows.Forms.CheckBox chkTest;
 
         private void InitializeComponent()
         {
@@ -41,6 +42,7 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnShowCurrent = new System.Windows.Forms.Button();
             this.lstFiles = new System.Windows.Forms.ListBox();
+            this.chkTest = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudDay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,13 +108,25 @@
             this.lstFiles.Size = new System.Drawing.Size(220, 184);
             this.lstFiles.TabIndex = 5;
 
-            // 
+            //
+            // chkTest
+            //
+            this.chkTest.AutoSize = true;
+            this.chkTest.Location = new System.Drawing.Point(12, 128);
+            this.chkTest.Name = "chkTest";
+            this.chkTest.Size = new System.Drawing.Size(76, 19);
+            this.chkTest.TabIndex = 6;
+            this.chkTest.Text = "Test File";
+            this.chkTest.UseVisualStyleBackColor = true;
+
+            //
             // MainForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 237);
             this.Controls.Add(this.lstFiles);
+            this.Controls.Add(this.chkTest);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.btnShowCurrent);
             this.Controls.Add(this.btnGenerate);
