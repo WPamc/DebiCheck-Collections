@@ -29,6 +29,32 @@ namespace RMCollectionProcessor
             if (!collections.Any())
                 throw new InvalidOperationException("No collections to process.");
 
+
+            var now = DateTime.Now;
+            var cutOffTime = new TimeSpan(11, 30, 0);
+
+            if (now.TimeOfDay > cutOffTime)
+            {
+                foreach (var collection in collections)
+                {
+                    // Check if the collection is scheduled for today
+                    if (collection.RequestedCollectionDate.Date == now.Date)
+                    {
+                        // Move the collection to the next day
+                        collection.RequestedCollectionDate = collection.RequestedCollectionDate.AddDays(1);
+
+                        // Per the spec (page 55), the RelatedDate/CycleDate must be kept in sync
+                        // for FRST, OOFF, and RCUR debit sequences.
+                        string debitSeq = collection.DebitSequence.Trim().ToUpper();
+                        if (debitSeq == "FRST" || debitSeq == "OOFF" || debitSeq == "RCUR")
+                        {
+                            collection.RelatedCycleDate = collection.RequestedCollectionDate;
+                        }
+                    }
+                }
+            }
+
+
             var creditorDefaults = new CreditorDefaults();
             int genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
 
