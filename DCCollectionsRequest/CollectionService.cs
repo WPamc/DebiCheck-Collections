@@ -25,7 +25,7 @@ namespace RMCollectionProcessor
 
             var dbService = new DatabaseService(configuration);
 
-            var collections = dbService.GetCollectionsAsync(deductionDay).GetAwaiter().GetResult();
+            var collections = dbService.GetCollections(deductionDay);
             if (!collections.Any())
                 throw new InvalidOperationException("No collections to process.");
 
@@ -59,11 +59,11 @@ namespace RMCollectionProcessor
             int genNumber;
             if (isTest)
             {
-                genNumber = dbService.GetCurrentGenerationNumberAsync().GetAwaiter().GetResult() + 1;
+                genNumber = dbService.GetCurrentGenerationNumber() + 1;
             }
             else
             {
-                genNumber = dbService.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
+                genNumber = dbService.GetNextGenerationNumber();
             }
 
             var staticData = new StaticDataProvider(
@@ -79,15 +79,15 @@ namespace RMCollectionProcessor
             int firstSeq;
             if (isTest)
             {
-                firstSeq = dbService.GetCurrentDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult() + 1;
+                firstSeq = dbService.GetCurrentDailyCounter(DateTime.Today) + 1;
             }
             else
             {
-                firstSeq = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                firstSeq = dbService.GetNextDailyCounter(DateTime.Today);
             }
 
             string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
-            int fileRowId = dbService.CreateBankFileRecordAsync(fileName, genNumber, firstSeq).GetAwaiter().GetResult();
+            int fileRowId = dbService.CreateBankFileRecord(fileName, genNumber, firstSeq);
 
             records.Add(recordBuilder.BuildTransmissionHeader(staticData));
 
@@ -109,13 +109,13 @@ namespace RMCollectionProcessor
                     }
                     else
                     {
-                        sequenceNumber = dbService.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                        sequenceNumber = dbService.GetNextDailyCounter(DateTime.Today);
                     }
-                    dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, sequenceNumber).GetAwaiter().GetResult();
+                    dbService.UpdateBankFileDailyCounterEnd(fileRowId, sequenceNumber);
                 }
             }
 
-            dbService.UpdateBankFileDailyCounterEndAsync(fileRowId, lastSeq).GetAwaiter().GetResult();
+            dbService.UpdateBankFileDailyCounterEnd(fileRowId, lastSeq);
 
             var collectionHeader = recordBuilder.BuildCollectionHeader(staticData, firstSeq, collections.Count);
             records.Insert(1, collectionHeader);
@@ -134,7 +134,7 @@ namespace RMCollectionProcessor
                 typeof(TransmissionTrailer999));
 
             engine.WriteFile(fileName, records);
-            dbService.MarkBankFileGenerationCompleteAsync(fileRowId).GetAwaiter().GetResult();
+            dbService.MarkBankFileGenerationComplete(fileRowId);
 
             return fileName;
         }
