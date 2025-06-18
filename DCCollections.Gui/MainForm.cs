@@ -145,5 +145,32 @@ namespace DCCollections.Gui
                 }
             }
         }
+
+        private void btnLookup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var reference = txtReference.Text.Trim();
+                if (string.IsNullOrEmpty(reference))
+                {
+                    MessageBox.Show("Enter a reference", "Info");
+                    return;
+                }
+
+                var result = _service.GetRequestByReference(reference, _config);
+                if (result == null)
+                {
+                    MessageBox.Show("No record found", "Info");
+                }
+                else
+                {
+                    MessageBox.Show($"Row ID: {result.RowId}\nAmount: {result.AmountRequested}", "Result");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
     }
 }

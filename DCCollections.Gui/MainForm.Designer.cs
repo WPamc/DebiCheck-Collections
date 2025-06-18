@@ -41,6 +41,8 @@
         private System.Windows.Forms.ListBox lstFolderFiles;
         private System.Windows.Forms.Button btnParseSelected;
         private System.Windows.Forms.TextBox txtRaw;
+        private System.Windows.Forms.TextBox txtReference;
+        private System.Windows.Forms.Button btnLookup;
 
         private void InitializeComponent()
         {
@@ -59,6 +61,8 @@
             lstFolderFiles = new ListBox();
             btnFolderBrowse = new Button();
             txtFolder = new TextBox();
+            txtReference = new TextBox();
+            btnLookup = new Button();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
@@ -84,6 +88,8 @@
             tabOperations.Controls.Add(btnBrowse);
             tabOperations.Controls.Add(btnShowCurrent);
             tabOperations.Controls.Add(btnGenerate);
+            tabOperations.Controls.Add(txtReference);
+            tabOperations.Controls.Add(btnLookup);
             tabOperations.Controls.Add(nudDay);
             tabOperations.Controls.Add(btnParse);
             tabOperations.Location = new Point(4, 34);
@@ -115,6 +121,25 @@
             chkTest.TabIndex = 6;
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
+            //
+            // txtReference
+            //
+            txtReference.Location = new Point(9, 252);
+            txtReference.Margin = new Padding(4, 5, 4, 5);
+            txtReference.Name = "txtReference";
+            txtReference.Size = new Size(171, 31);
+            txtReference.TabIndex = 7;
+            //
+            // btnLookup
+            //
+            btnLookup.Location = new Point(9, 293);
+            btnLookup.Margin = new Padding(4, 5, 4, 5);
+            btnLookup.Name = "btnLookup";
+            btnLookup.Size = new Size(171, 38);
+            btnLookup.TabIndex = 8;
+            btnLookup.Text = "Lookup Ref";
+            btnLookup.UseVisualStyleBackColor = true;
+            btnLookup.Click += btnLookup_Click;
             // 
             // btnBrowse
             // 

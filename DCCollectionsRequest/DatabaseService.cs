@@ -180,5 +180,38 @@ END", conn);
         conn.Open();
         cmd.ExecuteNonQuery();
     }
+
+    public BillingCollectionRequest? GetCollectionRequestByReference(string reference)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE,
+                DEDUCTIONREFERENCE, AMOUNTREQUESTED, RESULT, METHOD,
+                CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE
+           FROM dbo.BILLING_COLLECTIONREQUESTS
+          WHERE REFERENCE = @ref;", conn);
+        cmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 23) { Value = reference });
+        conn.Open();
+        using var reader = cmd.ExecuteReader();
+        if (reader.Read())
+        {
+            var req = new BillingCollectionRequest
+            {
+                RowId = reader.GetInt32(reader.GetOrdinal("ROWID")),
+                DateRequested = reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")),
+                SubSSN = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN")),
+                Reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE")),
+                DeductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE")),
+                AmountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : reader.GetString(reader.GetOrdinal("AMOUNTREQUESTED")),
+                Result = reader.IsDBNull(reader.GetOrdinal("RESULT")) ? null : reader.GetBoolean(reader.GetOrdinal("RESULT")),
+                Method = reader.IsDBNull(reader.GetOrdinal("METHOD")) ? null : reader.GetInt32(reader.GetOrdinal("METHOD")),
+                CreateBy = reader.IsDBNull(reader.GetOrdinal("CREATEBY")) ? null : reader.GetInt32(reader.GetOrdinal("CREATEBY")),
+                CreateDate = reader.IsDBNull(reader.GetOrdinal("CREATEDATE")) ? null : reader.GetDateTime(reader.GetOrdinal("CREATEDATE")),
+                LastChangeBy = reader.IsDBNull(reader.GetOrdinal("LASTCHANGEBY")) ? null : reader.GetInt32(reader.GetOrdinal("LASTCHANGEBY")),
+                LastChangeDate = reader.IsDBNull(reader.GetOrdinal("LASTCHANGEDATE")) ? null : reader.GetDateTime(reader.GetOrdinal("LASTCHANGEDATE"))
+            };
+            return req;
+        }
+        return null;
+    }
 }
 
