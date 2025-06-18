@@ -72,24 +72,7 @@ public class DatabaseService
 
     public  CreditorDefaults GetCreditorDefaultsAsync(int creditorId)
     {
-    //    await using var conn = new SqlConnection(_connectionString);
-    //    await using var cmd = new SqlCommand(_creditorDefaultsSql, conn);
-    //    cmd.Parameters.Add(new SqlParameter("@CreditorId", SqlDbType.Int) { Value = creditorId });
-    //    await conn.OpenAsync();
-    //    await using var reader = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow);
-    //    if (await reader.ReadAsync())
-    //    {
-    //        return new CreditorDefaults
-    //        {
-    //            InitiatingParty = reader[nameof(CreditorDefaults.InitiatingParty)].ToString() ?? string.Empty,
-    //            CreditorName = reader[nameof(CreditorDefaults.CreditorName)].ToString() ?? string.Empty,
-    //            CreditorContactDetails = reader[nameof(CreditorDefaults.CreditorContactDetails)].ToString() ?? string.Empty,
-    //            CreditorAbbreviatedShortName = reader[nameof(CreditorDefaults.CreditorAbbreviatedShortName)].ToString() ?? string.Empty,
-    //            CreditorEmail = reader[nameof(CreditorDefaults.CreditorEmail)].ToString() ?? string.Empty,
-    //            CreditorAccountNumber = reader[nameof(CreditorDefaults.CreditorAccountNumber)].ToString() ?? string.Empty,
-    //            CreditorBankBranch = reader[nameof(CreditorDefaults.CreditorBankBranch)].ToString() ?? string.Empty
-    //        };
-    //    }
+  
         return 
         new CreditorDefaults();
     }
@@ -126,10 +109,10 @@ END", conn);
     }
 
     public Task<int> GetNextGenerationNumberAsync()
-        => GetNextCounterAsync("GENERATIONNUMBER", null);
+        => GetNextCounterAsync("DC GENERATIONNUMBER", null);
 
     public Task<int> GetNextDailyCounterAsync(DateTime date)
-        => GetNextCounterAsync("DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
+        => GetNextCounterAsync("DC DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
 
     public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
     {
