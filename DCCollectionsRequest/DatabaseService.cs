@@ -45,9 +45,17 @@ public class DatabaseService
         await using var conn = new SqlConnection(_connectionString);
         await using var cmd = new SqlCommand(_collectionsSql, conn);
         cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
-        await conn.OpenAsync();
-        await using var reader = await cmd.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
+        try
+        {
+            conn.Open();
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+         using var reader =  cmd.ExecuteReader();
+        while ( reader.Read())
         {
             var data = new DebtorCollectionData
             {
@@ -80,7 +88,7 @@ public class DatabaseService
     private async Task<int> GetNextCounterAsync(string subclass1, string? subclass2)
     {
         await using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
+        conn.Open();
 
         await using var cmd = new SqlCommand(@"SET NOCOUNT ON;
 UPDATE dbo.EDI_GENERICCOUNTERS
@@ -104,7 +112,7 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
         cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
 
-        var result = await cmd.ExecuteScalarAsync();
+        var result =  cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
@@ -117,7 +125,7 @@ END", conn);
     public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
     {
         await using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
+         conn.Open();
 
         await using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
                 (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
@@ -130,7 +138,7 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
         cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.Int) { Value = dailyCounterStart });
 
-        var result = await cmd.ExecuteScalarAsync();
+        var result =  cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
@@ -144,8 +152,8 @@ END", conn);
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
         cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.Int) { Value = dailyCounterEnd });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 
     public async Task MarkBankFileGenerationCompleteAsync(int rowId)
@@ -157,8 +165,8 @@ END", conn);
        LASTCHANGEDATE = GETDATE()
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+         conn.Open();
+         cmd.ExecuteNonQuery();
     }
 
     public async Task MarkBankFileDeliveredAsync(int rowId)
@@ -170,8 +178,8 @@ END", conn);
        LASTCHANGEDATE = GETDATE()
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+         conn.Open();
+         cmd.ExecuteNonQuery();
     }
 }
 
