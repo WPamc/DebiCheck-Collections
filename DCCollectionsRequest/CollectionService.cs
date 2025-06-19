@@ -99,7 +99,11 @@ namespace RMCollectionProcessor
             }
 
             string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
-            int fileRowId = dbService.CreateBankFileRecord(fileName, genNumber, firstSeq);
+            int fileRowId = -1;
+            if (!isTest)
+            {
+                fileRowId = dbService.CreateBankFileRecord(fileName, genNumber, firstSeq);
+            }
 
             records.Add(recordBuilder.BuildTransmissionHeader(staticData));
 
@@ -123,11 +127,17 @@ namespace RMCollectionProcessor
                     {
                         sequenceNumber = dbService.GetNextDailyCounter(DateTime.Today);
                     }
-                    dbService.UpdateBankFileDailyCounterEnd(fileRowId, sequenceNumber);
+                    if (!isTest)
+                    {
+                        dbService.UpdateBankFileDailyCounterEnd(fileRowId, sequenceNumber);
+                    }
                 }
             }
 
-            dbService.UpdateBankFileDailyCounterEnd(fileRowId, lastSeq);
+            if (!isTest)
+            {
+                dbService.UpdateBankFileDailyCounterEnd(fileRowId, lastSeq);
+            }
 
             var collectionHeader = recordBuilder.BuildCollectionHeader(staticData, firstSeq, collections.Count);
             records.Insert(1, collectionHeader);
@@ -146,7 +156,10 @@ namespace RMCollectionProcessor
                 typeof(TransmissionTrailer999));
 
             engine.WriteFile(fileName, records);
-            dbService.MarkBankFileGenerationComplete(fileRowId);
+            if (!isTest)
+            {
+                dbService.MarkBankFileGenerationComplete(fileRowId);
+            }
 
             return fileName;
         }
