@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 using System.IO;
 
 namespace DCCollections.Gui
@@ -8,6 +9,7 @@ namespace DCCollections.Gui
         private readonly RMCollectionProcessor.CollectionService _service;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
         private object[]? _parsedRecords;
+        private readonly UserSettings _settings;
 
         private class FileListItem
         {
@@ -29,6 +31,10 @@ namespace DCCollections.Gui
                 .AddJsonFile("appsettings.json", optional: true)
                 .Build();
             _service = new RMCollectionProcessor.CollectionService();
+            _settings = UserSettings.Load();
+            WindowState = FormWindowState.Maximized;
+            MaximizeBox = true;
+            LoadInitialPaths();
         }
 
         private void btnParse_Click(object sender, EventArgs e)
@@ -68,35 +74,14 @@ namespace DCCollections.Gui
             using var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                try
-                {
-                    lstFiles.Items.Clear();
-                    foreach (var file in Directory.GetFiles(fbd.SelectedPath))
-                    {
-                        lstFiles.Items.Add(Path.GetFileName(file));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error");
-                }
+                _settings.OperationFolderPath = fbd.SelectedPath;
+                LoadOperationsFiles(fbd.SelectedPath);
             }
         }
 
         private void btnShowCurrent_Click(object sender, EventArgs e)
         {
-            try
-            {
-                lstFiles.Items.Clear();
-                foreach (var file in Directory.GetFiles(AppContext.BaseDirectory))
-                {
-                    lstFiles.Items.Add(Path.GetFileName(file));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error");
-            }
+            LoadOperationsFiles(AppContext.BaseDirectory);
         }
 
         private void btnFolderBrowse_Click(object sender, EventArgs e)
@@ -105,6 +90,7 @@ namespace DCCollections.Gui
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 txtFolder.Text = fbd.SelectedPath;
+                _settings.ParseFolderPath = fbd.SelectedPath;
                 LoadFolderFiles(fbd.SelectedPath);
             }
         }
@@ -184,6 +170,62 @@ namespace DCCollections.Gui
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+        }
+
+        private void btnOpenCsv_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var csv = Path.Combine(AppContext.BaseDirectory, "transactions.csv");
+                if (File.Exists(csv))
+                {
+                    Process.Start(new ProcessStartInfo(csv) { UseShellExecute = true });
+                }
+                else
+                {
+                    MessageBox.Show($"File not found: {csv}", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void LoadInitialPaths()
+        {
+            if (!string.IsNullOrWhiteSpace(_settings.ParseFolderPath) && Directory.Exists(_settings.ParseFolderPath))
+            {
+                txtFolder.Text = _settings.ParseFolderPath;
+                LoadFolderFiles(_settings.ParseFolderPath);
+            }
+
+            if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
+            {
+                LoadOperationsFiles(_settings.OperationFolderPath);
+            }
+        }
+
+        private void LoadOperationsFiles(string path)
+        {
+            try
+            {
+                lstFiles.Items.Clear();
+                foreach (var file in Directory.GetFiles(path))
+                {
+                    lstFiles.Items.Add(new FileListItem(file));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            _settings.Save();
         }
     }
 }
