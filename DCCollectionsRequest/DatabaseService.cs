@@ -229,9 +229,9 @@ END", conn);
         {
             using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
-                 RESULT, METHOD, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID)
+                 RESULT,  CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID,METHOD)
              VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
-                 NULL, NULL, 99, GETDATE(), 99, GETDATE(), @fileRowId);", conn);
+                 0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
             // --------------------------------------------------------------
             // Mapping from TransactionRecord -> BILLING_COLLECTIONREQUESTS
@@ -249,13 +249,22 @@ END", conn);
             decimal.TryParse(r.InstructedAmount, out var amountRequested);
 
             cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
-            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = r.RecordSequenceNumber });
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS"+r.ContractReference });
             cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
-            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.MandateReference });
+            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
             cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
+            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
+            try
+            {
 
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+
+                //throw;
+            }
         }
     }
 }
