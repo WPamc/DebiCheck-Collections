@@ -10,13 +10,24 @@ namespace RMCollectionProcessor
 {
     public class CollectionService
     {
+        private readonly CsvFileStore _store;
+
+        public CollectionService()
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "transactions.csv");
+            _store = new CsvFileStore(path);
+        }
+
         public object[] ParseFile(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"File '{filePath}' not found.");
 
             var processor = new FileProcessor();
-            return processor.ProcessFile(filePath);
+            var parsed = processor.ProcessFile(filePath);
+            var records = ExtractTransactionRecords(filePath, parsed);
+            _store.AddRecords(records);
+            return parsed;
         }
 
         public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false)
@@ -144,6 +155,80 @@ namespace RMCollectionProcessor
         {
             var dbService = new DatabaseService(configuration);
             return dbService.GetCollectionRequestByReference(reference);
+        }
+
+        private IEnumerable<TransactionRecord> ExtractTransactionRecords(string filePath, object[] parsed)
+        {
+            string fileName = Path.GetFileName(filePath);
+            string dataSetStatus = string.Empty;
+            string generationNumber = string.Empty;
+            string submissionDate = string.Empty;
+
+            foreach (var obj in parsed)
+            {
+                if (obj is CollectionHeader080 h)
+                {
+                    dataSetStatus = h.DataSetStatus.Trim();
+                    generationNumber = h.UserGenerationNumber.Trim();
+                    submissionDate = h.CreationDateTime.Trim();
+                    break;
+                }
+            }
+
+            var dict = new Dictionary<string, (string status, CollectionTxLine01? l1, CollectionTxLine02? l2, CollectionTxLine03? l3)>();
+            foreach (var obj in parsed)
+            {
+                switch (obj)
+                {
+                    case CollectionTxLine01 l1:
+                        var seq1 = l1.RecordSequenceNumber.Trim();
+                        if (!dict.ContainsKey(seq1))
+                            dict[seq1] = (l1.DataSetStatus.Trim(), null, null, null);
+                        var tup1 = dict[seq1];
+                        tup1.l1 = l1;
+                        tup1.status = l1.DataSetStatus.Trim();
+                        dict[seq1] = tup1;
+                        break;
+                    case CollectionTxLine02 l2:
+                        var seq2 = l2.RecordSequenceNumber.Trim();
+                        if (!dict.ContainsKey(seq2))
+                            dict[seq2] = (dataSetStatus, null, null, null);
+                        var tup2 = dict[seq2];
+                        tup2.l2 = l2;
+                        dict[seq2] = tup2;
+                        break;
+                    case CollectionTxLine03 l3:
+                        var seq3 = l3.RecordSequenceNumber.Trim();
+                        if (!dict.ContainsKey(seq3))
+                            dict[seq3] = (dataSetStatus, null, null, null);
+                        var tup3 = dict[seq3];
+                        tup3.l3 = l3;
+                        dict[seq3] = tup3;
+                        break;
+                }
+            }
+
+            foreach (var kvp in dict)
+            {
+                var l1 = kvp.Value.l1;
+                var l2 = kvp.Value.l2;
+                var l3 = kvp.Value.l3;
+                yield return new TransactionRecord
+                {
+                    Filename = fileName,
+                    DataSetStatus = kvp.Value.status,
+                    GenerationNumber = generationNumber,
+                    RecordSequenceNumber = kvp.Key,
+                    SubmissionDate = submissionDate,
+                    PaymentInformation = l1?.PaymentInformation.Trim() ?? string.Empty,
+                    RequestedCollectionDate = l1?.RequestedCollectionDate.Trim() ?? string.Empty,
+                    InstructedAmount = l2?.InstructedAmount.Trim() ?? string.Empty,
+                    MandateReference = l2?.MandateReference.Trim() ?? string.Empty,
+                    ContractReference = l3?.ContractReference.Trim() ?? string.Empty,
+                    RelatedCycleDate = l3?.RelatedCycleDate.Trim() ?? string.Empty,
+                    FileType = "RM Collections"
+                };
+            }
         }
     }
 }

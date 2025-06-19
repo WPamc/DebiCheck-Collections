@@ -271,9 +271,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1698, 1111);
             Controls.Add(tabMain);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.Sizable;
             Margin = new Padding(4, 5, 4, 5);
-            MaximizeBox = false;
+            MaximizeBox = true;
             Name = "MainForm";
             Text = "Collections";
             tabMain.ResumeLayout(false);
