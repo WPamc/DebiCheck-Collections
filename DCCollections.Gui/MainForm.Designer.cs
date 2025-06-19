@@ -43,6 +43,7 @@
         private System.Windows.Forms.TextBox txtRaw;
         private System.Windows.Forms.TextBox txtReference;
         private System.Windows.Forms.Button btnLookup;
+        private System.Windows.Forms.Button btnOpenCsv;
 
         private void InitializeComponent()
         {
@@ -63,6 +64,7 @@
             txtFolder = new TextBox();
             txtReference = new TextBox();
             btnLookup = new Button();
+            btnOpenCsv = new Button();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
@@ -175,6 +177,7 @@
             tabParse.Controls.Add(txtFolder);
             tabParse.Controls.Add(txtReference);
             tabParse.Controls.Add(btnLookup);
+            tabParse.Controls.Add(btnOpenCsv);
             tabParse.Location = new Point(4, 24);
             tabParse.Name = "tabParse";
             tabParse.Padding = new Padding(3, 3, 3, 3);
@@ -247,9 +250,19 @@
             btnLookup.Text = "Lookup Ref";
             btnLookup.UseVisualStyleBackColor = true;
             btnLookup.Click += btnLookup_Click;
-            // 
+            //
+            // btnOpenCsv
+            //
+            btnOpenCsv.Location = new Point(132, 263);
+            btnOpenCsv.Name = "btnOpenCsv";
+            btnOpenCsv.Size = new Size(120, 23);
+            btnOpenCsv.TabIndex = 9;
+            btnOpenCsv.Text = "Open CSV";
+            btnOpenCsv.UseVisualStyleBackColor = true;
+            btnOpenCsv.Click += btnOpenCsv_Click;
+            //
             // MainForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1189, 637);
