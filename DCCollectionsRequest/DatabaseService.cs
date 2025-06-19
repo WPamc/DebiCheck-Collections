@@ -246,7 +246,8 @@ END", conn);
             // --------------------------------------------------------------
 
             DateTime.TryParse(r.RequestedCollectionDate, out var dateRequested);
-            decimal.TryParse(r.InstructedAmount, out var amountRequested);
+            decimal.TryParse(r.InstructedAmount, out var amountRequestedInCents);
+            var amountRequested = amountRequestedInCents / 100m;
 
             cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
             cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS"+r.ContractReference });
