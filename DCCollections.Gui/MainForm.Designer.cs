@@ -88,8 +88,6 @@
             tabOperations.Controls.Add(btnBrowse);
             tabOperations.Controls.Add(btnShowCurrent);
             tabOperations.Controls.Add(btnGenerate);
-            tabOperations.Controls.Add(txtReference);
-            tabOperations.Controls.Add(btnLookup);
             tabOperations.Controls.Add(nudDay);
             tabOperations.Controls.Add(btnParse);
             tabOperations.Location = new Point(4, 34);
@@ -124,7 +122,7 @@
             //
             // txtReference
             //
-            txtReference.Location = new Point(9, 252);
+            txtReference.Location = new Point(9, 397);
             txtReference.Margin = new Padding(4, 5, 4, 5);
             txtReference.Name = "txtReference";
             txtReference.Size = new Size(171, 31);
@@ -132,7 +130,7 @@
             //
             // btnLookup
             //
-            btnLookup.Location = new Point(9, 293);
+            btnLookup.Location = new Point(9, 438);
             btnLookup.Margin = new Padding(4, 5, 4, 5);
             btnLookup.Name = "btnLookup";
             btnLookup.Size = new Size(171, 38);
@@ -203,6 +201,8 @@
             tabParse.Controls.Add(lstFolderFiles);
             tabParse.Controls.Add(btnFolderBrowse);
             tabParse.Controls.Add(txtFolder);
+            tabParse.Controls.Add(txtReference);
+            tabParse.Controls.Add(btnLookup);
             tabParse.Location = new Point(4, 34);
             tabParse.Margin = new Padding(4, 5, 4, 5);
             tabParse.Name = "tabParse";

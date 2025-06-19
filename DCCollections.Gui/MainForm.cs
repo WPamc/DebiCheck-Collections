@@ -7,6 +7,7 @@ namespace DCCollections.Gui
     {
         private readonly RMCollectionProcessor.CollectionService _service;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
+        private object[]? _parsedRecords;
 
         private class FileListItem
         {
@@ -37,8 +38,8 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(ofd.FileName);
-                    MessageBox.Show($"Parsed {result.Length} records.", "Success");
+                    _parsedRecords = _service.ParseFile(ofd.FileName);
+                    MessageBox.Show($"Parsed {_parsedRecords.Length} records.", "Success");
                 }
                 catch (Exception ex)
                 {
@@ -135,9 +136,9 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(item.Path);
+                    _parsedRecords = _service.ParseFile(item.Path);
                     txtRaw.Text = File.ReadAllText(item.Path);
-                    MessageBox.Show($"Parsed {result.Length} records.", "Success");
+                    MessageBox.Show($"Parsed {_parsedRecords.Length} records.", "Success");
                 }
                 catch (Exception ex)
                 {
@@ -157,15 +158,27 @@ namespace DCCollections.Gui
                     return;
                 }
 
-                var result = _service.GetRequestByReference(reference, _config);
-                if (result == null)
+                if (_parsedRecords == null)
                 {
-                    MessageBox.Show("No record found", "Info");
+                    MessageBox.Show("Parse a file first", "Info");
+                    return;
                 }
-                else
+
+                foreach (var obj in _parsedRecords)
                 {
-                    MessageBox.Show($"Row ID: {result.RowId}\nAmount: {result.AmountRequested}", "Result");
+                    if (obj is RMCollectionProcessor.Models.CollectionTxLine02 l2 && l2.MandateReference.Trim() == reference)
+                    {
+                        MessageBox.Show($"Found mandate reference in sequence {l2.RecordSequenceNumber}", "Result");
+                        return;
+                    }
+                    if (obj is RMCollectionProcessor.Models.CollectionTxLine03 l3 && l3.ContractReference.Trim() == reference)
+                    {
+                        MessageBox.Show($"Found contract reference in sequence {l3.RecordSequenceNumber}", "Result");
+                        return;
+                    }
                 }
+
+                MessageBox.Show("No record found", "Info");
             }
             catch (Exception ex)
             {
