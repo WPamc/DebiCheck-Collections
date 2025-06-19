@@ -30,11 +30,32 @@ namespace DCCollections.Gui
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: true)
                 .Build();
+
+            // Display the connection string (without the password) to the user
+            var connStr = _config.GetConnectionString("DefaultConnection");
+            if (!string.IsNullOrWhiteSpace(connStr))
+            {
+                var safeConn = RemovePassword(connStr);
+                MessageBox.Show(safeConn, "Database Connection");
+                Text = $"Collections - {safeConn}";
+            }
+
             _service = new RMCollectionProcessor.CollectionService();
             _settings = UserSettings.Load();
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
             LoadInitialPaths();
+        }
+
+        private static string RemovePassword(string connection)
+        {
+            var builder = new System.Data.Common.DbConnectionStringBuilder
+            {
+                ConnectionString = connection
+            };
+            builder.Remove("Password");
+            builder.Remove("Pwd");
+            return builder.ConnectionString;
         }
 
         private void btnParse_Click(object sender, EventArgs e)
