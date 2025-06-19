@@ -257,7 +257,6 @@ END", conn);
             cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
             try
             {
-
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
