@@ -53,13 +53,15 @@ namespace RMCollectionProcessor
                 if (bankservId == "04") return typeof(CollectionHeader080);
                 if (bankservId == "92") return typeof(CollectionTrailer080);
 
-                if (bankservId == "08")
-                {
-                    string lineCount = recordLine.Substring(16, 2);
-                    if (lineCount == "01") return typeof(CollectionTxLine01);
-                    if (lineCount == "02") return typeof(CollectionTxLine02);
-                    if (lineCount == "03") return typeof(CollectionTxLine03);
-                }
+                string lineCount = recordLine.Substring(16, 2);
+                if (bankservId == "08" && lineCount == "01") 
+                    return typeof(CollectionTxLine01);
+                lineCount = recordLine.Substring(8, 2);
+                if (lineCount == "02") 
+                    return typeof(CollectionTxLine02);
+                if (lineCount == "03") 
+                    return typeof(CollectionTxLine03);
+
             }
 
             return null; // Unknown record type

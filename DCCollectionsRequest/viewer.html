@@ -3,178 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixed-Length File Parser</title>
+    <title>Fixed-Width File Viewer</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f9;
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
             color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #0d47a1;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
         }
 
         #fileInput {
-            display: block;
-            margin: 20px 0 10px 0;
-            padding: 10px;
-            border: 2px dashed #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-            #fileInput:hover {
-                border-color: #0d47a1;
-            }
-
-        .path-info {
-            font-size: 0.9em;
-            color: #666;
             margin-bottom: 20px;
-        }
-
-            .path-info code {
-                background-color: #e0e0e0;
-                padding: 2px 6px;
-                border-radius: 4px;
-                font-family: 'Courier New', Courier, monospace;
-            }
-
-        #outputContainer {
-            margin-top: 20px;
-        }
-
-        .record-block {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 25px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .record-header {
-            background-color: #e3f2fd;
-            padding: 10px 15px;
-            font-weight: bold;
-            color: #0d47a1;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .raw-line {
-            background-color: #2d2d2d;
-            color: #f0f0f0;
-            padding: 15px;
-            margin: 0;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            white-space: pre;
-            overflow-x: auto;
-            cursor: default;
-        }
-
-            .raw-line span {
-                display: inline-block;
-            }
-
-        .fields-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-            .fields-table th, .fields-table td {
-                border-bottom: 1px solid #eee;
-                padding: 12px 15px;
-                text-align: left;
-                vertical-align: top;
-            }
-
-            .fields-table tr {
-                cursor: default;
-            }
-
-                .fields-table tr:last-child td {
-                    border-bottom: none;
-                }
-
-            .fields-table th {
-                background-color: #f9f9f9;
-                font-weight: 600;
-            }
-
-            .fields-table td:first-child {
-                font-weight: 500;
-                color: #555;
-                width: 250px;
-            }
-
-            .fields-table td:nth-child(2) {
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 14px;
-            }
-
-        .unknown-record {
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 10px 15px;
-            border: 1px solid #c62828;
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 4px;
         }
-        /* Style for the highlight */
-        .highlight {
-            background-color: #fff9c4 !important;
-            color: #212121 !important;
-            transition: background-color 0.1s ease-in-out;
+
+        .record-container {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .raw-text-container {
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            white-space: pre;
+            font-family: monospace;
+            cursor: default;
+            word-break: break-all;
+            user-select: none; /* Prevent text selection interference */
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            .field-table th, .field-table td {
+                border: 1px solid #dee2e6;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .field-table th {
+                background-color: #e9ecef;
+            }
+
+        .highlight-text {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .highlight-row {
+            background-color: #b8daff; /* Light blue for table row */
+        }
+
+        .record-type-label {
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 5px;
+        }
+
+        .error-message {
+            color: red;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Fixed-Length File Parser</h1>
-        <p>Select a file with the specified layout to see its content parsed below.</p>
-        <input type="file" id="fileInput" accept=".txt, .dat, .*">
-        <p class="path-info">Example file location: <code>C:\Users\wimpie.PAMC\code\github\DebiCheck-Collections\DCCollectionsRequest\bin\Debug\net8.0</code></p>
-        <div id="outputContainer">
-            <p><i>No file selected. Please choose a file to begin.</i></p>
-        </div>
-    </div>
+    <h1>Fixed-Width File Viewer</h1>
+    <input type="file" id="fileInput" accept=".txt,.*">
+    <div id="output"></div>
 
     <script>
-        // --- START OF AMENDED SECTION 1: Updated Record Definitions ---
-        // These JavaScript definitions are based on your C# models.
-        // NOTE: For consistency, transaction lines 02 and 03 have been given the same
-        // prefix fields as line 01, and their Fillers have been adjusted to ensure a
-        // total length of 198 bytes, which is the likely correct file format.
-        const recordDefinitions = {
-            "000": { name: "Transmission Header (000)", fields: [{ name: "RecordIdentifier", length: 3 }, { name: "RecordStatus", length: 1 }, { name: "TransmissionDate", length: 8 }, { name: "UserCode", length: 5 }, { name: "UserName", length: 30 }, { name: "TransmissionNumber", length: 7 }, { name: "Destination", length: 5 }, { name: "Filler1", length: 119 }, { name: "ForLdUsersUse", length: 20 }] },
-            "080-04": { name: "Collection Header (080-04)", fields: [{ name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 }, { name: "BankServRecordId", length: 2 }, { name: "BankServUserCode", length: 4 }, { name: "FirstSequenceNumber", length: 6 }, { name: "UserGenerationNumber", length: 4 }, { name: "ServiceType", length: 8 }, { name: "CreationDateTime", length: 19 }, { name: "TotalTransactions", length: 15 }, { name: "PaymentInfoId", length: 20 }, { name: "AccountTypeCorrection", length: 1 }, { name: "Filler", length: 115 }] },
-            "080-08-01": { name: "Collection Transaction Line 1 (080-08-01)", fields: [{ name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 }, { name: "BankServRecordId", length: 2 }, { name: "BankServUserCode", length: 4 }, { name: "RecordSequenceNumber", length: 6 }, { name: "LineCount", length: 2 }, { name: "InitiatingParty", length: 35 }, { name: "PaymentInformation", length: 35 }, { name: "RequestedCollectionDate", length: 19 }, { name: "CreditorName", length: 35 }, { name: "CreditorContactDetails", length: 30 }, { name: "CreditorAbbreviatedShortName", length: 10 }, { name: "Filler", length: 16 }] },
-
-            // CORRECTED definition for transaction line 2. Total length is 198.
-            "08-02": {
-                name: "Collection Transaction Line 2 (08-02)", fields: [
-                    // Common transaction prefix
-                    { name: "RecordIdentifier", length: 3 },      // e.g., "08 "
+        const recordModels = {
+            TransmissionHeader000: {
+                name: "TransmissionHeader000",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "RecordStatus", length: 1 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "UserName", length: 30 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "Destination", length: 5 },
+                    { name: "Filler1", length: 119 },
+                    { name: "ForLdUsersUse", length: 20 }
+                ]
+            },
+            CollectionHeader080: {
+                name: "CollectionHeader080",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
                     { name: "DataSetStatus", length: 1 },
-                    { name: "BankServRecordId", length: 2 },      // "08"
+                    { name: "BankServRecordId", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "FirstSequenceNumber", length: 6 },
+                    { name: "UserGenerationNumber", length: 4 },
+                    { name: "ServiceType", length: 8 },
+                    { name: "CreationDateTime", length: 19 },
+                    { name: "TotalTransactions", length: 15 },
+                    { name: "PaymentInfoId", length: 20 },
+                    { name: "AccountTypeCorrection", length: 1 },
+                    { name: "Filler", length: 115 }
+                ]
+            },
+            CollectionTxLine01: {
+                name: "CollectionTxLine01",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "BankServRecordId", length: 2 },
                     { name: "BankServUserCode", length: 4 },
                     { name: "RecordSequenceNumber", length: 6 },
-                    { name: "LineCount", length: 2 },             // "02"
-                    // Fields from C# CollectionTxLine02 model
+                    { name: "LineCount", length: 2 },
+                    { name: "InitiatingParty", length: 35 },
+                    { name: "PaymentInformation", length: 35 },
+                    { name: "RequestedCollectionDate", length: 19 },
+                    { name: "CreditorName", length: 35 },
+                    { name: "CreditorContactDetails", length: 30 },
+                    { name: "CreditorAbbreviatedShortName", length: 10 },
+                    { name: "Filler", length: 16 }
+                ]
+            },
+            CollectionTxLine02: {
+                name: "CollectionTxLine02",
+                fields: [
+                    { name: "RecordIdentifier", length: 2 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "LineCount", length: 2 },
                     { name: "CreditorEmail", length: 90 },
                     { name: "CreditorAccountNumber", length: 19 },
                     { name: "CreditorBankBranch", length: 6 },
@@ -186,169 +152,269 @@
                     { name: "ChargeBearer", length: 4 },
                     { name: "MandateReference", length: 22 },
                     { name: "DebtorBankBranch", length: 6 },
-                    { name: "Filler", length: 6 } // Adjusted from 14 to make total 198
+                    { name: "Filler", length: 14 }
                 ]
             },
-
-            // NEW definition for transaction line 3. Total length is 198.
-            "08-03": {
-                name: "Collection Transaction Line 3 (08-03)", fields: [
-                    // Common transaction prefix
-                    { name: "RecordIdentifier", length: 3 },      // e.g., "08 "
-                    { name: "DataSetStatus", length: 1 },
-                    { name: "BankServRecordId", length: 2 },      // "08"
-                    { name: "BankServUserCode", length: 4 },
+            CollectionTxLine03: {
+                name: "CollectionTxLine03",
+                fields: [
+                    { name: "RecordIdentifier", length: 2 },
                     { name: "RecordSequenceNumber", length: 6 },
-                    { name: "LineCount", length: 2 },             // "03"
-                    // Fields from C# CollectionTxLine03 model
+                    { name: "LineCount", length: 2 },
                     { name: "DebtorName", length: 35 },
                     { name: "DebtorAccountNumber", length: 19 },
                     { name: "AccountType", length: 35 },
                     { name: "ContractReference", length: 14 },
                     { name: "RelatedCycleDate", length: 10 },
-                    { name: "Filler", length: 67 } // Adjusted from 75 to make total 198
+                    { name: "Filler", length: 75 }
                 ]
             },
-
-            "080-92": { name: "Collection Trailer (080-92)", fields: [{ name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 }, { name: "BankServRecordId", length: 2 }, { name: "BankServUserCode", length: 4 }, { name: "FirstSequenceNumber", length: 6 }, { name: "LastSequenceNumber", length: 6 }, { name: "NumberOfCollectionRecords", length: 15 }, { name: "SumOfAcctNosAndAmounts", length: 18 }, { name: "Filler", length: 143 }] },
-            "999": { name: "Transmission Trailer (999)", fields: [{ name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 }, { name: "NumberOfRecords", length: 9 }, { name: "Filler", length: 185 }] }
-        };
-        // --- END OF AMENDED SECTION 1 ---
-
-        const fileInput = document.getElementById('fileInput');
-        const outputContainer = document.getElementById('outputContainer');
-
-        fileInput.addEventListener('change', handleFileSelect);
-
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                outputContainer.innerHTML = '<p><i>No file selected. Please choose a file to begin.</i></p>';
-                return;
+            CollectionTrailer080: {
+                name: "CollectionTrailer080",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "BankServRecordId", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "FirstSequenceNumber", length: 6 },
+                    { name: "LastSequenceNumber", length: 6 },
+                    { name: "NumberOfCollectionRecords", length: 15 },
+                    { name: "SumOfAcctNosAndAmounts", length: 18 },
+                    { name: "Filler", length: 143 }
+                ]
+            },
+            TransmissionTrailer999: {
+                name: "TransmissionTrailer999",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "NumberOfRecords", length: 9 },
+                    { name: "Filler", length: 185 }
+                ]
             }
-            const reader = new FileReader();
-            reader.onload = (e) => parseAndDisplayFile(e.target.result);
-            reader.readAsText(file);
+        };
+
+        // Pre-calculate start positions for fields
+        for (const modelKey in recordModels) {
+            let currentPos = 0;
+            recordModels[modelKey].fields.forEach(field => {
+                field.start = currentPos;
+                currentPos += field.length;
+                field.end = currentPos;
+            });
+            recordModels[modelKey].totalLength = currentPos;
         }
 
-        function parseAndDisplayFile(content) {
-            outputContainer.innerHTML = ''; // Clear previous output
-            const lines = content.split(/\r?\n/);
+        function customRecordSelector(recordLine) {
+            if (typeof recordLine !== 'string' || recordLine.length < 3) {
+                return null;
+            }
+
+            const recordId = recordLine.substring(0, 3);
+
+            if (recordId === "000") return recordModels.TransmissionHeader000;
+            if (recordId === "999") return recordModels.TransmissionTrailer999;
+
+            if (recordId === "080") {
+                if (recordLine.length < 6) return null;
+                const bankservId = recordLine.substring(4, 6);
+                if (bankservId === "04") return recordModels.CollectionHeader080;
+                if (bankservId === "92") return recordModels.CollectionTrailer080;
+
+                // Check for Line 01
+                if (recordLine.length >= 18) {
+                    const lineCountFor01 = recordLine.substring(16, 18);
+                    if (bankservId === "08" && lineCountFor01 === "01") {
+                        return recordModels.CollectionTxLine01;
+                    }
+                }
+
+                // Check for Line 02 and 03 from their specific position
+                if (recordLine.length >= 10) {
+                    const lineCountFor0203 = recordLine.substring(8, 10);
+                    if (lineCountFor0203 === "02") {
+                        return recordModels.CollectionTxLine02;
+                    }
+                    if (lineCountFor0203 === "03") {
+                        return recordModels.CollectionTxLine03;
+                    }
+                }
+            }
+
+            return null; // Unknown record type
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const content = e.target.result;
+                    processFileContent(content);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function processFileContent(content) {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+            const lines = content.split(/\r\n|\n|\r/); // Handle different line endings
 
             lines.forEach((line, index) => {
-                if (line.trim() === '') return;
+                if (line.trim() === '') return; // Skip empty lines
 
-                const recordBlock = document.createElement('div');
-                recordBlock.className = 'record-block';
+                const recordContainer = document.createElement('div');
+                recordContainer.className = 'record-container';
+                recordContainer.id = `record-container-${index}`;
 
-                // --- START OF AMENDED SECTION 2: Rewritten Record Selector Logic ---
-                // This logic determines which definition to use for the current line.
-                let definitionKey = null;
-                const recordId = line.substring(0, 3);
+                const rawTextContainer = document.createElement('div');
+                rawTextContainer.className = 'raw-text-container';
+                rawTextContainer.id = `raw-text-${index}`;
+                rawTextContainer.textContent = line; // Initial display
+                recordContainer.appendChild(rawTextContainer);
 
-                if (recordId === '000' || recordId === '999') {
-                    definitionKey = recordId;
-                } else if (recordId === '080') {
-                    const bankServId = line.substring(4, 6);
-                    if (bankServId === '04') {
-                        definitionKey = '080-04'; // Collection Header
-                    } else if (bankServId === '92') {
-                        definitionKey = '080-92'; // Collection Trailer
-                    } else if (bankServId === '08') {
-                        // Per the spec, a record starting "080" with BankServId "08" is Line 1.
-                        definitionKey = '080-08-01';
-                    }
-                } else if (line.startsWith('08 ')) { // Continuation lines start with "08 "
-                    // The LineCount field distinguishes between line 2 and 3.
-                    const lineCount = line.substring(16, 18);
-                    if (lineCount === '02') {
-                        definitionKey = '08-02'; // Transaction Line 2
-                    } else if (lineCount === '03') {
-                        definitionKey = '08-03'; // Transaction Line 3
-                    }
-                }
-                // --- END OF AMENDED SECTION 2 ---
+                const model = customRecordSelector(line);
+                const recordTypeLabel = document.createElement('div');
+                recordTypeLabel.className = 'record-type-label';
 
-                const definition = recordDefinitions[definitionKey];
+                if (model) {
+                    recordTypeLabel.textContent = `Record Type: ${model.name}`;
+                    recordContainer.appendChild(recordTypeLabel);
 
-                const header = document.createElement('div');
-                header.className = 'record-header';
-
-                const rawLineElement = document.createElement('pre');
-                rawLineElement.className = 'raw-line';
-
-                recordBlock.appendChild(header);
-                recordBlock.appendChild(rawLineElement);
-
-                if (definition) {
-                    header.textContent = `Line ${index + 1}: ${definition.name}`;
                     const table = document.createElement('table');
-                    table.className = 'fields-table';
+                    table.className = 'field-table';
+                    table.id = `table-${index}`;
+                    const header = table.createTHead().insertRow();
+                    header.insertCell().textContent = 'Field Name';
+                    header.insertCell().textContent = 'Value';
+                    header.insertCell().textContent = 'Start';
+                    header.insertCell().textContent = 'Length';
 
-                    createInteractiveFields(line, definition.fields, rawLineElement, table);
-                    recordBlock.appendChild(table);
+                    const tbody = table.createTBody();
+                    let currentPos = 0;
+                    model.fields.forEach((field, fieldIndex) => {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-${fieldIndex}`;
+                        row.insertCell().textContent = field.name;
+                        const fieldValue = line.substring(field.start, field.end);
+                        row.insertCell().textContent = fieldValue;
+                        row.insertCell().textContent = field.start;
+                        row.insertCell().textContent = field.length;
+                        currentPos = field.end;
+                    });
 
-                    addHighlightEvents(recordBlock);
+                    if (currentPos < line.length) {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-unmapped`;
+                        row.insertCell().textContent = "Unmapped Trailing Data";
+                        row.insertCell().textContent = line.substring(currentPos);
+                        row.insertCell().textContent = currentPos;
+                        row.insertCell().textContent = line.length - currentPos;
+                        row.style.fontStyle = "italic";
+                        row.style.color = "grey";
+                    }
+                    if (model.totalLength > line.length) {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-shortfall`;
+                        row.insertCell().textContent = "Line Shorter Than Model";
+                        row.insertCell().textContent = `Expected ${model.totalLength}, Got ${line.length}`;
+                        row.setAttribute("colspan", "3");
+                        row.style.color = "orange";
+                    }
+
+
+                    recordContainer.appendChild(table);
+
+                    // Add mousemove listener to raw text
+                    rawTextContainer.addEventListener('mousemove', (e) => {
+                        handleRawTextMouseMove(e, line, model, index);
+                    });
+                    rawTextContainer.addEventListener('mouseleave', () => {
+                        clearHighlights(index, model, line);
+                    });
 
                 } else {
-                    header.textContent = `Line ${index + 1}: Unknown Record Type`;
-                    rawLineElement.textContent = line;
-                    const errorMsg = document.createElement('p');
-                    errorMsg.className = 'unknown-record';
-                    errorMsg.textContent = `Could not find a definition for line starting with '${line.substring(0, 3)}'. Check record identifiers and line content.`;
-                    recordBlock.appendChild(errorMsg);
+                    recordTypeLabel.textContent = 'Record Type: Unknown';
+                    recordTypeLabel.classList.add('error-message');
+                    recordContainer.appendChild(recordTypeLabel);
                 }
-                outputContainer.appendChild(recordBlock);
+                outputDiv.appendChild(recordContainer);
             });
+        }
 
-            if (outputContainer.innerHTML === '') {
-                outputContainer.innerHTML = '<p><i>The selected file appears to be empty.</i></p>';
+        let lastHighlightedField = { lineIndex: -1, fieldIndex: -1 };
+
+        function handleRawTextMouseMove(event, line, model, lineIndex) {
+            const rawTextContainer = document.getElementById(`raw-text-${lineIndex}`);
+            const table = document.getElementById(`table-${lineIndex}`);
+            if (!rawTextContainer || !table) return;
+
+            // Calculate character index from mouse position
+            // This is an approximation and might need refinement for precise character boundary detection
+            const rect = rawTextContainer.getBoundingClientRect();
+            const charWidth = rawTextContainer.scrollWidth / line.length; // Approximate char width
+            const mouseXInText = event.clientX - rect.left + rawTextContainer.scrollLeft;
+            const charIndex = Math.floor(mouseXInText / charWidth);
+
+            let currentFieldIndex = -1;
+            for (let i = 0; i < model.fields.length; i++) {
+                const field = model.fields[i];
+                if (charIndex >= field.start && charIndex < field.end) {
+                    currentFieldIndex = i;
+                    break;
+                }
+            }
+
+            if (lastHighlightedField.lineIndex === lineIndex && lastHighlightedField.fieldIndex === currentFieldIndex) {
+                return; // No change in highlighted field
+            }
+
+            // Clear previous highlights for this line
+            clearHighlights(lineIndex, model, line);
+
+            if (currentFieldIndex !== -1) {
+                const field = model.fields[currentFieldIndex];
+
+                // Highlight text segment
+                const prefix = line.substring(0, field.start);
+                const highlighted = line.substring(field.start, field.end);
+                const suffix = line.substring(field.end);
+                rawTextContainer.innerHTML = ''; // Clear existing content
+                rawTextContainer.appendChild(document.createTextNode(prefix));
+                const span = document.createElement('span');
+                span.className = 'highlight-text';
+                span.textContent = highlighted;
+                rawTextContainer.appendChild(span);
+                rawTextContainer.appendChild(document.createTextNode(suffix));
+
+                // Highlight table row
+                const row = document.getElementById(`row-${lineIndex}-${currentFieldIndex}`);
+                if (row) {
+                    row.classList.add('highlight-row');
+                }
+                lastHighlightedField = { lineIndex, fieldIndex: currentFieldIndex };
+            } else {
+                lastHighlightedField = { lineIndex, fieldIndex: -1 };
             }
         }
 
-        function createInteractiveFields(line, fields, rawLineContainer, table) {
-            rawLineContainer.innerHTML = '';
-            const tbody = table.createTBody();
-            let currentPosition = 0;
+        function clearHighlights(lineIndex, model, originalLine) {
+            const rawTextContainer = document.getElementById(`raw-text-${lineIndex}`);
+            if (rawTextContainer) {
+                rawTextContainer.textContent = originalLine; // Restore original text
+            }
 
-            fields.forEach((field, index) => {
-                const value = line.substring(currentPosition, currentPosition + field.length);
-
-                const span = document.createElement('span');
-                span.textContent = value;
-                span.dataset.fieldIndex = index;
-                rawLineContainer.appendChild(span);
-
-                const row = tbody.insertRow();
-                row.dataset.fieldIndex = index;
-                const cellName = row.insertCell();
-                const cellValue = row.insertCell();
-                cellName.textContent = field.name;
-                cellValue.textContent = value;
-
-                currentPosition += field.length;
-            });
-        }
-
-        function addHighlightEvents(recordBlock) {
-            const handleMouseOver = (event) => {
-                const target = event.target.closest('[data-field-index]');
-                if (!target) return;
-                const index = target.dataset.fieldIndex;
-                const elementsToHighlight = recordBlock.querySelectorAll(`[data-field-index="${index}"]`);
-                elementsToHighlight.forEach(el => el.classList.add('highlight'));
-            };
-
-            const handleMouseOut = (event) => {
-                const target = event.target.closest('[data-field-index]');
-                if (!target) return;
-                const index = target.dataset.fieldIndex;
-                const elementsToHighlight = recordBlock.querySelectorAll(`[data-field-index="${index}"]`);
-                elementsToHighlight.forEach(el => el.classList.remove('highlight'));
-            };
-
-            recordBlock.addEventListener('mouseover', handleMouseOver);
-            recordBlock.addEventListener('mouseout', handleMouseOut);
+            const table = document.getElementById(`table-${lineIndex}`);
+            if (table) {
+                const rows = table.getElementsByTagName('tr');
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].classList.remove('highlight-row');
+                }
+            }
+            if (lastHighlightedField.lineIndex === lineIndex) {
+                lastHighlightedField = { lineIndex: -1, fieldIndex: -1 };
+            }
         }
 
     </script>

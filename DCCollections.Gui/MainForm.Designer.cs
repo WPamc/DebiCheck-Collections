@@ -75,10 +75,9 @@
             tabMain.Controls.Add(tabParse);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
-            tabMain.Margin = new Padding(4, 5, 4, 5);
             tabMain.Name = "tabMain";
             tabMain.SelectedIndex = 0;
-            tabMain.Size = new Size(1698, 1111);
+            tabMain.Size = new Size(1189, 637);
             tabMain.TabIndex = 0;
             // 
             // tabOperations
@@ -90,11 +89,10 @@
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
             tabOperations.Controls.Add(btnParse);
-            tabOperations.Location = new Point(4, 34);
-            tabOperations.Margin = new Padding(4, 5, 4, 5);
+            tabOperations.Location = new Point(4, 24);
             tabOperations.Name = "tabOperations";
-            tabOperations.Padding = new Padding(4, 5, 4, 5);
-            tabOperations.Size = new Size(949, 534);
+            tabOperations.Padding = new Padding(3, 3, 3, 3);
+            tabOperations.Size = new Size(1181, 609);
             tabOperations.TabIndex = 0;
             tabOperations.Text = "Operations";
             tabOperations.UseVisualStyleBackColor = true;
@@ -102,49 +100,27 @@
             // lstFiles
             // 
             lstFiles.FormattingEnabled = true;
-            lstFiles.ItemHeight = 25;
-            lstFiles.Location = new Point(214, 58);
-            lstFiles.Margin = new Padding(4, 5, 4, 5);
+            lstFiles.ItemHeight = 15;
+            lstFiles.Location = new Point(150, 35);
             lstFiles.Name = "lstFiles";
-            lstFiles.Size = new Size(731, 479);
+            lstFiles.Size = new Size(513, 289);
             lstFiles.TabIndex = 5;
             // 
             // chkTest
             // 
             chkTest.AutoSize = true;
-            chkTest.Location = new Point(9, 203);
-            chkTest.Margin = new Padding(4, 5, 4, 5);
+            chkTest.Location = new Point(6, 122);
             chkTest.Name = "chkTest";
-            chkTest.Size = new Size(99, 29);
+            chkTest.Size = new Size(68, 19);
             chkTest.TabIndex = 6;
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
-            //
-            // txtReference
-            //
-            txtReference.Location = new Point(9, 397);
-            txtReference.Margin = new Padding(4, 5, 4, 5);
-            txtReference.Name = "txtReference";
-            txtReference.Size = new Size(171, 31);
-            txtReference.TabIndex = 7;
-            //
-            // btnLookup
-            //
-            btnLookup.Location = new Point(9, 438);
-            btnLookup.Margin = new Padding(4, 5, 4, 5);
-            btnLookup.Name = "btnLookup";
-            btnLookup.Size = new Size(171, 38);
-            btnLookup.TabIndex = 8;
-            btnLookup.Text = "Lookup Ref";
-            btnLookup.UseVisualStyleBackColor = true;
-            btnLookup.Click += btnLookup_Click;
             // 
             // btnBrowse
             // 
-            btnBrowse.Location = new Point(214, 10);
-            btnBrowse.Margin = new Padding(4, 5, 4, 5);
+            btnBrowse.Location = new Point(150, 6);
             btnBrowse.Name = "btnBrowse";
-            btnBrowse.Size = new Size(171, 38);
+            btnBrowse.Size = new Size(120, 23);
             btnBrowse.TabIndex = 3;
             btnBrowse.Text = "Browse Folder";
             btnBrowse.UseVisualStyleBackColor = true;
@@ -152,10 +128,9 @@
             // 
             // btnShowCurrent
             // 
-            btnShowCurrent.Location = new Point(9, 155);
-            btnShowCurrent.Margin = new Padding(4, 5, 4, 5);
+            btnShowCurrent.Location = new Point(6, 93);
             btnShowCurrent.Name = "btnShowCurrent";
-            btnShowCurrent.Size = new Size(171, 38);
+            btnShowCurrent.Size = new Size(120, 23);
             btnShowCurrent.TabIndex = 4;
             btnShowCurrent.Text = "Show App Files";
             btnShowCurrent.UseVisualStyleBackColor = true;
@@ -163,10 +138,9 @@
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(9, 107);
-            btnGenerate.Margin = new Padding(4, 5, 4, 5);
+            btnGenerate.Location = new Point(6, 64);
             btnGenerate.Name = "btnGenerate";
-            btnGenerate.Size = new Size(171, 38);
+            btnGenerate.Size = new Size(120, 23);
             btnGenerate.TabIndex = 2;
             btnGenerate.Text = "Generate File";
             btnGenerate.UseVisualStyleBackColor = true;
@@ -174,21 +148,19 @@
             // 
             // nudDay
             // 
-            nudDay.Location = new Point(9, 58);
-            nudDay.Margin = new Padding(4, 5, 4, 5);
+            nudDay.Location = new Point(6, 35);
             nudDay.Maximum = new decimal(new int[] { 31, 0, 0, 0 });
             nudDay.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudDay.Name = "nudDay";
-            nudDay.Size = new Size(171, 31);
+            nudDay.Size = new Size(120, 23);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btnParse
             // 
-            btnParse.Location = new Point(9, 10);
-            btnParse.Margin = new Padding(4, 5, 4, 5);
+            btnParse.Location = new Point(6, 6);
             btnParse.Name = "btnParse";
-            btnParse.Size = new Size(171, 38);
+            btnParse.Size = new Size(120, 23);
             btnParse.TabIndex = 0;
             btnParse.Text = "Parse File";
             btnParse.UseVisualStyleBackColor = true;
@@ -203,11 +175,10 @@
             tabParse.Controls.Add(txtFolder);
             tabParse.Controls.Add(txtReference);
             tabParse.Controls.Add(btnLookup);
-            tabParse.Location = new Point(4, 34);
-            tabParse.Margin = new Padding(4, 5, 4, 5);
+            tabParse.Location = new Point(4, 24);
             tabParse.Name = "tabParse";
-            tabParse.Padding = new Padding(4, 5, 4, 5);
-            tabParse.Size = new Size(1690, 1073);
+            tabParse.Padding = new Padding(3, 3, 3, 3);
+            tabParse.Size = new Size(1181, 609);
             tabParse.TabIndex = 1;
             tabParse.Text = "Parse Files";
             tabParse.UseVisualStyleBackColor = true;
@@ -215,21 +186,19 @@
             // txtRaw
             // 
             txtRaw.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtRaw.Location = new Point(815, 58);
-            txtRaw.Margin = new Padding(4, 5, 4, 5);
+            txtRaw.Location = new Point(570, 35);
             txtRaw.Multiline = true;
             txtRaw.Name = "txtRaw";
             txtRaw.ScrollBars = ScrollBars.Vertical;
-            txtRaw.Size = new Size(863, 1005);
+            txtRaw.Size = new Size(605, 575);
             txtRaw.TabIndex = 4;
             // 
             // btnParseSelected
             // 
             btnParseSelected.Enabled = false;
-            btnParseSelected.Location = new Point(511, 10);
-            btnParseSelected.Margin = new Padding(4, 5, 4, 5);
+            btnParseSelected.Location = new Point(358, 6);
             btnParseSelected.Name = "btnParseSelected";
-            btnParseSelected.Size = new Size(171, 38);
+            btnParseSelected.Size = new Size(120, 23);
             btnParseSelected.TabIndex = 3;
             btnParseSelected.Text = "Parse File";
             btnParseSelected.UseVisualStyleBackColor = true;
@@ -238,20 +207,18 @@
             // lstFolderFiles
             // 
             lstFolderFiles.FormattingEnabled = true;
-            lstFolderFiles.ItemHeight = 25;
-            lstFolderFiles.Location = new Point(9, 58);
-            lstFolderFiles.Margin = new Padding(4, 5, 4, 5);
+            lstFolderFiles.ItemHeight = 15;
+            lstFolderFiles.Location = new Point(6, 35);
             lstFolderFiles.Name = "lstFolderFiles";
-            lstFolderFiles.Size = new Size(798, 329);
+            lstFolderFiles.Size = new Size(560, 199);
             lstFolderFiles.TabIndex = 2;
             lstFolderFiles.SelectedIndexChanged += lstFolderFiles_SelectedIndexChanged;
             // 
             // btnFolderBrowse
             // 
-            btnFolderBrowse.Location = new Point(360, 10);
-            btnFolderBrowse.Margin = new Padding(4, 5, 4, 5);
+            btnFolderBrowse.Location = new Point(252, 6);
             btnFolderBrowse.Name = "btnFolderBrowse";
-            btnFolderBrowse.Size = new Size(143, 38);
+            btnFolderBrowse.Size = new Size(100, 23);
             btnFolderBrowse.TabIndex = 1;
             btnFolderBrowse.Text = "Browse";
             btnFolderBrowse.UseVisualStyleBackColor = true;
@@ -259,21 +226,34 @@
             // 
             // txtFolder
             // 
-            txtFolder.Location = new Point(9, 10);
-            txtFolder.Margin = new Padding(4, 5, 4, 5);
+            txtFolder.Location = new Point(6, 6);
             txtFolder.Name = "txtFolder";
-            txtFolder.Size = new Size(341, 31);
+            txtFolder.Size = new Size(240, 23);
             txtFolder.TabIndex = 0;
+            // 
+            // txtReference
+            // 
+            txtReference.Location = new Point(6, 238);
+            txtReference.Name = "txtReference";
+            txtReference.Size = new Size(121, 23);
+            txtReference.TabIndex = 7;
+            // 
+            // btnLookup
+            // 
+            btnLookup.Location = new Point(6, 263);
+            btnLookup.Name = "btnLookup";
+            btnLookup.Size = new Size(120, 23);
+            btnLookup.TabIndex = 8;
+            btnLookup.Text = "Lookup Ref";
+            btnLookup.UseVisualStyleBackColor = true;
+            btnLookup.Click += btnLookup_Click;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1698, 1111);
+            ClientSize = new Size(1189, 637);
             Controls.Add(tabMain);
-            FormBorderStyle = FormBorderStyle.Sizable;
-            Margin = new Padding(4, 5, 4, 5);
-            MaximizeBox = true;
             Name = "MainForm";
             Text = "Collections";
             tabMain.ResumeLayout(false);
