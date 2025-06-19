@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using RMCollectionProcessor.Models;
+using RMCollectionProcessor;
 
 
 public class DatabaseService
@@ -212,6 +213,50 @@ END", conn);
             return req;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Inserts a collection request record for each transaction in the generated file.
+    /// </summary>
+    /// <param name="records">Transaction records extracted from the live file.</param>
+    /// <param name="bankFileRowId">Row Id from EDI_BANK_FILES to relate requests back to the file.</param>
+    public void InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        foreach (var r in records)
+        {
+            using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
+                (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
+                 RESULT, METHOD, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID)
+             VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
+                 NULL, NULL, 99, GETDATE(), 99, GETDATE(), @fileRowId);", conn);
+
+            // --------------------------------------------------------------
+            // Mapping from TransactionRecord -> BILLING_COLLECTIONREQUESTS
+            //   DATEREQUESTED     <- RequestedCollectionDate
+            //   SUBSSN            <- RecordSequenceNumber
+            //   REFERENCE         <- ContractReference
+            //   DEDUCTIONREFERENCE<- MandateReference
+            //   AMOUNTREQUESTED   <- InstructedAmount
+            //   RESULT/METHOD are not available in TransactionRecord
+            //   EDIBANKFILEROWID  <- bankFileRowId
+            // Adjust these assignments if your schema differs.
+            // --------------------------------------------------------------
+
+            DateTime.TryParse(r.RequestedCollectionDate, out var dateRequested);
+            decimal.TryParse(r.InstructedAmount, out var amountRequested);
+
+            cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = r.RecordSequenceNumber });
+            cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
+            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.MandateReference });
+            cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
+            cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
+
+            cmd.ExecuteNonQuery();
+        }
     }
 }
 

@@ -156,8 +156,13 @@ namespace RMCollectionProcessor
                 typeof(TransmissionTrailer999));
 
             engine.WriteFile(fileName, records);
+
             if (!isTest)
             {
+                // Parse the generated file and store each request
+                var txRecords = ExtractTransactionRecords(fileName, records.ToArray());
+                dbService.InsertCollectionRequests(txRecords, fileRowId);
+
                 dbService.MarkBankFileGenerationComplete(fileRowId);
             }
 
