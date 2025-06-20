@@ -40,6 +40,14 @@
         private System.Windows.Forms.TextBox txtReference;
         private System.Windows.Forms.Button btnLookup;
         private System.Windows.Forms.Button btnOpenCsv;
+        private System.Windows.Forms.Panel pnlImportTop;
+        private System.Windows.Forms.TextBox txtImportFolder;
+        private System.Windows.Forms.Button btnImportBrowse;
+        private System.Windows.Forms.Button btnImportRead;
+        private System.Windows.Forms.ListView lvImportFiles;
+        private System.Windows.Forms.ColumnHeader chName;
+        private System.Windows.Forms.ColumnHeader chSize;
+        private System.Windows.Forms.ColumnHeader chModified;
 
         private void InitializeComponent()
         {
@@ -58,10 +66,19 @@
             btnLookup = new Button();
             btnOpenCsv = new Button();
             tpImportFiles = new TabPage();
+            pnlImportTop = new Panel();
+            txtImportFolder = new TextBox();
+            btnImportBrowse = new Button();
+            btnImportRead = new Button();
+            lvImportFiles = new ListView();
+            chName = new ColumnHeader();
+            chSize = new ColumnHeader();
+            chModified = new ColumnHeader();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
             tabParse.SuspendLayout();
+            tpImportFiles.SuspendLayout();
             SuspendLayout();
             // 
             // tabMain
@@ -213,7 +230,9 @@
             btnOpenCsv.Click += btnOpenCsv_Click;
             // 
             // tpImportFiles
-            // 
+            //
+            tpImportFiles.Controls.Add(lvImportFiles);
+            tpImportFiles.Controls.Add(pnlImportTop);
             tpImportFiles.Location = new Point(4, 24);
             tpImportFiles.Name = "tpImportFiles";
             tpImportFiles.Padding = new Padding(3);
@@ -221,6 +240,81 @@
             tpImportFiles.TabIndex = 2;
             tpImportFiles.Text = "Import Files";
             tpImportFiles.UseVisualStyleBackColor = true;
+
+            //
+            // pnlImportTop
+            //
+            pnlImportTop.Controls.Add(btnImportRead);
+            pnlImportTop.Controls.Add(btnImportBrowse);
+            pnlImportTop.Controls.Add(txtImportFolder);
+            pnlImportTop.Dock = DockStyle.Top;
+            pnlImportTop.Location = new Point(3, 3);
+            pnlImportTop.Name = "pnlImportTop";
+            pnlImportTop.Size = new Size(1175, 32);
+            pnlImportTop.TabIndex = 0;
+
+            //
+            // txtImportFolder
+            //
+            txtImportFolder.Location = new Point(3, 5);
+            txtImportFolder.Name = "txtImportFolder";
+            txtImportFolder.Size = new Size(240, 23);
+            txtImportFolder.TabIndex = 0;
+
+            //
+            // btnImportBrowse
+            //
+            btnImportBrowse.Location = new Point(249, 4);
+            btnImportBrowse.Name = "btnImportBrowse";
+            btnImportBrowse.Size = new Size(100, 23);
+            btnImportBrowse.TabIndex = 1;
+            btnImportBrowse.Text = "Browse";
+            btnImportBrowse.UseVisualStyleBackColor = true;
+            btnImportBrowse.Click += btnImportBrowse_Click;
+
+            //
+            // btnImportRead
+            //
+            btnImportRead.Enabled = false;
+            btnImportRead.Location = new Point(355, 4);
+            btnImportRead.Name = "btnImportRead";
+            btnImportRead.Size = new Size(100, 23);
+            btnImportRead.TabIndex = 2;
+            btnImportRead.Text = "Read File";
+            btnImportRead.UseVisualStyleBackColor = true;
+            btnImportRead.Click += btnImportRead_Click;
+
+            //
+            // lvImportFiles
+            //
+            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chSize, chModified });
+            lvImportFiles.Dock = DockStyle.Fill;
+            lvImportFiles.FullRowSelect = true;
+            lvImportFiles.Location = new Point(3, 35);
+            lvImportFiles.Name = "lvImportFiles";
+            lvImportFiles.Size = new Size(1175, 571);
+            lvImportFiles.TabIndex = 1;
+            lvImportFiles.UseCompatibleStateImageBehavior = false;
+            lvImportFiles.View = View.Details;
+            lvImportFiles.SelectedIndexChanged += lvImportFiles_SelectedIndexChanged;
+
+            //
+            // chName
+            //
+            chName.Text = "Name";
+            chName.Width = 400;
+
+            //
+            // chSize
+            //
+            chSize.Text = "Size";
+            chSize.Width = 100;
+
+            //
+            // chModified
+            //
+            chModified.Text = "Modified";
+            chModified.Width = 200;
             // 
             // MainForm
             // 
@@ -236,6 +330,8 @@
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
             tabParse.ResumeLayout(false);
             tabParse.PerformLayout();
+            tpImportFiles.ResumeLayout(false);
+            tpImportFiles.PerformLayout();
             ResumeLayout(false);
         }
 
