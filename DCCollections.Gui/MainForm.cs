@@ -243,6 +243,65 @@ namespace DCCollections.Gui
             }
         }
 
+        private void btnImportBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtImportFolder.Text = fbd.SelectedPath;
+                LoadImportFiles(fbd.SelectedPath);
+            }
+        }
+
+        private void LoadImportFiles(string path)
+        {
+            try
+            {
+                lvImportFiles.Items.Clear();
+                foreach (var file in Directory.GetFiles(path))
+                {
+                    var info = new FileInfo(file);
+                    var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
+                    var item = new ListViewItem(info.Name)
+                    {
+                        Tag = info.FullName
+                    };
+                    item.SubItems.Add(size);
+                    item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
+                    lvImportFiles.Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void lvImportFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnImportRead.Enabled = lvImportFiles.SelectedItems.Count > 0;
+        }
+
+        private void btnImportRead_Click(object sender, EventArgs e)
+        {
+            if (lvImportFiles.SelectedItems.Count == 0)
+                return;
+
+            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
+            try
+            {
+                var text = File.ReadAllText(path);
+                MessageBox.Show(text, Path.GetFileName(path));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
