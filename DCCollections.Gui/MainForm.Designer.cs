@@ -29,12 +29,8 @@
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabOperations;
         private System.Windows.Forms.TabPage tabParse;
-        private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.Button btnShowCurrent;
-        private System.Windows.Forms.ListBox lstFiles;
         private System.Windows.Forms.CheckBox chkTest;
         private System.Windows.Forms.TextBox txtFolder;
         private System.Windows.Forms.Button btnFolderBrowse;
@@ -49,13 +45,9 @@
         {
             tabMain = new TabControl();
             tabOperations = new TabPage();
-            lstFiles = new ListBox();
             chkTest = new CheckBox();
-            btnBrowse = new Button();
-            btnShowCurrent = new Button();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
-            btnParse = new Button();
             tabParse = new TabPage();
             txtRaw = new TextBox();
             btnParseSelected = new Button();
@@ -84,29 +76,16 @@
             // 
             // tabOperations
             // 
-            tabOperations.Controls.Add(lstFiles);
             tabOperations.Controls.Add(chkTest);
-            tabOperations.Controls.Add(btnBrowse);
-            tabOperations.Controls.Add(btnShowCurrent);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
-            tabOperations.Controls.Add(btnParse);
             tabOperations.Location = new Point(4, 24);
             tabOperations.Name = "tabOperations";
-            tabOperations.Padding = new Padding(3, 3, 3, 3);
+            tabOperations.Padding = new Padding(3);
             tabOperations.Size = new Size(1181, 609);
             tabOperations.TabIndex = 0;
             tabOperations.Text = "Operations";
             tabOperations.UseVisualStyleBackColor = true;
-            // 
-            // lstFiles
-            // 
-            lstFiles.FormattingEnabled = true;
-            lstFiles.ItemHeight = 15;
-            lstFiles.Location = new Point(150, 35);
-            lstFiles.Name = "lstFiles";
-            lstFiles.Size = new Size(513, 289);
-            lstFiles.TabIndex = 5;
             // 
             // chkTest
             // 
@@ -117,26 +96,6 @@
             chkTest.TabIndex = 6;
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
-            // 
-            // btnBrowse
-            // 
-            btnBrowse.Location = new Point(150, 6);
-            btnBrowse.Name = "btnBrowse";
-            btnBrowse.Size = new Size(120, 23);
-            btnBrowse.TabIndex = 3;
-            btnBrowse.Text = "Browse Folder";
-            btnBrowse.UseVisualStyleBackColor = true;
-            btnBrowse.Click += btnBrowse_Click;
-            // 
-            // btnShowCurrent
-            // 
-            btnShowCurrent.Location = new Point(6, 93);
-            btnShowCurrent.Name = "btnShowCurrent";
-            btnShowCurrent.Size = new Size(120, 23);
-            btnShowCurrent.TabIndex = 4;
-            btnShowCurrent.Text = "Show App Files";
-            btnShowCurrent.UseVisualStyleBackColor = true;
-            btnShowCurrent.Click += btnShowCurrent_Click;
             // 
             // btnGenerate
             // 
@@ -158,16 +117,6 @@
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // btnParse
-            // 
-            btnParse.Location = new Point(6, 6);
-            btnParse.Name = "btnParse";
-            btnParse.Size = new Size(120, 23);
-            btnParse.TabIndex = 0;
-            btnParse.Text = "Parse File";
-            btnParse.UseVisualStyleBackColor = true;
-            btnParse.Click += btnParse_Click;
-            // 
             // tabParse
             // 
             tabParse.Controls.Add(txtRaw);
@@ -180,7 +129,7 @@
             tabParse.Controls.Add(btnOpenCsv);
             tabParse.Location = new Point(4, 24);
             tabParse.Name = "tabParse";
-            tabParse.Padding = new Padding(3, 3, 3, 3);
+            tabParse.Padding = new Padding(3);
             tabParse.Size = new Size(1181, 609);
             tabParse.TabIndex = 1;
             tabParse.Text = "Parse Files";
@@ -250,9 +199,9 @@
             btnLookup.Text = "Lookup Ref";
             btnLookup.UseVisualStyleBackColor = true;
             btnLookup.Click += btnLookup_Click;
-            //
+            // 
             // btnOpenCsv
-            //
+            // 
             btnOpenCsv.Location = new Point(132, 263);
             btnOpenCsv.Name = "btnOpenCsv";
             btnOpenCsv.Size = new Size(120, 23);
@@ -260,9 +209,9 @@
             btnOpenCsv.Text = "Open CSV";
             btnOpenCsv.UseVisualStyleBackColor = true;
             btnOpenCsv.Click += btnOpenCsv_Click;
-            //
+            // 
             // MainForm
-            //
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1189, 637);

@@ -50,10 +50,10 @@ namespace RMCollectionProcessor
                 foreach (var collection in collections)
                 {
                     // Check if the collection is scheduled for today
-                    if (collection.RequestedCollectionDate.Date == now.Date)
+                    if (collection.RequestedCollectionDate.Date.Day <= now.Date.Day)
                     {
                         // Move the collection to the next day
-                        collection.RequestedCollectionDate = collection.RequestedCollectionDate.AddDays(1);
+                        collection.RequestedCollectionDate = now.Date.AddDays(1);
 
                         // Per the spec (page 55), the RelatedDate/CycleDate must be kept in sync
                         // for FRST, OOFF, and RCUR debit sequences.
