@@ -23,7 +23,7 @@ namespace RMCollectionProcessor
         /// </summary>
         /// <param name="filePath">The path to the file to parse.</param>
         /// <returns>The parsed records and their detected file type.</returns>
-        public ParseResult ParseFile(string filePath)
+        public ParseResult ParseFile(string filePath, IConfiguration configuration)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"File '{filePath}' not found.");
@@ -32,20 +32,29 @@ namespace RMCollectionProcessor
             var parsed = processor.ProcessFile(filePath);
 
             var fileType = FileTypeIdentifier.Identify(parsed);
-
+            var dbService = new DatabaseService(configuration);
             switch (fileType)
             {
                 case FileType.CollectionRequest:
-                    var records = ExtractTransactionRecords(filePath, parsed);
-                    _store.AddRecords(records);
+                    var txRecords = ExtractTransactionRecords(filePath, parsed);
+                    dbService.InsertCollectionRequests(txRecords, 0);
+                    _store.AddRecords(txRecords);
                     break;
                 case FileType.StatusReport:
-                    throw new NotImplementedException("Processing for Status Report files is not yet implemented.");
+                    Console.Write("Unknown");
+                    break;
+                //  throw new NotImplementedException("Processing for Status Report files is not yet implemented.");
                 case FileType.Reply:
-                    throw new NotImplementedException("Processing for Reply files is not yet implemented.");
+                    Console.Write("Unknown");
+                    break;
+                //throw new NotImplementedException("Processing for Reply files is not yet implemented.");
                 case FileType.Unknown:
+                    Console.Write("Unknown");
+                    break;
                 default:
-                    throw new InvalidDataException($"The file '{filePath}' is of an unknown or unsupported type.");
+                    Console.Write("Unknown");
+                    break;
+                    // throw new InvalidDataException($"The file '{filePath}' is of an unknown or unsupported type.");
             }
 
             return new ParseResult(parsed, fileType);

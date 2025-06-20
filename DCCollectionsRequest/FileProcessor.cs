@@ -82,14 +82,14 @@ namespace RMCollectionProcessor
                     if (bankservId == "04") return typeof(CollectionHeader080);
                     if (bankservId == "92") return typeof(CollectionTrailer080);
                     if (bankservId == "08") return typeof(CollectionTxLine01);
-                    return typeof(StatusUserSetHeader080);
+                    
 
-                case "08":
+               
                     if (recordLine.Length < 10) return null;
                     string lineCount08 = recordLine.Substring(8, 2);
                     if (lineCount08 == "02") return typeof(CollectionTxLine02);
                     if (lineCount08 == "03") return typeof(CollectionTxLine03);
-                    break;
+                    return typeof(StatusUserSetHeader080);
 
                 case "081":
                     if (recordLine.Length < 8) return null;

@@ -66,7 +66,7 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(ofd.FileName);
+                    var result = _service.ParseFile(ofd.FileName, _config);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
@@ -146,7 +146,7 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(item.Path);
+                    var result = _service.ParseFile(item.Path,_config);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     txtRaw.Text = File.ReadAllText(item.Path);
@@ -293,7 +293,7 @@ namespace DCCollections.Gui
                 {
                     try
                     {
-                        var result = _service.ParseFile(path);
+                        var result = _service.ParseFile(path, _config);
                         _parsedRecords = result.Records;
                         _currentFileType = result.FileType;
                     }
