@@ -22,8 +22,8 @@ namespace RMCollectionProcessor
         /// Parses the specified file, identifies its type, and routes it to the appropriate processing logic.
         /// </summary>
         /// <param name="filePath">The path to the file to parse.</param>
-        /// <returns>An array of the parsed record objects from the file.</returns>
-        public object[] ParseFile(string filePath)
+        /// <returns>The parsed records and their detected file type.</returns>
+        public ParseResult ParseFile(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"File '{filePath}' not found.");
@@ -48,7 +48,7 @@ namespace RMCollectionProcessor
                     throw new InvalidDataException($"The file '{filePath}' is of an unknown or unsupported type.");
             }
 
-            return parsed;
+            return new ParseResult(parsed, fileType);
         }
 
         public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false)
