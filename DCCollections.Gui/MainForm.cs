@@ -231,10 +231,10 @@ namespace DCCollections.Gui
         {
             try
             {
-                lstFiles.Items.Clear();
+                //lstFiles.Items.Clear();
                 foreach (var file in Directory.GetFiles(path))
                 {
-                    lstFiles.Items.Add(new FileListItem(file));
+                  //  lstFiles.Items.Add(new FileListItem(file));
                 }
             }
             catch (Exception ex)

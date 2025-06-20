@@ -57,7 +57,7 @@
             txtReference = new TextBox();
             btnLookup = new Button();
             btnOpenCsv = new Button();
-            tabPage1 = new TabPage();
+            tpImportFiles = new TabPage();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
@@ -68,7 +68,7 @@
             // 
             tabMain.Controls.Add(tabOperations);
             tabMain.Controls.Add(tabParse);
-            tabMain.Controls.Add(tabPage1);
+            tabMain.Controls.Add(tpImportFiles);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
             tabMain.Name = "tabMain";
@@ -212,15 +212,15 @@
             btnOpenCsv.UseVisualStyleBackColor = true;
             btnOpenCsv.Click += btnOpenCsv_Click;
             // 
-            // tabPage1
+            // tpImportFiles
             // 
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1181, 609);
-            tabPage1.TabIndex = 2;
-            tabPage1.Text = "Import Files";
-            tabPage1.UseVisualStyleBackColor = true;
+            tpImportFiles.Location = new Point(4, 24);
+            tpImportFiles.Name = "tpImportFiles";
+            tpImportFiles.Padding = new Padding(3);
+            tpImportFiles.Size = new Size(1181, 609);
+            tpImportFiles.TabIndex = 2;
+            tpImportFiles.Text = "Import Files";
+            tpImportFiles.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -241,6 +241,6 @@
 
         #endregion
 
-        private TabPage tabPage1;
+        private TabPage tpImportFiles;
     }
 }
