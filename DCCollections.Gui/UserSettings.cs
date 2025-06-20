@@ -6,6 +6,7 @@ namespace DCCollections.Gui
     {
         public string? OperationFolderPath { get; set; }
         public string? ParseFolderPath { get; set; }
+        public string? OpenFolderPath { get; set; }
 
         private static string SettingsFile => Path.Combine(AppContext.BaseDirectory, "usersettings.json");
 
