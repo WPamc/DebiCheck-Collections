@@ -9,6 +9,7 @@ namespace DCCollections.Gui
         private readonly RMCollectionProcessor.CollectionService _service;
         private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
         private object[]? _parsedRecords;
+        private RMCollectionProcessor.FileType _currentFileType;
         private readonly UserSettings _settings;
 
         private class FileListItem
@@ -65,8 +66,10 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    _parsedRecords = _service.ParseFile(ofd.FileName);
-                    MessageBox.Show($"Parsed {_parsedRecords.Length} records.", "Success");
+                    var result = _service.ParseFile(ofd.FileName);
+                    _parsedRecords = result.Records;
+                    _currentFileType = result.FileType;
+                    MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
                 }
                 catch (Exception ex)
                 {
@@ -143,9 +146,11 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    _parsedRecords = _service.ParseFile(item.Path);
+                    var result = _service.ParseFile(item.Path);
+                    _parsedRecords = result.Records;
+                    _currentFileType = result.FileType;
                     txtRaw.Text = File.ReadAllText(item.Path);
-                    MessageBox.Show($"Parsed {_parsedRecords.Length} records.", "Success");
+                    MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
                 }
                 catch (Exception ex)
                 {
@@ -280,6 +285,24 @@ namespace DCCollections.Gui
         private void lvImportFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnImportRead.Enabled = lvImportFiles.SelectedItems.Count > 0;
+
+            if (lvImportFiles.SelectedItems.Count > 0)
+            {
+                var path = lvImportFiles.SelectedItems[0].Tag as string;
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    try
+                    {
+                        var result = _service.ParseFile(path);
+                        _parsedRecords = result.Records;
+                        _currentFileType = result.FileType;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error");
+                    }
+                }
+            }
         }
 
         private void btnImportRead_Click(object sender, EventArgs e)
