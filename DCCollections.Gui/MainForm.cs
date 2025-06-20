@@ -90,20 +90,7 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            using var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                _settings.OperationFolderPath = fbd.SelectedPath;
-                LoadOperationsFiles(fbd.SelectedPath);
-            }
-        }
-
-        private void btnShowCurrent_Click(object sender, EventArgs e)
-        {
-            LoadOperationsFiles(AppContext.BaseDirectory);
-        }
+        // Legacy operations tab handlers removed as no longer used
 
         private void btnFolderBrowse_Click(object sender, EventArgs e)
         {
@@ -221,26 +208,76 @@ namespace DCCollections.Gui
                 LoadFolderFiles(_settings.ParseFolderPath);
             }
 
-            if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
+            // legacy operation folder path handling removed
+
+            if (!string.IsNullOrWhiteSpace(_settings.OpenFolderPath) && Directory.Exists(_settings.OpenFolderPath))
             {
-                LoadOperationsFiles(_settings.OperationFolderPath);
+                txtOpenFolder.Text = _settings.OpenFolderPath;
+                LoadOpenFiles(_settings.OpenFolderPath);
             }
         }
 
-        private void LoadOperationsFiles(string path)
+
+        private void btnOpenBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtOpenFolder.Text = fbd.SelectedPath;
+                _settings.OpenFolderPath = fbd.SelectedPath;
+                LoadOpenFiles(fbd.SelectedPath);
+            }
+        }
+
+        private void lvOpenFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnReadFile.Enabled = lvOpenFiles.SelectedItems.Count > 0;
+        }
+
+        private void btnReadFile_Click(object sender, EventArgs e)
+        {
+            if (lvOpenFiles.SelectedItems.Count > 0 && lvOpenFiles.SelectedItems[0].Tag is string path)
+            {
+                try
+                {
+                    var text = File.ReadAllText(path);
+                    MessageBox.Show(text, "File Content");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
+            }
+        }
+
+        private void LoadOpenFiles(string path)
         {
             try
             {
-                lstFiles.Items.Clear();
+                lvOpenFiles.Items.Clear();
                 foreach (var file in Directory.GetFiles(path))
                 {
-                    lstFiles.Items.Add(new FileListItem(file));
+                    var info = new FileInfo(file);
+                    var item = new ListViewItem(info.Name)
+                    {
+                        Tag = file
+                    };
+                    item.SubItems.Add(FormatSize(info.Length));
+                    item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
+                    lvOpenFiles.Items.Add(item);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+        }
+
+        private static string FormatSize(long bytes)
+        {
+            if (bytes > 1024)
+                return $"{bytes / 1024} KB";
+            return $"{bytes} bytes";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

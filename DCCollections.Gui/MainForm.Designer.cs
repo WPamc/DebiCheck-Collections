@@ -40,6 +40,15 @@
         private System.Windows.Forms.TextBox txtReference;
         private System.Windows.Forms.Button btnLookup;
         private System.Windows.Forms.Button btnOpenCsv;
+        private System.Windows.Forms.TabPage tabOpenFiles;
+        private System.Windows.Forms.Panel pnlOpenTop;
+        private System.Windows.Forms.Button btnOpenBrowse;
+        private System.Windows.Forms.TextBox txtOpenFolder;
+        private System.Windows.Forms.Button btnReadFile;
+        private System.Windows.Forms.ListView lvOpenFiles;
+        private System.Windows.Forms.ColumnHeader colName;
+        private System.Windows.Forms.ColumnHeader colSize;
+        private System.Windows.Forms.ColumnHeader colModified;
 
         private void InitializeComponent()
         {
@@ -57,18 +66,28 @@
             txtReference = new TextBox();
             btnLookup = new Button();
             btnOpenCsv = new Button();
-            tabPage1 = new TabPage();
+            tabOpenFiles = new TabPage();
+            pnlOpenTop = new Panel();
+            btnOpenBrowse = new Button();
+            txtOpenFolder = new TextBox();
+            btnReadFile = new Button();
+            lvOpenFiles = new ListView();
+            colName = new ColumnHeader();
+            colSize = new ColumnHeader();
+            colModified = new ColumnHeader();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
             tabParse.SuspendLayout();
+            tabOpenFiles.SuspendLayout();
+            pnlOpenTop.SuspendLayout();
             SuspendLayout();
             // 
             // tabMain
             // 
             tabMain.Controls.Add(tabOperations);
             tabMain.Controls.Add(tabParse);
-            tabMain.Controls.Add(tabPage1);
+            tabMain.Controls.Add(tabOpenFiles);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
             tabMain.Name = "tabMain";
@@ -212,15 +231,84 @@
             btnOpenCsv.UseVisualStyleBackColor = true;
             btnOpenCsv.Click += btnOpenCsv_Click;
             // 
-            // tabPage1
-            // 
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1181, 609);
-            tabPage1.TabIndex = 2;
-            tabPage1.Text = "Import Files";
-            tabPage1.UseVisualStyleBackColor = true;
+            // tabOpenFiles
+            //
+            tabOpenFiles.Controls.Add(lvOpenFiles);
+            tabOpenFiles.Controls.Add(pnlOpenTop);
+            tabOpenFiles.Location = new Point(4, 24);
+            tabOpenFiles.Name = "tabOpenFiles";
+            tabOpenFiles.Padding = new Padding(3);
+            tabOpenFiles.Size = new Size(1181, 609);
+            tabOpenFiles.TabIndex = 2;
+            tabOpenFiles.Text = "Open Files";
+            tabOpenFiles.UseVisualStyleBackColor = true;
+
+            // pnlOpenTop
+            //
+            pnlOpenTop.Controls.Add(btnReadFile);
+            pnlOpenTop.Controls.Add(btnOpenBrowse);
+            pnlOpenTop.Controls.Add(txtOpenFolder);
+            pnlOpenTop.Dock = DockStyle.Top;
+            pnlOpenTop.Location = new Point(3, 3);
+            pnlOpenTop.Name = "pnlOpenTop";
+            pnlOpenTop.Size = new Size(1175, 32);
+            pnlOpenTop.TabIndex = 0;
+
+            // txtOpenFolder
+            //
+            txtOpenFolder.Location = new Point(0, 5);
+            txtOpenFolder.Name = "txtOpenFolder";
+            txtOpenFolder.Size = new Size(240, 23);
+            txtOpenFolder.TabIndex = 0;
+
+            // btnOpenBrowse
+            //
+            btnOpenBrowse.Location = new Point(246, 4);
+            btnOpenBrowse.Name = "btnOpenBrowse";
+            btnOpenBrowse.Size = new Size(100, 23);
+            btnOpenBrowse.TabIndex = 1;
+            btnOpenBrowse.Text = "Browse";
+            btnOpenBrowse.UseVisualStyleBackColor = true;
+            btnOpenBrowse.Click += btnOpenBrowse_Click;
+
+            // btnReadFile
+            //
+            btnReadFile.Enabled = false;
+            btnReadFile.Location = new Point(352, 4);
+            btnReadFile.Name = "btnReadFile";
+            btnReadFile.Size = new Size(100, 23);
+            btnReadFile.TabIndex = 2;
+            btnReadFile.Text = "Read File";
+            btnReadFile.UseVisualStyleBackColor = true;
+            btnReadFile.Click += btnReadFile_Click;
+
+            // lvOpenFiles
+            //
+            lvOpenFiles.Columns.AddRange(new ColumnHeader[] { colName, colSize, colModified });
+            lvOpenFiles.Dock = DockStyle.Fill;
+            lvOpenFiles.FullRowSelect = true;
+            lvOpenFiles.Location = new Point(3, 35);
+            lvOpenFiles.Name = "lvOpenFiles";
+            lvOpenFiles.Size = new Size(1175, 571);
+            lvOpenFiles.TabIndex = 1;
+            lvOpenFiles.UseCompatibleStateImageBehavior = false;
+            lvOpenFiles.View = View.Details;
+            lvOpenFiles.SelectedIndexChanged += lvOpenFiles_SelectedIndexChanged;
+
+            // colName
+            //
+            colName.Text = "Name";
+            colName.Width = 300;
+
+            // colSize
+            //
+            colSize.Text = "Size";
+            colSize.Width = 80;
+
+            // colModified
+            //
+            colModified.Text = "Modified";
+            colModified.Width = 150;
             // 
             // MainForm
             // 
@@ -236,11 +324,13 @@
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
             tabParse.ResumeLayout(false);
             tabParse.PerformLayout();
+            tabOpenFiles.ResumeLayout(false);
+            pnlOpenTop.ResumeLayout(false);
+            pnlOpenTop.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private TabPage tabPage1;
     }
 }
