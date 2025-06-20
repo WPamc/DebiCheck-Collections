@@ -18,6 +18,11 @@ namespace RMCollectionProcessor
             _store = new CsvFileStore(path);
         }
 
+        /// <summary>
+        /// Parses the specified file, identifies its type, and routes it to the appropriate processing logic.
+        /// </summary>
+        /// <param name="filePath">The path to the file to parse.</param>
+        /// <returns>An array of the parsed record objects from the file.</returns>
         public object[] ParseFile(string filePath)
         {
             if (!File.Exists(filePath))
@@ -25,8 +30,24 @@ namespace RMCollectionProcessor
 
             var processor = new FileProcessor();
             var parsed = processor.ProcessFile(filePath);
-            var records = ExtractTransactionRecords(filePath, parsed);
-            _store.AddRecords(records);
+
+            var fileType = FileTypeIdentifier.Identify(parsed);
+
+            switch (fileType)
+            {
+                case FileType.CollectionRequest:
+                    var records = ExtractTransactionRecords(filePath, parsed);
+                    _store.AddRecords(records);
+                    break;
+                case FileType.StatusReport:
+                    throw new NotImplementedException("Processing for Status Report files is not yet implemented.");
+                case FileType.Reply:
+                    throw new NotImplementedException("Processing for Reply files is not yet implemented.");
+                case FileType.Unknown:
+                default:
+                    throw new InvalidDataException($"The file '{filePath}' is of an unknown or unsupported type.");
+            }
+
             return parsed;
         }
 
