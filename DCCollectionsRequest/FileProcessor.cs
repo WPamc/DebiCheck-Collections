@@ -77,18 +77,27 @@ namespace RMCollectionProcessor
                 case "085": return typeof(StatusUserSetErrorRecord085);
 
                 case "080":
+                    Type lastRecordType = engine.LastRecord?.GetType();
+
+                    if (recordLine.Length >= 10)
+                    {
+                        string lineCount = recordLine.Substring(8, 2);
+                        if (lastRecordType == typeof(CollectionTxLine01) && lineCount == "02")
+                        {
+                            return typeof(CollectionTxLine02);
+                        }
+                        if (lastRecordType == typeof(CollectionTxLine02) && lineCount == "03")
+                        {
+                            return typeof(CollectionTxLine03);
+                        }
+                    }
+
                     if (recordLine.Length < 6) return null;
                     string bankservId = recordLine.Substring(4, 2);
                     if (bankservId == "04") return typeof(CollectionHeader080);
                     if (bankservId == "92") return typeof(CollectionTrailer080);
                     if (bankservId == "08") return typeof(CollectionTxLine01);
-                    
 
-               
-                    if (recordLine.Length < 10) return null;
-                    string lineCount08 = recordLine.Substring(8, 2);
-                    if (lineCount08 == "02") return typeof(CollectionTxLine02);
-                    if (lineCount08 == "03") return typeof(CollectionTxLine03);
                     return typeof(StatusUserSetHeader080);
 
                 case "081":
