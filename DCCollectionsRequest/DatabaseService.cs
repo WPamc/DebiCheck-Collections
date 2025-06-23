@@ -36,7 +36,7 @@ public class DatabaseService
         cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
         conn.Open();
         using var reader = cmd.ExecuteReader();
-        while ( reader.Read())
+        while (reader.Read())
         {
             var data = new DebtorCollectionData
             {
@@ -45,7 +45,7 @@ public class DatabaseService
                 TrackingPeriod = reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))),
                 DebitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty,
                 EntryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty,
-                InstructedAmount = Convert.ToDecimal( reader["InstructedAmount"]),
+                InstructedAmount = Convert.ToDecimal(reader["InstructedAmount"]),
                 MandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty,
                 DebtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty,
                 DebtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty,
@@ -91,7 +91,7 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
         cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
 
-        var result =  cmd.ExecuteScalar();
+        var result = cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
@@ -139,7 +139,7 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
         cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.Int) { Value = dailyCounterStart });
 
-        var result =  cmd.ExecuteScalar();
+        var result = cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
@@ -270,24 +270,12 @@ END", conn);
              VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
                  0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
-            // --------------------------------------------------------------
-            // Mapping from TransactionRecord -> BILLING_COLLECTIONREQUESTS
-            //   DATEREQUESTED     <- RequestedCollectionDate
-            //   SUBSSN            <- RecordSequenceNumber
-            //   REFERENCE         <- ContractReference
-            //   DEDUCTIONREFERENCE<- MandateReference
-            //   AMOUNTREQUESTED   <- InstructedAmount
-            //   RESULT/METHOD are not available in TransactionRecord
-            //   EDIBANKFILEROWID  <- bankFileRowId
-            // Adjust these assignments if your schema differs.
-            // --------------------------------------------------------------
-
             DateTime.TryParse(r.RequestedCollectionDate, out var dateRequested);
             decimal.TryParse(r.InstructedAmount, out var amountRequestedInCents);
             var amountRequested = amountRequestedInCents / 100m;
 
             cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
-            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS"+r.ContractReference });
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.ContractReference });
             cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
             cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
@@ -300,14 +288,9 @@ END", conn);
             catch (Exception ex)
             {
 
-                //throw;
             }
         }
 
-        // Update the DAILYCOUNTEREND for the associated bank file record.
-        // Some code paths (like ParseFile) only call InsertCollectionRequests
-        // so we update the counter here based on the highest sequence
-        // number in the parsed records.
         if (bankFileRowId > 0)
         {
             var maxSeq = recordList
@@ -318,5 +301,74 @@ END", conn);
             UpdateBankFileDailyCounterEnd(bankFileRowId, maxSeq);
         }
     }
-}
 
+    /// <summary>
+    /// Inserts response records from a Status Report and updates the original collection requests.
+    /// </summary>
+    /// <param name="statusRecords">A collection of transaction data from the status report.</param>
+    /// <param name="filePath">The path of the status report file being processed.</param>
+    public void InsertCollectionResponses(IEnumerable<StatusReportTransaction> statusRecords, string filePath)
+    {
+        var recordList = statusRecords.ToList();
+        if (!recordList.Any()) return;
+
+        string fileName = Path.GetFileName(filePath);
+        int bankFileRowId = GetBankFileRowId(fileName);
+        if (bankFileRowId <= 0)
+        {
+            bankFileRowId = CreateBankFileRecord(fileName, 0, 0);
+        }
+
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        foreach (var r in recordList)
+        {
+            int originalRequestRowId = 0;
+            using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE REFERENCE = @ref", conn))
+            {
+                findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 14) { Value = r.ContractReference });
+                var result = findCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    originalRequestRowId = Convert.ToInt32(result);
+                }
+            }
+
+            if (originalRequestRowId == 0)
+            {
+                continue;
+            }
+
+            using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
+                (BILLING_COLLECTIONREQUESTS_ROWID, EDI_BANK_FILES_ROWID, TRANSACTIONSTATUS,
+                 REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
+                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
+               VALUES
+                (@reqId, @fileId, @status, @reasonCode, @reasonDesc, @actionDate,
+                 @effectiveDate, @origContractRef, @origPmtInfo, 99, GETDATE());", conn);
+
+            DateTime.TryParse(r.ActionDate, out var actionDate);
+            DateTime.TryParse(r.EffectiveDate, out var effectiveDate);
+
+            insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@status", SqlDbType.VarChar, 4) { Value = r.TransactionStatus });
+            insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)r.RejectReasonCode ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)r.RejectReasonDescription ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = (object?)actionDate ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@effectiveDate", SqlDbType.DateTime) { Value = (object?)effectiveDate ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@origContractRef", SqlDbType.VarChar, 14) { Value = r.ContractReference });
+            insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.OriginalPaymentInformation });
+            insertCmd.ExecuteNonQuery();
+
+            bool success = r.TransactionStatus.ToUpper() == "ACCP";
+            using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
+                SET RESULT = @result, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
+                WHERE ROWID = @reqId;", conn);
+            updateCmd.Parameters.Add(new SqlParameter("@result", SqlDbType.Bit) { Value = success });
+            updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            updateCmd.ExecuteNonQuery();
+        }
+    }
+}

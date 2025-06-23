@@ -41,23 +41,71 @@ namespace RMCollectionProcessor
                     _store.AddRecords(txRecords);
                     break;
                 case FileType.StatusReport:
-                    Console.Write("Unknown");
+                    var statusRecords = ProcessStatusReport(parsed);
+                    dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
-                //  throw new NotImplementedException("Processing for Status Report files is not yet implemented.");
                 case FileType.Reply:
                     Console.Write("Unknown");
                     break;
-                //throw new NotImplementedException("Processing for Reply files is not yet implemented.");
                 case FileType.Unknown:
                     Console.Write("Unknown");
                     break;
                 default:
                     Console.Write("Unknown");
                     break;
-                    // throw new InvalidDataException($"The file '{filePath}' is of an unknown or unsupported type.");
             }
 
             return new ParseResult(parsed, fileType);
+        }
+
+        /// <summary>
+        /// Extracts and groups transaction data from a parsed Status Report file.
+        /// </summary>
+        /// <param name="parsedRecords">The array of objects parsed from the status report file.</param>
+        /// <returns>A collection of structured status transaction records.</returns>
+        private IEnumerable<StatusReportTransaction> ProcessStatusReport(object[] parsedRecords)
+        {
+            var results = new List<StatusReportTransaction>();
+            var transactionGroups = new Dictionary<string, (StatusUserSetTransactionLine01? l1, StatusUserSetTransactionLine02? l2, StatusUserSetErrorRecord085? err)>();
+
+            foreach (var record in parsedRecords)
+            {
+                string? seqNum = null;
+                if (record is StatusUserSetTransactionLine01 l1) seqNum = l1.RecordSequenceNumber.Trim();
+                else if (record is StatusUserSetTransactionLine02 l2) seqNum = record.GetType().GetField("RecordSequenceNumber")?.GetValue(record)?.ToString()?.Trim();
+                else if (record is StatusUserSetErrorRecord085 err) seqNum = err.RecordSequenceNumber.Trim();
+
+                if (seqNum == null) continue;
+
+                if (!transactionGroups.ContainsKey(seqNum))
+                {
+                    transactionGroups[seqNum] = (null, null, null);
+                }
+
+                var group = transactionGroups[seqNum];
+                if (record is StatusUserSetTransactionLine01 line1) group.l1 = line1;
+                else if (record is StatusUserSetTransactionLine02 line2) group.l2 = line2;
+                else if (record is StatusUserSetErrorRecord085 error) group.err = error;
+                transactionGroups[seqNum] = group;
+            }
+
+            foreach (var group in transactionGroups.Values)
+            {
+                if (group.l1 == null) continue;
+
+                results.Add(new StatusReportTransaction
+                {
+                    TransactionStatus = group.l1.TransactionStatus.Trim(),
+                    ContractReference = group.l1.ContractReferenceNumber.Trim(),
+                    OriginalPaymentInformation = group.l1.OriginalPmtInfId.Trim(),
+                    ActionDate = group.l2?.ActionDate.Trim(),
+                    EffectiveDate = group.l2?.EffectiveDate.Trim(),
+                    RejectReasonCode = group.err?.TransactionLevelRejectReasonCode.Trim(),
+                    RejectReasonDescription = group.err?.TransactionLevelErrorCodeDescription.Trim()
+                });
+            }
+
+            return results;
         }
 
         public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false)
@@ -74,19 +122,14 @@ namespace RMCollectionProcessor
 
             var now = DateTime.Now;
             var cutOffTime = new TimeSpan(01, 30, 0);
-//adjust collection date if too late
             if (now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
             {
                 foreach (var collection in collections)
                 {
-                    // Check if the collection is scheduled for today
                     if (collection.RequestedCollectionDate.Date.Day <= now.Date.Day)
                     {
-                        // Move the collection to the next day
                         collection.RequestedCollectionDate = now.Date.AddDays(1);
 
-                        // Per the spec (page 55), the RelatedDate/CycleDate must be kept in sync
-                        // for FRST, OOFF, and RCUR debit sequences.
                         string debitSeq = collection.DebitSequence.Trim().ToUpper();
                         if (debitSeq == "FRST" || debitSeq == "OOFF" || debitSeq == "RCUR")
                         {
@@ -189,7 +232,6 @@ namespace RMCollectionProcessor
 
             if (!isTest)
             {
-                // Parse the generated file and store each request
                 var txRecords = ExtractTransactionRecords(fileName, records.ToArray());
                 dbService.InsertCollectionRequests(txRecords, fileRowId);
 

@@ -146,7 +146,7 @@ public class RecordBuilder
         // Corrected Line 2
         var line2 = new CollectionTxLine02
         {
-            RecordIdentifier = "08 ", // <-- CORRECTED: "08" plus a space
+            RecordIdentifier = "08", 
             RecordSequenceNumber = seqStr,
             LineCount = "02",
             CreditorEmail = staticData.CreditorEmail,
@@ -166,7 +166,7 @@ public class RecordBuilder
         // Corrected Line 3
         var line3 = new CollectionTxLine03
         {
-            RecordIdentifier = "08 ", // <-- CORRECTED: "08" plus a space
+            RecordIdentifier = "08", 
             RecordSequenceNumber = seqStr,
             LineCount = "03",
             DebtorName = debtorData.DebtorName.PadRight(35),
