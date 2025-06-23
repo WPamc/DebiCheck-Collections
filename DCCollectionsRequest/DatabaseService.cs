@@ -143,6 +143,16 @@ END", conn);
         return Convert.ToInt32(result);
     }
 
+    public int GetBankFileRowId(string fileName)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"SELECT ROWID FROM dbo.EDI_BANK_FILES WHERE FILENAME = @file", conn);
+        cmd.Parameters.Add(new SqlParameter("@file", SqlDbType.VarChar, 100) { Value = fileName });
+        conn.Open();
+        var result = cmd.ExecuteScalar();
+        return result == null ? 0 : Convert.ToInt32(result);
+    }
+
     public void UpdateBankFileDailyCounterEnd(int rowId, int dailyCounterEnd)
     {
         using var conn = new SqlConnection(_connectionString);
@@ -231,7 +241,16 @@ END", conn);
             var first = recordList.First();
             int.TryParse(first.GenerationNumber, out var gen);
             int.TryParse(first.RecordSequenceNumber, out var start);
-            bankFileRowId = CreateBankFileRecord(first.Filename, gen, start);
+
+            var existing = GetBankFileRowId(first.Filename);
+            if (existing > 0)
+            {
+                bankFileRowId = existing;
+            }
+            else
+            {
+                bankFileRowId = CreateBankFileRecord(first.Filename, gen, start);
+            }
         }
 
         using var conn = new SqlConnection(_connectionString);
