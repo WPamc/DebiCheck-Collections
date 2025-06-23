@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace RMCollectionProcessor
+namespace RMCollectionProcessor.Models
 {
     /// <summary>
     /// Represents a single, consolidated transaction from a Status Report file.
