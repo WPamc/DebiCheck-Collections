@@ -284,24 +284,30 @@ namespace DCCollections.Gui
 
         private void lvImportFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnImportRead.Enabled = lvImportFiles.SelectedItems.Count > 0;
+            bool hasSelection = lvImportFiles.SelectedItems.Count > 0;
+            btnImportRead.Enabled = hasSelection;
+            btnImportParse.Enabled = hasSelection;
+        }
 
-            if (lvImportFiles.SelectedItems.Count > 0)
+        private void btnImportParse_Click(object sender, EventArgs e)
+        {
+            if (lvImportFiles.SelectedItems.Count == 0)
+                return;
+
+            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
+            try
             {
-                var path = lvImportFiles.SelectedItems[0].Tag as string;
-                if (!string.IsNullOrWhiteSpace(path))
-                {
-                    try
-                    {
-                        var result = _service.ParseFile(path, _config);
-                        _parsedRecords = result.Records;
-                        _currentFileType = result.FileType;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error");
-                    }
-                }
+                var result = _service.ParseFile(path, _config);
+                _parsedRecords = result.Records;
+                _currentFileType = result.FileType;
+                MessageBox.Show($"Imported {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 
