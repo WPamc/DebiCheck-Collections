@@ -44,6 +44,7 @@
         private System.Windows.Forms.TextBox txtImportFolder;
         private System.Windows.Forms.Button btnImportBrowse;
         private System.Windows.Forms.Button btnImportRead;
+        private System.Windows.Forms.Button btnImportParse;
         private System.Windows.Forms.ListView lvImportFiles;
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.ColumnHeader chSize;
@@ -70,6 +71,7 @@
             txtImportFolder = new TextBox();
             btnImportBrowse = new Button();
             btnImportRead = new Button();
+            btnImportParse = new Button();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
             chSize = new ColumnHeader();
@@ -244,6 +246,7 @@
             //
             // pnlImportTop
             //
+            pnlImportTop.Controls.Add(btnImportParse);
             pnlImportTop.Controls.Add(btnImportRead);
             pnlImportTop.Controls.Add(btnImportBrowse);
             pnlImportTop.Controls.Add(txtImportFolder);
@@ -283,6 +286,18 @@
             btnImportRead.Text = "Read File";
             btnImportRead.UseVisualStyleBackColor = true;
             btnImportRead.Click += btnImportRead_Click;
+
+            //
+            // btnImportParse
+            //
+            btnImportParse.Enabled = false;
+            btnImportParse.Location = new Point(461, 4);
+            btnImportParse.Name = "btnImportParse";
+            btnImportParse.Size = new Size(100, 23);
+            btnImportParse.TabIndex = 3;
+            btnImportParse.Text = "Import";
+            btnImportParse.UseVisualStyleBackColor = true;
+            btnImportParse.Click += btnImportParse_Click;
 
             //
             // lvImportFiles
