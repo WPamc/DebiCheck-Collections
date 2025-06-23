@@ -4,6 +4,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Linq;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 
@@ -222,11 +223,27 @@ END", conn);
     /// <param name="bankFileRowId">Row Id from EDI_BANK_FILES to relate requests back to the file.</param>
     public void InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
     {
+        var recordList = records.ToList();
+        if (!recordList.Any()) return;
+
+        if (bankFileRowId <= 0)
+        {
+            var first = recordList.First();
+            int.TryParse(first.GenerationNumber, out var gen);
+            int.TryParse(first.RecordSequenceNumber, out var start);
+            bankFileRowId = CreateBankFileRecord(first.Filename, gen, start);
+        }
+
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
 
-        foreach (var r in records)
+        foreach (var r in recordList)
         {
+            using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
+            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+            var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
+            if (exists > 0) continue;
+
             using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
                  RESULT,  CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID,METHOD)
