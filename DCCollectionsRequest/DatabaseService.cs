@@ -302,6 +302,20 @@ END", conn);
                 //throw;
             }
         }
+
+        // Update the DAILYCOUNTEREND for the associated bank file record.
+        // Some code paths (like ParseFile) only call InsertCollectionRequests
+        // so we update the counter here based on the highest sequence
+        // number in the parsed records.
+        if (bankFileRowId > 0)
+        {
+            var maxSeq = recordList
+                .Select(r => int.TryParse(r.RecordSequenceNumber, out var seq) ? seq : 0)
+                .DefaultIfEmpty()
+                .Max();
+
+            UpdateBankFileDailyCounterEnd(bankFileRowId, maxSeq);
+        }
     }
 }
 
