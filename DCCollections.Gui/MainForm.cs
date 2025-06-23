@@ -1,15 +1,16 @@
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.IO;
+using RMCollectionProcessor.Models;
 
 namespace DCCollections.Gui
 {
     public partial class MainForm : Form
     {
         private readonly RMCollectionProcessor.CollectionService _service;
-        private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
+        private readonly IConfiguration _config;
         private object[]? _parsedRecords;
-        private RMCollectionProcessor.FileType _currentFileType;
+        private FileType _currentFileType;
         private readonly UserSettings _settings;
 
         private class FileListItem

@@ -1,4 +1,4 @@
-namespace RMCollectionProcessor
+namespace RMCollectionProcessor.Models
 {
     /// <summary>
     /// Represents the outcome of parsing a file.

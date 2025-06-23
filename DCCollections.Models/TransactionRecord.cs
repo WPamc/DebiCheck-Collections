@@ -1,4 +1,4 @@
-namespace RMCollectionProcessor
+namespace RMCollectionProcessor.Models
 {
     public class TransactionRecord
     {

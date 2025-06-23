@@ -1,6 +1,6 @@
-﻿using RMCollectionProcessor.Models;
+using RMCollectionProcessor.Models;
 
-namespace RMCollectionProcessor
+namespace RMCollectionProcessor.Models
 {
     /// <summary>
     /// Defines the types of RM files that can be processed.
