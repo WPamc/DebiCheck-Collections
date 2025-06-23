@@ -31,5 +31,5 @@ FROM (
 ) AS mmb
 INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID
 inner join    GetsavviDEBICheck dbc
- on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-23 12:00:00')
+ on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-24 12:00:00')
 WHERE DEDUCTIONDAY =@DEDUCTIONDAY and [day]=@DEDUCTIONDAY

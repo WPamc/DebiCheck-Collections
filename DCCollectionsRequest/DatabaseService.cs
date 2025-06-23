@@ -255,9 +255,10 @@ END", conn);
 
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
-
+        int counter = 0;
         foreach (var r in recordList)
         {
+            counter++;
             using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
             existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());

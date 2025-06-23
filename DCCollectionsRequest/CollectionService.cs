@@ -75,7 +75,7 @@ namespace RMCollectionProcessor
             var now = DateTime.Now;
             var cutOffTime = new TimeSpan(01, 30, 0);
 //adjust collection date if too late
-            if (now.TimeOfDay > cutOffTime)
+            if (now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
             {
                 foreach (var collection in collections)
                 {
