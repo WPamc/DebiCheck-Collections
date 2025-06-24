@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCollectionsRequest", "DCC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCollections.Gui", "..\DCCollections.Gui\DCCollections.Gui.csproj", "{A1F6CD65-5B82-4D39-9D9D-6335CB39E2CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCollections.Models", "..\DCCollections.Models\DCCollections.Models.csproj", "{CE7DB63F-ED4D-4C9A-9CE9-5F3A62DFA22B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DC-Models-Identifier", "..\DCCollections.Models\DC-Models-Identifier.csproj", "{CE7DB63F-ED4D-4C9A-9CE9-5F3A62DFA22B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
