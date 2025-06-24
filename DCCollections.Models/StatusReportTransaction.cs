@@ -7,6 +7,10 @@ namespace RMCollectionProcessor.Models
     /// </summary>
     public class StatusReportTransaction
     {
+        /// <summary>
+        /// The BankServ User Code Generation Number from the Status User Set Header.
+        /// </summary>
+        public string GenerationNumber { get; set; } = string.Empty;
         public string TransactionStatus { get; set; } = string.Empty;
         public string ContractReference { get; set; } = string.Empty;
         public string OriginalPaymentInformation { get; set; } = string.Empty;

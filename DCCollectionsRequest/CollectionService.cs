@@ -59,54 +59,70 @@ namespace RMCollectionProcessor
         }
 
         /// <summary>
-        /// Extracts and groups transaction data from a parsed Status Report file.
+        /// Processes the raw parsed records from a Status Report file into a list of consolidated transactions.
         /// </summary>
-        /// <param name="parsedRecords">The array of objects parsed from the status report file.</param>
-        /// <returns>A collection of structured status transaction records.</returns>
-        private IEnumerable<StatusReportTransaction> ProcessStatusReport(object[] parsedRecords)
+        /// <param name="parsedRecords">The array of record objects from the file parser.</param>
+        /// <returns>An enumerable of consolidated <see cref="StatusReportTransaction"/> objects.</returns>
+        public IEnumerable<StatusReportTransaction> ProcessStatusReport(object[] parsedRecords)
         {
             var results = new List<StatusReportTransaction>();
-            var transactionGroups = new Dictionary<string, (StatusUserSetTransactionLine01? l1, StatusUserSetTransactionLine02? l2, StatusUserSetErrorRecord085? err)>();
+            string generationNumber = string.Empty;
+            StatusReportTransaction? currentTransaction = null;
+
+            var header = parsedRecords.OfType<StatusUserSetHeader080>().FirstOrDefault();
+            if (header != null)
+            {
+                generationNumber = header.BankServUserCodeGenerationNumber.Trim();
+            }
 
             foreach (var record in parsedRecords)
             {
-                string? seqNum = null;
-                if (record is StatusUserSetTransactionLine01 l1) seqNum = l1.RecordSequenceNumber.Trim();
-                else if (record is StatusUserSetTransactionLine02 l2) seqNum = record.GetType().GetField("RecordSequenceNumber")?.GetValue(record)?.ToString()?.Trim();
-                else if (record is StatusUserSetErrorRecord085 err) seqNum = err.RecordSequenceNumber.Trim();
-
-                if (seqNum == null) continue;
-
-                if (!transactionGroups.ContainsKey(seqNum))
+                if (record is StatusUserSetTransactionLine01 line1)
                 {
-                    transactionGroups[seqNum] = (null, null, null);
-                }
+                    if (currentTransaction != null)
+                    {
+                        results.Add(currentTransaction);
+                    }
 
-                var group = transactionGroups[seqNum];
-                if (record is StatusUserSetTransactionLine01 line1) group.l1 = line1;
-                else if (record is StatusUserSetTransactionLine02 line2) group.l2 = line2;
-                else if (record is StatusUserSetErrorRecord085 error) group.err = error;
-                transactionGroups[seqNum] = group;
+                    currentTransaction = new StatusReportTransaction
+                    {
+                        GenerationNumber = generationNumber,
+                        TransactionStatus = line1.TransactionStatus.Trim(),
+                        ContractReference = line1.ContractReferenceNumber.Trim(),
+                       // OriginalPaymentInformation = line1.OriginalPmtInfId.Trim()
+                    };
+                }
+                else if (currentTransaction != null)
+                {
+                    if (record is StatusUserSetTransactionLine02 line2)
+                    {
+                        currentTransaction.ActionDate = line2.ActionDate.Trim();
+                        currentTransaction.EffectiveDate = line2.EffectiveDate.Trim();
+                    }
+                    else if (record is StatusUserSetTransactionLine03 line3)
+                    {
+                        currentTransaction.OriginalPaymentInformation = line3.Filler.Trim();
+                    }
+                    else if (record is StatusUserSetTransactionLine04 line4)
+                    {
+
+                    }
+                    else if (record is StatusUserSetErrorRecord085 error)
+                    {
+                        currentTransaction.RejectReasonCode = error.TransactionLevelRejectReasonCode.Trim();
+                        currentTransaction.RejectReasonDescription = error.TransactionLevelErrorCodeDescription.Trim();
+                    }
+                }
             }
 
-            foreach (var group in transactionGroups.Values)
+            if (currentTransaction != null)
             {
-                if (group.l1 == null) continue;
-
-                results.Add(new StatusReportTransaction
-                {
-                    TransactionStatus = group.l1.TransactionStatus.Trim(),
-                    ContractReference = group.l1.ContractReferenceNumber.Trim(),
-                    OriginalPaymentInformation = group.l1.OriginalPmtInfId.Trim(),
-                    ActionDate = group.l2?.ActionDate.Trim(),
-                    EffectiveDate = group.l2?.EffectiveDate.Trim(),
-                    RejectReasonCode = group.err?.TransactionLevelRejectReasonCode.Trim(),
-                    RejectReasonDescription = group.err?.TransactionLevelErrorCodeDescription.Trim()
-                });
+                results.Add(currentTransaction);
             }
 
             return results;
         }
+
 
         public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false, string? outputFolder = null)
         {

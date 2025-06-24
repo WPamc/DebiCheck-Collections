@@ -8,6 +8,8 @@ namespace RMCollectionProcessor
 {
     public class FileProcessor
     {
+        private Type? _lastProcessedRecordType;
+
         /// <summary>
         /// Processes a file using a multi-record engine capable of handling Collection, Status, and Reply file formats.
         /// </summary>
@@ -15,6 +17,8 @@ namespace RMCollectionProcessor
         /// <returns>An array of parsed record objects.</returns>
         public object[] ProcessFile(string filePath)
         {
+            _lastProcessedRecordType = null;
+
             var engine = new MultiRecordEngine(
                 typeof(TransmissionHeader000),
                 typeof(CollectionHeader080),
@@ -64,74 +68,91 @@ namespace RMCollectionProcessor
         /// <returns>The Type of the model that corresponds to the record line.</returns>
         private Type? CustomRecordSelector(MultiRecordEngine engine, string recordLine)
         {
-            if (string.IsNullOrEmpty(recordLine) || recordLine.Length < 3)
-                return null;
-
-            string recordId = recordLine.Substring(0, 3);
-
-            switch (recordId)
+            if (string.IsNullOrEmpty(recordLine))
             {
-                case "000": return typeof(TransmissionHeader000);
-                case "999": return typeof(TransmissionTrailer999);
-                case "084": return typeof(StatusUserSetTrailer084);
-                case "085": return typeof(StatusUserSetErrorRecord085);
-
-                case "080":
-                    Type lastRecordType = engine.LastRecord?.GetType();
-
-                    if (recordLine.Length >= 10)
-                    {
-                        string lineCount = recordLine.Substring(8, 2);
-                        if (lastRecordType == typeof(CollectionTxLine01) && lineCount == "02")
-                        {
-                            return typeof(CollectionTxLine02);
-                        }
-                        if (lastRecordType == typeof(CollectionTxLine02) && lineCount == "03")
-                        {
-                            return typeof(CollectionTxLine03);
-                        }
-                    }
-
-                    if (recordLine.Length < 6) return null;
-                    string bankservId = recordLine.Substring(4, 2);
-                    if (bankservId == "04") return typeof(CollectionHeader080);
-                    if (bankservId == "92") return typeof(CollectionTrailer080);
-                    if (bankservId == "08") return typeof(CollectionTxLine01);
-
-                    return typeof(StatusUserSetHeader080);
-
-                case "081":
-                    if (recordLine.Length < 8) return null;
-                    string lineCount081 = recordLine.Substring(6, 2);
-                    if (lineCount081 == "01") return typeof(StatusUserSetHeaderLine01);
-                    if (lineCount081 == "02") return typeof(StatusUserSetHeaderLine02);
-                    break;
-
-                case "082":
-                    if (recordLine.Length < 5) return null;
-                    string lineCount082 = recordLine.Substring(3, 2);
-                    if (lineCount082 == "01") return typeof(StatusUserSetTransactionLine01);
-                    if (lineCount082 == "02") return typeof(StatusUserSetTransactionLine02);
-                    if (lineCount082 == "03") return typeof(StatusUserSetTransactionLine03);
-                    if (lineCount082 == "04") return typeof(StatusUserSetTransactionLine04);
-                    break;
-
-                case "900":
-                    if (recordLine.Length < 7) return null;
-                    string indicator900 = recordLine.Substring(4, 3);
-                    if (indicator900 == "000") return typeof(ReplyTransmissionStatus900);
-                    if (indicator900 == "080") return typeof(ReplyUserSetStatus900);
-                    break;
-
-                case "901":
-                    if (recordLine.Length < 7) return null;
-                    string indicator901 = recordLine.Substring(4, 3);
-                    if (indicator901 == "080") return typeof(ReplyRejectedMessage901);
-                    if (indicator901 == "000") return typeof(ReplyTransmissionRejectReason901);
-                    break;
+                _lastProcessedRecordType = null;
+                return null;
             }
 
-            return null;
+            Type? selectedType = null;
+
+            if (recordLine.Length >= 3)
+            {
+                string recordId = recordLine.Substring(0, 3);
+                switch (recordId)
+                {
+                    case "000": selectedType = typeof(TransmissionHeader000); break;
+                    case "999": selectedType = typeof(TransmissionTrailer999); break;
+                    case "084": selectedType = typeof(StatusUserSetTrailer084); break;
+                    case "085": selectedType = typeof(StatusUserSetErrorRecord085); break;
+
+                    case "080":
+                        if (recordLine.Length >= 7)
+                        {
+                            string bankservId = recordLine.Substring(4, 2);
+                            if (bankservId == "04") selectedType = typeof(CollectionHeader080);
+                            else if (bankservId == "92") selectedType = typeof(CollectionTrailer080);
+                            else if (bankservId == "08") selectedType = typeof(CollectionTxLine01);
+                            else selectedType = typeof(StatusUserSetHeader080);
+                        }
+                        else
+                        {
+                            selectedType = typeof(StatusUserSetHeader080);
+                        }
+                        break;
+
+                    case "081":
+                        if (_lastProcessedRecordType == typeof(StatusUserSetHeader080)) selectedType = typeof(StatusUserSetHeaderLine01);
+                        else if (_lastProcessedRecordType == typeof(StatusUserSetHeaderLine01)) selectedType = typeof(StatusUserSetHeaderLine02);
+                        break;
+
+                    case "082":
+                        if (_lastProcessedRecordType == typeof(StatusUserSetHeaderLine02) ||
+                            _lastProcessedRecordType == typeof(StatusUserSetTransactionLine04) ||
+                            _lastProcessedRecordType == typeof(StatusUserSetErrorRecord085))
+                        {
+                            selectedType = typeof(StatusUserSetTransactionLine01);
+                        }
+                        else if (_lastProcessedRecordType == typeof(StatusUserSetTransactionLine01)) selectedType = typeof(StatusUserSetTransactionLine02);
+                        else if (_lastProcessedRecordType == typeof(StatusUserSetTransactionLine02)) selectedType = typeof(StatusUserSetTransactionLine03);
+                        else if (_lastProcessedRecordType == typeof(StatusUserSetTransactionLine03)) selectedType = typeof(StatusUserSetTransactionLine04);
+                        break;
+
+                    case "900":
+                        if (recordLine.Length >= 8)
+                        {
+                            string indicator900 = recordLine.Substring(4, 3);
+                            if (indicator900 == "000") selectedType = typeof(ReplyTransmissionStatus900);
+                            else if (indicator900 == "080") selectedType = typeof(ReplyUserSetStatus900);
+                        }
+                        break;
+
+                    case "901":
+                        if (recordLine.Length >= 8)
+                        {
+                            string indicator901 = recordLine.Substring(4, 3);
+                            if (indicator901 == "080") selectedType = typeof(ReplyRejectedMessage901);
+                            else if (indicator901 == "000") selectedType = typeof(ReplyTransmissionRejectReason901);
+                        }
+                        break;
+                }
+            }
+
+            if (selectedType == null && recordLine.Length >= 2)
+            {
+                string recordId2Char = recordLine.Substring(0, 2);
+                if (recordId2Char == "08")
+                {
+                    if (_lastProcessedRecordType == typeof(CollectionTxLine01)) selectedType = typeof(CollectionTxLine02);
+                    else if (_lastProcessedRecordType == typeof(CollectionTxLine02)) selectedType = typeof(CollectionTxLine03);
+                }
+            }
+
+            if (selectedType != null)
+            {
+                _lastProcessedRecordType = selectedType;
+            }
+            return selectedType;
         }
     }
 }

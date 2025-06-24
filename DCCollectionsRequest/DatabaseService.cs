@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
-
+using System.Globalization;
 
 public class DatabaseService
 {
@@ -325,9 +325,9 @@ END", conn);
         foreach (var r in recordList)
         {
             int originalRequestRowId = 0;
-            using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE REFERENCE = @ref", conn))
+            using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @ref", conn))
             {
-                findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 14) { Value = r.ContractReference });
+                findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 50) { Value = r.OriginalPaymentInformation });
                 var result = findCmd.ExecuteScalar();
                 if (result != null && result != DBNull.Value)
                 {
@@ -341,7 +341,7 @@ END", conn);
             }
 
             using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
-                (BILLING_COLLECTIONREQUESTS_ROWID, EDI_BANK_FILES_ROWID, TRANSACTIONSTATUS,
+                (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
                  REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
                  ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
                VALUES
@@ -349,8 +349,17 @@ END", conn);
                  @effectiveDate, @origContractRef, @origPmtInfo, 99, GETDATE());", conn);
 
             DateTime.TryParse(r.ActionDate, out var actionDate);
-            DateTime.TryParse(r.EffectiveDate, out var effectiveDate);
 
+            bool isValid = DateTime.TryParseExact(
+                r.EffectiveDate,
+                "yyyyMMdd",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var effectiveDate);
+            if (!isValid)
+            {
+
+            }
             insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
             insertCmd.Parameters.Add(new SqlParameter("@status", SqlDbType.VarChar, 4) { Value = r.TransactionStatus });
