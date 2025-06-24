@@ -85,7 +85,8 @@ namespace DCCollections.Gui
             {
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
-                var file = _service.GenerateFile(day, _config, test);
+                string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
+                var file = _service.GenerateFile(day, _config, test, outFolder);
                 MessageBox.Show($"File generated: {file}", "Success");
             }
             catch (Exception ex)
@@ -117,6 +118,26 @@ namespace DCCollections.Gui
                 txtFolder.Text = fbd.SelectedPath;
                 _settings.ParseFolderPath = fbd.SelectedPath;
                 LoadFolderFiles(fbd.SelectedPath);
+            }
+        }
+
+        private void btnLiveOutputBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtLiveOutputFolder.Text = fbd.SelectedPath;
+                _settings.LiveOutputFolderPath = fbd.SelectedPath;
+            }
+        }
+
+        private void btnTestOutputBrowse_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtTestOutputFolder.Text = fbd.SelectedPath;
+                _settings.TestOutputFolderPath = fbd.SelectedPath;
             }
         }
 
@@ -230,6 +251,16 @@ namespace DCCollections.Gui
             if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
             {
                 LoadOperationsFiles(_settings.OperationFolderPath);
+            }
+
+            if (!string.IsNullOrWhiteSpace(_settings.LiveOutputFolderPath) && Directory.Exists(_settings.LiveOutputFolderPath))
+            {
+                txtLiveOutputFolder.Text = _settings.LiveOutputFolderPath;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_settings.TestOutputFolderPath) && Directory.Exists(_settings.TestOutputFolderPath))
+            {
+                txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
             }
         }
 
