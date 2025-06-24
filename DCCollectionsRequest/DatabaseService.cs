@@ -322,6 +322,22 @@ END", conn);
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
 
+        var existingResponses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        using (var existingCmd = new SqlCommand(@"SELECT TOP (1000) [ROWID], [COLLECTIONREQUESTSROWID], [EDIBANKFILEROWID],
+            [TRANSACTIONSTATUS], [REJECTREASONCODE], [REJECTREASONDESCRIPTION], [ACTIONDATE], [EFFECTIVEDATE],
+            [ORIGINALCONTRACTREFERENCE], [ORIGINALPAYMENTINFORMATION], [CREATEBY], [CREATEDATE]
+            FROM [BILLING_COLLECTIONRESPONSES]
+            WHERE EDIBANKFILEROWID = @bankFileRowId", conn))
+        {
+            existingCmd.Parameters.Add(new SqlParameter("@bankFileRowId", SqlDbType.Int) { Value = bankFileRowId });
+            using var reader = existingCmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var info = reader["ORIGINALPAYMENTINFORMATION"]?.ToString();
+                if (!string.IsNullOrEmpty(info)) existingResponses.Add(info);
+            }
+        }
+
         foreach (var r in recordList)
         {
             int originalRequestRowId = 0;
@@ -336,6 +352,11 @@ END", conn);
             }
 
             if (originalRequestRowId == 0)
+            {
+                continue;
+            }
+
+            if (existingResponses.Contains(r.OriginalPaymentInformation))
             {
                 continue;
             }
@@ -370,6 +391,8 @@ END", conn);
             insertCmd.Parameters.Add(new SqlParameter("@origContractRef", SqlDbType.VarChar, 14) { Value = r.ContractReference });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.OriginalPaymentInformation });
             insertCmd.ExecuteNonQuery();
+
+            existingResponses.Add(r.OriginalPaymentInformation);
 
             bool success = r.TransactionStatus.ToUpper() == "ACCP";
             using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
