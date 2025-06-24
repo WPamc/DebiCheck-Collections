@@ -46,6 +46,7 @@ namespace DCCollections.Gui
             _settings = UserSettings.Load();
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
+            chkTest.Checked = true;
             LoadInitialPaths();
         }
 
