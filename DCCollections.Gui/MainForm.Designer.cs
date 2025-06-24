@@ -32,6 +32,12 @@
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
         private System.Windows.Forms.CheckBox chkTest;
+        private System.Windows.Forms.Label lblLiveOutput;
+        private System.Windows.Forms.TextBox txtLiveOutputFolder;
+        private System.Windows.Forms.Button btnLiveOutputBrowse;
+        private System.Windows.Forms.Label lblTestOutput;
+        private System.Windows.Forms.TextBox txtTestOutputFolder;
+        private System.Windows.Forms.Button btnTestOutputBrowse;
         private System.Windows.Forms.TextBox txtFolder;
         private System.Windows.Forms.Button btnFolderBrowse;
         private System.Windows.Forms.ListBox lstFolderFiles;
@@ -57,6 +63,12 @@
             chkTest = new CheckBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
+            lblLiveOutput = new Label();
+            txtLiveOutputFolder = new TextBox();
+            btnLiveOutputBrowse = new Button();
+            lblTestOutput = new Label();
+            txtTestOutputFolder = new TextBox();
+            btnTestOutputBrowse = new Button();
             tabParse = new TabPage();
             txtRaw = new TextBox();
             btnParseSelected = new Button();
@@ -100,6 +112,10 @@
             tabOperations.Controls.Add(chkTest);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
+            tabOperations.Controls.Add(txtLiveOutputFolder);
+            tabOperations.Controls.Add(btnLiveOutputBrowse);
+            tabOperations.Controls.Add(txtTestOutputFolder);
+            tabOperations.Controls.Add(btnTestOutputBrowse);
             tabOperations.Location = new Point(4, 24);
             tabOperations.Name = "tabOperations";
             tabOperations.Padding = new Padding(3);
@@ -137,6 +153,58 @@
             nudDay.Size = new Size(120, 23);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            //
+            // lblLiveOutput
+            //
+            lblLiveOutput.AutoSize = true;
+            lblLiveOutput.Location = new Point(6, 157);
+            lblLiveOutput.Name = "lblLiveOutput";
+            lblLiveOutput.Size = new Size(115, 15);
+            lblLiveOutput.TabIndex = 7;
+            lblLiveOutput.Text = "Live Output Folder";
+            //
+            // txtLiveOutputFolder
+            //
+            txtLiveOutputFolder.Location = new Point(6, 175);
+            txtLiveOutputFolder.Name = "txtLiveOutputFolder";
+            txtLiveOutputFolder.Size = new Size(240, 23);
+            txtLiveOutputFolder.TabIndex = 8;
+            //
+            // btnLiveOutputBrowse
+            //
+            btnLiveOutputBrowse.Location = new Point(252, 175);
+            btnLiveOutputBrowse.Name = "btnLiveOutputBrowse";
+            btnLiveOutputBrowse.Size = new Size(100, 23);
+            btnLiveOutputBrowse.TabIndex = 9;
+            btnLiveOutputBrowse.Text = "Browse";
+            btnLiveOutputBrowse.UseVisualStyleBackColor = true;
+            btnLiveOutputBrowse.Click += btnLiveOutputBrowse_Click;
+            //
+            // lblTestOutput
+            //
+            lblTestOutput.AutoSize = true;
+            lblTestOutput.Location = new Point(6, 204);
+            lblTestOutput.Name = "lblTestOutput";
+            lblTestOutput.Size = new Size(113, 15);
+            lblTestOutput.TabIndex = 10;
+            lblTestOutput.Text = "Test Output Folder";
+            //
+            // txtTestOutputFolder
+            //
+            txtTestOutputFolder.Location = new Point(6, 222);
+            txtTestOutputFolder.Name = "txtTestOutputFolder";
+            txtTestOutputFolder.Size = new Size(240, 23);
+            txtTestOutputFolder.TabIndex = 11;
+            //
+            // btnTestOutputBrowse
+            //
+            btnTestOutputBrowse.Location = new Point(252, 222);
+            btnTestOutputBrowse.Name = "btnTestOutputBrowse";
+            btnTestOutputBrowse.Size = new Size(100, 23);
+            btnTestOutputBrowse.TabIndex = 12;
+            btnTestOutputBrowse.Text = "Browse";
+            btnTestOutputBrowse.UseVisualStyleBackColor = true;
+            btnTestOutputBrowse.Click += btnTestOutputBrowse_Click;
             // 
             // tabParse
             // 

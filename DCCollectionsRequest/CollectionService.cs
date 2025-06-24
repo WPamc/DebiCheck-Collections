@@ -108,7 +108,7 @@ namespace RMCollectionProcessor
             return results;
         }
 
-        public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false)
+        public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false, string? outputFolder = null)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
@@ -172,6 +172,12 @@ namespace RMCollectionProcessor
             }
 
             string fileName = $"ZR{creditorDefaults.UserCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
+            string outputPath = outputFolder ?? AppContext.BaseDirectory;
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+            string fullPath = Path.Combine(outputPath, fileName);
             int fileRowId = -1;
             if (!isTest)
             {
@@ -228,17 +234,17 @@ namespace RMCollectionProcessor
                 typeof(CollectionTrailer080),
                 typeof(TransmissionTrailer999));
 
-            engine.WriteFile(fileName, records);
+            engine.WriteFile(fullPath, records);
 
             if (!isTest)
             {
-                var txRecords = ExtractTransactionRecords(fileName, records.ToArray());
+                var txRecords = ExtractTransactionRecords(fullPath, records.ToArray());
                 dbService.InsertCollectionRequests(txRecords, fileRowId);
 
                 dbService.MarkBankFileGenerationComplete(fileRowId);
             }
 
-            return fileName;
+            return fullPath;
         }
 
         public BillingCollectionRequest? GetRequestByReference(string reference, IConfiguration configuration)
