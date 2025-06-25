@@ -4,6 +4,7 @@ using System.IO;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 
@@ -17,6 +18,7 @@ namespace DCCollections.Gui
         private readonly UserSettings _settings;
         private int _importSortColumn;
         private bool _importSortDescending;
+        private ProgressBar _pbImport;
 
         private class ListViewItemComparer : System.Collections.IComparer
         {
@@ -58,6 +60,9 @@ namespace DCCollections.Gui
             MaximizeBox = true;
             chkTest.Checked = true;
             chkHideTestFiles.Checked = true;
+            _pbImport = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
+            tpImportFiles.Controls.Add(_pbImport);
+            lvImportFiles.MultiSelect = true;
             LoadInitialPaths();
         }
 
@@ -395,43 +400,50 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnImportParse_Click(object sender, EventArgs e)
+        private async void btnImportParse_Click(object sender, EventArgs e)
         {
             if (lvImportFiles.SelectedItems.Count == 0)
                 return;
 
-            var tagObj = lvImportFiles.SelectedItems[0].Tag;
-            string? path = null;
-            string status = string.Empty;
-            if (tagObj is ImportFileTag tag)
-            {
-                path = tag.Path;
-                status = tag.RecordStatus;
-            }
-            else
-            {
-                path = tagObj as string;
-            }
-
-            if (string.IsNullOrWhiteSpace(path))
-                return;
-
-            if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
-            {
-                MessageBox.Show("Test Files cannot be imported.");
-                return;
-            }
+            SetImportUiState(false);
+            _pbImport.Visible = true;
 
             try
             {
-                var result = _service.ParseFile(path);
-                _parsedRecords = result.Records;
-                _currentFileType = result.FileType;
-                MessageBox.Show($"Imported {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
+                foreach (ListViewItem item in lvImportFiles.SelectedItems)
+                {
+                    var tagObj = item.Tag;
+                    string? path = null;
+                    string status = string.Empty;
+                    if (tagObj is ImportFileTag tag)
+                    {
+                        path = tag.Path;
+                        status = tag.RecordStatus;
+                    }
+                    else
+                    {
+                        path = tagObj as string;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(path))
+                        continue;
+
+                    if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    await Task.Run(() => _service.ParseFile(path));
+                }
+
+                MessageBox.Show("Import complete.", "Success");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+            finally
+            {
+                _pbImport.Visible = false;
+                SetImportUiState(true);
             }
         }
 
@@ -459,6 +471,13 @@ namespace DCCollections.Gui
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+        }
+
+        private void SetImportUiState(bool enabled)
+        {
+            pnlImportTop.Enabled = enabled;
+            lvImportFiles.Enabled = enabled;
+            UseWaitCursor = !enabled;
         }
 
         private void btnSearchFiles_Click(object sender, EventArgs e)
