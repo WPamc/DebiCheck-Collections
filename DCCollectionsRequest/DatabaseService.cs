@@ -59,6 +59,35 @@ public class DatabaseService
         return results;
     }
 
+    public DataTable GetDuplicateCollections(int deductionDay)
+    {
+        var collections = GetCollections(deductionDay);
+        var table = new DataTable();
+        table.Columns.Add("ContractReference", typeof(string));
+        table.Columns.Add("RequestedCollectionDate", typeof(DateTime));
+        table.Columns.Add("PaymentInformation", typeof(string));
+        table.Columns.Add("InstructedAmount", typeof(decimal));
+
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        foreach (var c in collections)
+        {
+            using var cmd = new SqlCommand(@"SELECT count(*)
+  FROM [DRC].[dbo].[BILLING_COLLECTIONREQUESTS]
+  WHERE REFERENCE = @REFERENCE AND YEAR(DATEREQUESTED) = YEAR(@DATEREQUESTED)
+    AND MONTH(DATEREQUESTED) = MONTH(@DATEREQUESTED)", conn);
+            cmd.Parameters.Add(new SqlParameter("@REFERENCE", SqlDbType.VarChar, 23) { Value = c.ContractReference });
+            cmd.Parameters.Add(new SqlParameter("@DATEREQUESTED", SqlDbType.DateTime) { Value = c.RequestedCollectionDate });
+            var count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count > 0)
+            {
+                table.Rows.Add(c.ContractReference, c.RequestedCollectionDate, c.PaymentInformation, c.InstructedAmount);
+            }
+        }
+
+        return table;
+    }
+
     public CreditorDefaults GetCreditorDefaults(int creditorId)
     {
         return new CreditorDefaults();

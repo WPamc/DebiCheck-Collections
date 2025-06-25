@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Data;
 using RMCollectionProcessor.Models;
 
 namespace DCCollections.Gui
@@ -234,6 +235,21 @@ namespace DCCollections.Gui
                 {
                     MessageBox.Show($"File not found: {csv}", "Error");
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void btnCheckDuplicates_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int day = (int)nudDay.Value;
+                var table = _service.GetDuplicateCollections(day, _config);
+                dgvPossibleDuplicates.DataSource = table;
+                MessageBox.Show($"Found {table.Rows.Count} possible duplicates.", "Check Duplicates");
             }
             catch (Exception ex)
             {
