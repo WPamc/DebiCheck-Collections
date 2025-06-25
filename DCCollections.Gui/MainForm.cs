@@ -143,6 +143,35 @@ namespace DCCollections.Gui
             }
         }
 
+        private void btnLiveOutputOpen_Click(object sender, EventArgs e)
+        {
+            OpenFolder(txtLiveOutputFolder.Text);
+        }
+
+        private void btnTestOutputOpen_Click(object sender, EventArgs e)
+        {
+            OpenFolder(txtTestOutputFolder.Text);
+        }
+
+        private static void OpenFolder(string? path)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
+                {
+                    Process.Start(new ProcessStartInfo("explorer.exe", path) { UseShellExecute = true });
+                }
+                else
+                {
+                    MessageBox.Show($"Folder not found: {path}", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
         private void LoadFolderFiles(string path)
         {
             try

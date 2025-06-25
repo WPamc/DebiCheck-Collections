@@ -38,6 +38,8 @@
         private System.Windows.Forms.Label lblTestOutput;
         private System.Windows.Forms.TextBox txtTestOutputFolder;
         private System.Windows.Forms.Button btnTestOutputBrowse;
+        private System.Windows.Forms.Button btnLiveOutputOpen;
+        private System.Windows.Forms.Button btnTestOutputOpen;
         private System.Windows.Forms.TextBox txtFolder;
         private System.Windows.Forms.Button btnFolderBrowse;
         private System.Windows.Forms.ListBox lstFolderFiles;
@@ -181,9 +183,19 @@
             btnLiveOutputBrowse.Text = "Browse";
             btnLiveOutputBrowse.UseVisualStyleBackColor = true;
             btnLiveOutputBrowse.Click += btnLiveOutputBrowse_Click;
-            // 
+            //
+            // btnLiveOutputOpen
+            //
+            btnLiveOutputOpen.Location = new Point(358, 116);
+            btnLiveOutputOpen.Name = "btnLiveOutputOpen";
+            btnLiveOutputOpen.Size = new Size(100, 23);
+            btnLiveOutputOpen.TabIndex = 18;
+            btnLiveOutputOpen.Text = "Open";
+            btnLiveOutputOpen.UseVisualStyleBackColor = true;
+            btnLiveOutputOpen.Click += btnLiveOutputOpen_Click;
+            //
             // txtTestOutputFolder
-            // 
+            //
             txtTestOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtTestOutputFolder.Location = new Point(112, 87);
             txtTestOutputFolder.Name = "txtTestOutputFolder";
@@ -200,9 +212,19 @@
             btnTestOutputBrowse.Text = "Browse";
             btnTestOutputBrowse.UseVisualStyleBackColor = true;
             btnTestOutputBrowse.Click += btnTestOutputBrowse_Click;
-            // 
+            //
+            // btnTestOutputOpen
+            //
+            btnTestOutputOpen.Location = new Point(358, 145);
+            btnTestOutputOpen.Name = "btnTestOutputOpen";
+            btnTestOutputOpen.Size = new Size(100, 23);
+            btnTestOutputOpen.TabIndex = 19;
+            btnTestOutputOpen.Text = "Open";
+            btnTestOutputOpen.UseVisualStyleBackColor = true;
+            btnTestOutputOpen.Click += btnTestOutputOpen_Click;
+            //
             // tabParse
-            // 
+            //
             tabParse.Controls.Add(txtRaw);
             tabParse.Controls.Add(btnParseSelected);
             tabParse.Controls.Add(lstFolderFiles);
@@ -425,10 +447,12 @@
             // 
             groupBox1.Controls.Add(txtLiveOutputFolder);
             groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(btnTestOutputBrowse);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(txtTestOutputFolder);
             groupBox1.Controls.Add(btnLiveOutputBrowse);
+            groupBox1.Controls.Add(btnLiveOutputOpen);
+            groupBox1.Controls.Add(txtTestOutputFolder);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(btnTestOutputBrowse);
+            groupBox1.Controls.Add(btnTestOutputOpen);
             groupBox1.Location = new Point(8, 166);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(470, 253);
