@@ -480,7 +480,13 @@ namespace DCCollections.Gui
             if (lvImportFiles.SelectedItems.Count == 0)
                 return;
 
-            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            var tagObj = lvImportFiles.SelectedItems[0].Tag;
+            string? path = null;
+            if (tagObj is ImportFileTag tag)
+                path = tag.Path;
+            else
+                path = tagObj as string;
+
             if (string.IsNullOrWhiteSpace(path))
                 return;
 
@@ -540,7 +546,13 @@ namespace DCCollections.Gui
             if (lvImportFiles.SelectedItems.Count == 0)
                 return;
 
-            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            var tagObj = lvImportFiles.SelectedItems[0].Tag;
+            string? path = null;
+            if (tagObj is ImportFileTag tag)
+                path = tag.Path;
+            else
+                path = tagObj as string;
+
             if (string.IsNullOrWhiteSpace(path))
                 return;
 
