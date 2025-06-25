@@ -58,6 +58,8 @@
         private System.Windows.Forms.ColumnHeader chSize;
         private System.Windows.Forms.ColumnHeader chModified;
         private System.Windows.Forms.ColumnHeader chType;
+        private System.Windows.Forms.ContextMenuStrip cmsImportFiles;
+        private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
 
         private void InitializeComponent()
         {
@@ -102,6 +104,8 @@
             txtImportFolder = new TextBox();
             lblLiveOutput = new Label();
             lblTestOutput = new Label();
+            cmsImportFiles = new ContextMenuStrip(components);
+            previewToolStripMenuItem = new ToolStripMenuItem();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -110,6 +114,7 @@
             tabParse.SuspendLayout();
             tpImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
+            cmsImportFiles.SuspendLayout();
             SuspendLayout();
             // 
             // btnTestOutputOpen
@@ -412,6 +417,7 @@
             lvImportFiles.View = View.Details;
             lvImportFiles.SelectedIndexChanged += lvImportFiles_SelectedIndexChanged;
             lvImportFiles.ColumnClick += lvImportFiles_ColumnClick;
+            lvImportFiles.MouseUp += lvImportFiles_MouseUp;
             // 
             // chName
             //
@@ -511,9 +517,20 @@
             lblTestOutput.Size = new Size(113, 15);
             lblTestOutput.TabIndex = 10;
             lblTestOutput.Text = "Test Output Folder";
-            // 
+            //
+            // cmsImportFiles
+            //
+            cmsImportFiles.Items.AddRange(new ToolStripItem[] { previewToolStripMenuItem });
+            //
+            // previewToolStripMenuItem
+            //
+            previewToolStripMenuItem.Name = "previewToolStripMenuItem";
+            previewToolStripMenuItem.Size = new Size(116, 22);
+            previewToolStripMenuItem.Text = "Preview";
+            previewToolStripMenuItem.Click += previewToolStripMenuItem_Click;
+            //
             // MainForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1189, 637);
@@ -532,6 +549,7 @@
             tpImportFiles.ResumeLayout(false);
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
+            cmsImportFiles.ResumeLayout(false);
             ResumeLayout(false);
         }
 

@@ -440,6 +440,40 @@ namespace DCCollections.Gui
             lvImportFiles.Sort();
         }
 
+        private void lvImportFiles_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            var hit = lvImportFiles.HitTest(e.Location);
+            if (hit.Item != null && hit.Item.SubItems.IndexOf(hit.SubItem) == 0)
+            {
+                lvImportFiles.SelectedItems.Clear();
+                hit.Item.Selected = true;
+                cmsImportFiles.Show(lvImportFiles, e.Location);
+            }
+        }
+
+        private void previewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lvImportFiles.SelectedItems.Count == 0)
+                return;
+
+            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
+            try
+            {
+                using var form = new FilePreviewForm(path);
+                form.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
         private void btnImportParse_Click(object sender, EventArgs e)
         {
             if (lvImportFiles.SelectedItems.Count == 0)
