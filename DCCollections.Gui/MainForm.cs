@@ -44,7 +44,6 @@ namespace DCCollections.Gui
         {
             InitializeComponent();
 
-            // Display the connection string (without the password) to the user
             var connStr = DbConnection.AppConfig.ConnectionString;
             if (!string.IsNullOrWhiteSpace(connStr))
             {
@@ -58,6 +57,7 @@ namespace DCCollections.Gui
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
             chkTest.Checked = true;
+            chkHideTestFiles.Checked = true;
             LoadInitialPaths();
         }
 
