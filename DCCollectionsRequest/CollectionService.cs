@@ -1,5 +1,4 @@
 using FileHelpers;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +23,7 @@ namespace RMCollectionProcessor
         /// </summary>
         /// <param name="filePath">The path to the file to parse.</param>
         /// <returns>The parsed records and their detected file type.</returns>
-        public ParseResult ParseFile(string filePath, IConfiguration configuration)
+        public ParseResult ParseFile(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"File '{filePath}' not found.");
@@ -33,7 +32,7 @@ namespace RMCollectionProcessor
             var parsed = processor.ProcessFile(filePath);
 
             var fileType = FileTypeIdentifier.Identify(parsed);
-            var dbService = new DatabaseService(configuration);
+            var dbService = new DatabaseService();
             switch (fileType)
             {
                 case FileType.CollectionRequest:
@@ -125,12 +124,12 @@ namespace RMCollectionProcessor
         }
 
 
-        public string GenerateFile(int deductionDay, IConfiguration configuration, bool isTest = false, string? outputFolder = null)
+        public string GenerateFile(int deductionDay, bool isTest = false, string? outputFolder = null)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
 
-            var dbService = new DatabaseService(configuration);
+            var dbService = new DatabaseService();
 
             var collections = dbService.GetCollections(deductionDay);
             if (!collections.Any())
@@ -264,15 +263,15 @@ namespace RMCollectionProcessor
             return fullPath;
         }
 
-        public BillingCollectionRequest? GetRequestByReference(string reference, IConfiguration configuration)
+        public BillingCollectionRequest? GetRequestByReference(string reference)
         {
-            var dbService = new DatabaseService(configuration);
+            var dbService = new DatabaseService();
             return dbService.GetCollectionRequestByReference(reference);
         }
 
-        public DataTable GetDuplicateCollections(int deductionDay, IConfiguration configuration)
+        public DataTable GetDuplicateCollections(int deductionDay)
         {
-            var dbService = new DatabaseService(configuration);
+            var dbService = new DatabaseService();
             return dbService.GetDuplicateCollections(deductionDay);
         }
 

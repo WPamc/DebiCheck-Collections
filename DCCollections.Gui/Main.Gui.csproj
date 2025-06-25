@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DCCollections.Models\DC-Models-Identifier.csproj" />
-    <ProjectReference Include="..\DCCollectionsRequest\DCCollectionsRequest.csproj" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="NPOI" Version="2.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DCCollections.Models\DCModelsIdentifier.csproj" />
+    <ProjectReference Include="..\DCCollectionsRequest\DCCollections.csproj" />
+    <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
   </ItemGroup>
 
 </Project>
