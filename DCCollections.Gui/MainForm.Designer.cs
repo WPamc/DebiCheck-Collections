@@ -63,6 +63,7 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             btnTestOutputOpen = new Button();
             btnLiveOutputOpen = new Button();
             tabMain = new TabControl();
