@@ -456,6 +456,7 @@
             pnlImportTop.Controls.Add(btnImportRead);
             pnlImportTop.Controls.Add(btnImportBrowse);
             pnlImportTop.Controls.Add(txtImportFolder);
+            pnlImportTop.Controls.Add(chkHideTestFiles);
             pnlImportTop.Dock = DockStyle.Top;
             pnlImportTop.Location = new Point(3, 3);
             pnlImportTop.Name = "pnlImportTop";
@@ -500,9 +501,20 @@
             txtImportFolder.Name = "txtImportFolder";
             txtImportFolder.Size = new Size(240, 23);
             txtImportFolder.TabIndex = 0;
-            // 
+            //
+            // chkHideTestFiles
+            //
+            chkHideTestFiles.AutoSize = true;
+            chkHideTestFiles.Location = new Point(567, 7);
+            chkHideTestFiles.Name = "chkHideTestFiles";
+            chkHideTestFiles.Size = new Size(105, 19);
+            chkHideTestFiles.TabIndex = 4;
+            chkHideTestFiles.Text = "Hide Test Files";
+            chkHideTestFiles.UseVisualStyleBackColor = true;
+            chkHideTestFiles.CheckedChanged += chkHideTestFiles_CheckedChanged;
+            //
             // lblLiveOutput
-            // 
+            //
             lblLiveOutput.AutoSize = true;
             lblLiveOutput.Location = new Point(6, 157);
             lblLiveOutput.Name = "lblLiveOutput";
@@ -565,5 +577,6 @@
         private DataGridView dgvPossibleDuplicates;
         private ColumnHeader chGenDate;
         private ColumnHeader chGenTime;
+        private CheckBox chkHideTestFiles;
     }
 }

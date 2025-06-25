@@ -47,6 +47,8 @@ namespace DCCollections.Gui
             }
         }
 
+        private record ImportFileTag(string Path, string RecordStatus);
+
         public MainForm()
         {
             InitializeComponent();
@@ -379,34 +381,53 @@ namespace DCCollections.Gui
             }
         }
 
+        private void chkHideTestFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtImportFolder.Text))
+            {
+                LoadImportFiles(txtImportFolder.Text);
+            }
+        }
+
         private void LoadImportFiles(string path)
         {
             try
             {
                 lvImportFiles.Items.Clear();
+                bool hideTests = chkHideTestFiles.Checked;
                 foreach (var file in Directory.GetFiles(path))
                 {
                     var info = new FileInfo(file);
                     var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
                     FileType type = FileType.Unknown;
+                    string recordStatus = string.Empty;
                     try
                     {
                         var processor = new FileProcessor();
                         var records = processor.ProcessFile(file);
                         type = FileTypeIdentifier.Identify(records);
+                        if (records.Length > 0 && records[0] is TransmissionHeader000 th)
+                            recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
                     }
                     catch { }
+
+                    bool isLive = recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
+                    if (hideTests && !isLive)
+                        continue;
 
                     var (genDate, genTime) = ExtractGenerationInfo(info.Name);
                     var item = new ListViewItem(info.Name)
                     {
-                        Tag = info.FullName
+                        Tag = new ImportFileTag(info.FullName, recordStatus)
                     };
                     item.SubItems.Add(genDate);
                     item.SubItems.Add(genTime);
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
-                    item.SubItems.Add(type.ToString());
+                    var desc = type.ToString();
+                    if (!isLive && recordStatus.Length > 0)
+                        desc += " (Test)";
+                    item.SubItems.Add(desc);
                     lvImportFiles.Items.Add(item);
                 }
 
@@ -479,9 +500,27 @@ namespace DCCollections.Gui
             if (lvImportFiles.SelectedItems.Count == 0)
                 return;
 
-            var path = lvImportFiles.SelectedItems[0].Tag as string;
+            var tagObj = lvImportFiles.SelectedItems[0].Tag;
+            string? path = null;
+            string status = string.Empty;
+            if (tagObj is ImportFileTag tag)
+            {
+                path = tag.Path;
+                status = tag.RecordStatus;
+            }
+            else
+            {
+                path = tagObj as string;
+            }
+
             if (string.IsNullOrWhiteSpace(path))
                 return;
+
+            if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("Test Files cannot be imported.");
+                return;
+            }
 
             try
             {
