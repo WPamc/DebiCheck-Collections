@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCollectionsRequest", "DCCollectionsRequest.csproj", "{CC355B53-7B43-462A-A03C-BE5C010D74FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsRequest", "CollectionsRequest.csproj", "{CC355B53-7B43-462A-A03C-BE5C010D74FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCollections.Gui", "..\DCCollections.Gui\DCCollections.Gui.csproj", "{A1F6CD65-5B82-4D39-9D9D-6335CB39E2CB}"
 EndProject

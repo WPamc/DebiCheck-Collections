@@ -60,15 +60,23 @@
 
         private void InitializeComponent()
         {
+            btnTestOutputOpen = new Button();
+            btnLiveOutputOpen = new Button();
             tabMain = new TabControl();
             tabOperations = new TabPage();
+            label3 = new Label();
+            groupBox1 = new GroupBox();
+            txtLiveOutputFolder = new TextBox();
+            label2 = new Label();
+            btnLiveOutputBrowse = new Button();
+            txtTestOutputFolder = new TextBox();
+            label1 = new Label();
+            btnTestOutputBrowse = new Button();
+            dgvPossibleDuplicates = new DataGridView();
+            btnCheckDuplicates = new Button();
             chkTest = new CheckBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
-            txtLiveOutputFolder = new TextBox();
-            btnLiveOutputBrowse = new Button();
-            txtTestOutputFolder = new TextBox();
-            btnTestOutputBrowse = new Button();
             tabParse = new TabPage();
             txtRaw = new TextBox();
             btnParseSelected = new Button();
@@ -90,21 +98,37 @@
             txtImportFolder = new TextBox();
             lblLiveOutput = new Label();
             lblTestOutput = new Label();
-            label1 = new Label();
-            label2 = new Label();
-            groupBox1 = new GroupBox();
-            btnCheckDuplicates = new Button();
-            dgvPossibleDuplicates = new DataGridView();
-            label3 = new Label();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
+            groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
             tabParse.SuspendLayout();
             tpImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
-            groupBox1.SuspendLayout();
             SuspendLayout();
+            // 
+            // btnTestOutputOpen
+            // 
+            btnTestOutputOpen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnTestOutputOpen.Location = new Point(489, 87);
+            btnTestOutputOpen.Name = "btnTestOutputOpen";
+            btnTestOutputOpen.Size = new Size(51, 23);
+            btnTestOutputOpen.TabIndex = 19;
+            btnTestOutputOpen.Text = "Open";
+            btnTestOutputOpen.UseVisualStyleBackColor = true;
+            btnTestOutputOpen.Click += btnTestOutputOpen_Click;
+            // 
+            // btnLiveOutputOpen
+            // 
+            btnLiveOutputOpen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLiveOutputOpen.Location = new Point(489, 58);
+            btnLiveOutputOpen.Name = "btnLiveOutputOpen";
+            btnLiveOutputOpen.Size = new Size(51, 23);
+            btnLiveOutputOpen.TabIndex = 18;
+            btnLiveOutputOpen.Text = "Open";
+            btnLiveOutputOpen.UseVisualStyleBackColor = true;
+            btnLiveOutputOpen.Click += btnLiveOutputOpen_Click;
             // 
             // tabMain
             // 
@@ -134,6 +158,107 @@
             tabOperations.TabIndex = 0;
             tabOperations.Text = "Operations";
             tabOperations.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(77, 55);
+            label3.Name = "label3";
+            label3.Size = new Size(85, 15);
+            label3.TabIndex = 15;
+            label3.Text = "Deduction Day";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(txtLiveOutputFolder);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(btnLiveOutputBrowse);
+            groupBox1.Controls.Add(btnLiveOutputOpen);
+            groupBox1.Controls.Add(txtTestOutputFolder);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(btnTestOutputBrowse);
+            groupBox1.Controls.Add(btnTestOutputOpen);
+            groupBox1.Location = new Point(8, 166);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(544, 253);
+            groupBox1.TabIndex = 15;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Config";
+            // 
+            // txtLiveOutputFolder
+            // 
+            txtLiveOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtLiveOutputFolder.Location = new Point(112, 58);
+            txtLiveOutputFolder.Name = "txtLiveOutputFolder";
+            txtLiveOutputFolder.Size = new Size(314, 23);
+            txtLiveOutputFolder.TabIndex = 8;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(1, 61);
+            label2.Name = "label2";
+            label2.Size = new Size(105, 15);
+            label2.TabIndex = 14;
+            label2.Text = "Live Output Folder";
+            // 
+            // btnLiveOutputBrowse
+            // 
+            btnLiveOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLiveOutputBrowse.Location = new Point(432, 58);
+            btnLiveOutputBrowse.Name = "btnLiveOutputBrowse";
+            btnLiveOutputBrowse.Size = new Size(51, 23);
+            btnLiveOutputBrowse.TabIndex = 9;
+            btnLiveOutputBrowse.Text = "Browse";
+            btnLiveOutputBrowse.UseVisualStyleBackColor = true;
+            btnLiveOutputBrowse.Click += btnLiveOutputBrowse_Click;
+            // 
+            // txtTestOutputFolder
+            // 
+            txtTestOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtTestOutputFolder.Location = new Point(112, 87);
+            txtTestOutputFolder.Name = "txtTestOutputFolder";
+            txtTestOutputFolder.Size = new Size(314, 23);
+            txtTestOutputFolder.TabIndex = 11;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(1, 91);
+            label1.Name = "label1";
+            label1.Size = new Size(105, 15);
+            label1.TabIndex = 13;
+            label1.Text = "Test Output Folder";
+            // 
+            // btnTestOutputBrowse
+            // 
+            btnTestOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnTestOutputBrowse.Location = new Point(432, 87);
+            btnTestOutputBrowse.Name = "btnTestOutputBrowse";
+            btnTestOutputBrowse.Size = new Size(51, 23);
+            btnTestOutputBrowse.TabIndex = 12;
+            btnTestOutputBrowse.Text = "Browse";
+            btnTestOutputBrowse.UseVisualStyleBackColor = true;
+            btnTestOutputBrowse.Click += btnTestOutputBrowse_Click;
+            // 
+            // dgvPossibleDuplicates
+            // 
+            dgvPossibleDuplicates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvPossibleDuplicates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPossibleDuplicates.Location = new Point(558, 6);
+            dgvPossibleDuplicates.Name = "dgvPossibleDuplicates";
+            dgvPossibleDuplicates.Size = new Size(617, 593);
+            dgvPossibleDuplicates.TabIndex = 17;
+            // 
+            // btnCheckDuplicates
+            // 
+            btnCheckDuplicates.Location = new Point(95, 136);
+            btnCheckDuplicates.Name = "btnCheckDuplicates";
+            btnCheckDuplicates.Size = new Size(120, 23);
+            btnCheckDuplicates.TabIndex = 16;
+            btnCheckDuplicates.Text = "Check Duplicates";
+            btnCheckDuplicates.UseVisualStyleBackColor = true;
+            btnCheckDuplicates.Click += btnCheckDuplicates_Click;
             // 
             // chkTest
             // 
@@ -165,66 +290,8 @@
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // txtLiveOutputFolder
-            // 
-            txtLiveOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtLiveOutputFolder.Location = new Point(112, 58);
-            txtLiveOutputFolder.Name = "txtLiveOutputFolder";
-            txtLiveOutputFolder.Size = new Size(240, 23);
-            txtLiveOutputFolder.TabIndex = 8;
-            // 
-            // btnLiveOutputBrowse
-            // 
-            btnLiveOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLiveOutputBrowse.Location = new Point(358, 58);
-            btnLiveOutputBrowse.Name = "btnLiveOutputBrowse";
-            btnLiveOutputBrowse.Size = new Size(100, 23);
-            btnLiveOutputBrowse.TabIndex = 9;
-            btnLiveOutputBrowse.Text = "Browse";
-            btnLiveOutputBrowse.UseVisualStyleBackColor = true;
-            btnLiveOutputBrowse.Click += btnLiveOutputBrowse_Click;
-            //
-            // btnLiveOutputOpen
-            //
-            btnLiveOutputOpen.Location = new Point(358, 116);
-            btnLiveOutputOpen.Name = "btnLiveOutputOpen";
-            btnLiveOutputOpen.Size = new Size(100, 23);
-            btnLiveOutputOpen.TabIndex = 18;
-            btnLiveOutputOpen.Text = "Open";
-            btnLiveOutputOpen.UseVisualStyleBackColor = true;
-            btnLiveOutputOpen.Click += btnLiveOutputOpen_Click;
-            //
-            // txtTestOutputFolder
-            //
-            txtTestOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtTestOutputFolder.Location = new Point(112, 87);
-            txtTestOutputFolder.Name = "txtTestOutputFolder";
-            txtTestOutputFolder.Size = new Size(240, 23);
-            txtTestOutputFolder.TabIndex = 11;
-            // 
-            // btnTestOutputBrowse
-            // 
-            btnTestOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnTestOutputBrowse.Location = new Point(358, 87);
-            btnTestOutputBrowse.Name = "btnTestOutputBrowse";
-            btnTestOutputBrowse.Size = new Size(100, 23);
-            btnTestOutputBrowse.TabIndex = 12;
-            btnTestOutputBrowse.Text = "Browse";
-            btnTestOutputBrowse.UseVisualStyleBackColor = true;
-            btnTestOutputBrowse.Click += btnTestOutputBrowse_Click;
-            //
-            // btnTestOutputOpen
-            //
-            btnTestOutputOpen.Location = new Point(358, 145);
-            btnTestOutputOpen.Name = "btnTestOutputOpen";
-            btnTestOutputOpen.Size = new Size(100, 23);
-            btnTestOutputOpen.TabIndex = 19;
-            btnTestOutputOpen.Text = "Open";
-            btnTestOutputOpen.UseVisualStyleBackColor = true;
-            btnTestOutputOpen.Click += btnTestOutputOpen_Click;
-            //
             // tabParse
-            //
+            // 
             tabParse.Controls.Add(txtRaw);
             tabParse.Controls.Add(btnParseSelected);
             tabParse.Controls.Add(lstFolderFiles);
@@ -425,72 +492,6 @@
             lblTestOutput.TabIndex = 10;
             lblTestOutput.Text = "Test Output Folder";
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(1, 91);
-            label1.Name = "label1";
-            label1.Size = new Size(105, 15);
-            label1.TabIndex = 13;
-            label1.Text = "Test Output Folder";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(1, 61);
-            label2.Name = "label2";
-            label2.Size = new Size(105, 15);
-            label2.TabIndex = 14;
-            label2.Text = "Live Output Folder";
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(txtLiveOutputFolder);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(btnLiveOutputBrowse);
-            groupBox1.Controls.Add(btnLiveOutputOpen);
-            groupBox1.Controls.Add(txtTestOutputFolder);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(btnTestOutputBrowse);
-            groupBox1.Controls.Add(btnTestOutputOpen);
-            groupBox1.Location = new Point(8, 166);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(470, 253);
-            groupBox1.TabIndex = 15;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Config";
-
-            //
-            // btnCheckDuplicates
-            //
-            btnCheckDuplicates.Location = new Point(95, 136);
-            btnCheckDuplicates.Name = "btnCheckDuplicates";
-            btnCheckDuplicates.Size = new Size(120, 23);
-            btnCheckDuplicates.TabIndex = 16;
-            btnCheckDuplicates.Text = "Check Duplicates";
-            btnCheckDuplicates.UseVisualStyleBackColor = true;
-            btnCheckDuplicates.Click += btnCheckDuplicates_Click;
-
-            //
-            // dgvPossibleDuplicates
-            //
-            dgvPossibleDuplicates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvPossibleDuplicates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPossibleDuplicates.Location = new Point(484, 6);
-            dgvPossibleDuplicates.Name = "dgvPossibleDuplicates";
-            dgvPossibleDuplicates.RowTemplate.Height = 25;
-            dgvPossibleDuplicates.Size = new Size(691, 593);
-            dgvPossibleDuplicates.TabIndex = 17;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(77, 55);
-            label3.Name = "label3";
-            label3.Size = new Size(85, 15);
-            label3.TabIndex = 15;
-            label3.Text = "Deduction Day";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -502,15 +503,15 @@
             tabMain.ResumeLayout(false);
             tabOperations.ResumeLayout(false);
             tabOperations.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
             tabParse.ResumeLayout(false);
             tabParse.PerformLayout();
             tpImportFiles.ResumeLayout(false);
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 

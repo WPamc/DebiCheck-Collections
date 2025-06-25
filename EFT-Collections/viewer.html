@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive EFT File Comparison</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px auto; /* Center the layout */
+            background-color: #f4f4f4;
+            max-width: 1800px; /* Constrain the maximum width */
+        }
+
+        #controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #comparisonContainer {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start; /* Align columns to the top */
+        }
+
+        .file-display {
+            flex: 1;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-width: 0; /* Important for flexbox to allow shrinking */
+        }
+
+        .record-block {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .raw-data-line {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; /* Allows wrapping while preserving whitespace */
+            word-break: break-all; /* Breaks long words/fields if necessary */
+            cursor: default;
+            margin-bottom: 5px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+            .raw-data-line span {
+                display: inline-block;
+                min-width: 1px;
+            }
+        /* --- Highlighting Styles --- */
+        .field-highlight { /* Mouseover highlight */
+            background-color: #ffd700 !important; /* Gold */
+            outline: 1px solid #ccac00;
+        }
+
+        .table-highlight {
+            background-color: #ffeaa7 !important; /* Light gold */
+        }
+
+        .line-diff {
+            background-color: #ffebee; /* Light Pink */
+            border-color: #e57373;
+        }
+
+        .field-diff {
+            background-color: #fff59d; /* Yellow */
+            font-weight: bold;
+        }
+
+        .line-added {
+            background-color: #e8f5e9; /* Light Green */
+            border-color: #81c784;
+        }
+
+        .line-removed {
+            background-color: #f5f5f5; /* Light Grey */
+            border-color: #bdbdbd;
+        }
+
+            .line-removed .raw-data-line, .line-removed table {
+                text-decoration: line-through;
+                opacity: 0.7;
+            }
+
+        .placeholder-block {
+            padding: 10px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        /* --- Table Styles --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            font-size: 0.9em;
+            table-layout: fixed; /* Prevents content from expanding columns */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+            word-break: break-all; /* Allows long values in cells to wrap */
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        #infoPanel {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            min-width: 250px;
+            z-index: 100;
+        }
+
+        .field-name-col {
+            width: 40%; /* Adjusted slightly for better balance */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Interactive EFT File Comparison</h1>
+
+    <div id="controls">
+        <div>
+            <label for="baseFileInput"><strong>Base File:</strong></label>
+            <input type="file" id="baseFileInput" accept=".txt,.dat">
+        </div>
+        <div>
+            <label for="newFileInput"><strong>New File:</strong></label>
+            <input type="file" id="newFileInput" accept=".txt,.dat">
+        </div>
+        <button id="compareBtn" disabled>Compare Files</button>
+    </div>
+
+    <div id="infoPanel">Mouse over a field to see details.</div>
+
+    <div id="comparisonContainer">
+        <div id="baseFileDisplay" class="file-display">
+            <h2>Base File</h2>
+            <p>Please select a base file and a new file, then click "Compare Files".</p>
+        </div>
+        <div id="newFileDisplay" class="file-display">
+            <h2>New File</h2>
+        </div>
+    </div>
+
+    <script>
+        const recordDefinitions = {
+            TransmissionHeader000: [
+                { name: "RecordIdentifier", length: 3 }, { name: "RecordStatus", length: 1 },
+                { name: "TransmissionDate", length: 8 }, { name: "ClientCode", length: 5 },
+                { name: "ClientName", length: 30 }, { name: "TransmissionNumber", length: 7 },
+                { name: "Destination", length: 5 }, { name: "Filler1", length: 119 },
+                { name: "ForLdUsersUse", length: 20 }
+            ],
+            EftUserHeader001: [
+                { name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 },
+                { name: "BankservRecordId", length: 2 }, { name: "BankservUserCode", length: 4 },
+                { name: "BankservCreationDate", length: 6 }, { name: "BankservPurgeDate", length: 6 },
+                { name: "FirstActionDate", length: 6 }, { name: "LastActionDate", length: 6 },
+                { name: "FirstSequenceNumber", length: 6 }, { name: "UserGenerationNumber", length: 4 },
+                { name: "TypeOfService", length: 10 }, { name: "AcceptedReport", length: 1 },
+                { name: "AccountTypeCorrection", length: 1 }, { name: "Filler", length: 142 }
+            ],
+            EftStandardTransaction001: [
+                { name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 },
+                { name: "BankservRecordId", length: 2 }, { name: "UserBranch", length: 6 },
+                { name: "UserNominatedAccount", length: 11 }, { name: "UserCode", length: 4 },
+                { name: "UserSequenceNumber", length: 6 }, { name: "HomingBranch", length: 6 },
+                { name: "HomingAccountNumber", length: 11 }, { name: "TypeOfAccount", length: 1 },
+                { name: "AmountInCents", length: 11 }, { name: "ActionDate", length: 6 },
+                { name: "EntryClass", length: 2 }, { name: "TaxCode", length: 1 },
+                { name: "Filler1", length: 3 }, { name: "UserReference", length: 30 },
+                { name: "HomingAccountName", length: 30 }, { name: "NonStandardHomingAccount", length: 20 },
+                { name: "Filler2", length: 16 }, { name: "HomingInstitution", length: 2 },
+                { name: "Filler3", length: 26 }
+            ],
+            EftContraRecord001: [
+                { name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 },
+                { name: "BankservRecordId", length: 2 }, { name: "UserBranch", length: 6 },
+                { name: "UserNominatedAccount", length: 11 }, { name: "UserCode", length: 4 },
+                { name: "UserSequenceNumber", length: 6 }, { name: "HomingBranch", length: 6 },
+                { name: "HomingAccountNumber", length: 11 }, { name: "TypeOfAccount", length: 1 },
+                { name: "AmountInCents", length: 11 }, { name: "ActionDate", length: 6 },
+                { name: "EntryClass", length: 2 }, { name: "Filler1", length: 4 },
+                { name: "UserReference", length: 30 }, { name: "Filler2", length: 30 },
+                { name: "Filler3", length: 64 }
+            ],
+            EftUserTrailer001: [
+                { name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 },
+                { name: "BankservRecordId", length: 2 }, { name: "UserCode", length: 4 },
+                { name: "FirstSequenceNumber", length: 6 }, { name: "LastSequenceNumber", length: 6 },
+                { name: "FirstActionDate", length: 6 }, { name: "LastActionDate", length: 6 },
+                { name: "NumberOfDebitRecords", length: 6 }, { name: "NumberOfCreditRecords", length: 6 },
+                { name: "NumberOfContraRecords", length: 6 }, { name: "TotalDebitValueInCents", length: 12 },
+                { name: "TotalCreditValueInCents", length: 12 }, { name: "HashTotalOfHomingAcctNos", length: 12 },
+                { name: "Filler", length: 110 }
+            ],
+            TransmissionTrailer999: [
+                { name: "RecordIdentifier", length: 3 }, { name: "DataSetStatus", length: 1 },
+                { name: "NumberOfRecords", length: 9 }, { name: "Filler", length: 185 }
+            ],
+            Unknown: []
+        };
+
+        const baseFileInput = document.getElementById('baseFileInput');
+        const newFileInput = document.getElementById('newFileInput');
+        const compareBtn = document.getElementById('compareBtn');
+        const baseDisplay = document.getElementById('baseFileDisplay');
+        const newDisplay = document.getElementById('newFileDisplay');
+        const infoPanel = document.getElementById('infoPanel');
+
+        let baseFileContent = null;
+        let newFileContent = null;
+
+        baseFileInput.addEventListener('change', (e) => handleFileSelect(e, 'base'));
+        newFileInput.addEventListener('change', (e) => handleFileSelect(e, 'new'));
+        compareBtn.addEventListener('click', handleComparison);
+
+        function handleFileSelect(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (type === 'base') {
+                    baseFileContent = e.target.result;
+                } else {
+                    newFileContent = e.target.result;
+                }
+                checkEnableCompareButton();
+            };
+            reader.readAsText(file);
+        }
+
+        function checkEnableCompareButton() {
+            if (baseFileContent && newFileContent) {
+                compareBtn.disabled = false;
+            }
+        }
+
+        function getRecordType(line) {
+            if (line.length < 7) return 'Unknown';
+            const recId = line.substring(0, 3);
+            if (recId === "000") return 'TransmissionHeader000';
+            if (recId === "999") return 'TransmissionTrailer999';
+
+            if (recId === "001" || recId === "020") {
+                const bankservId = line.substring(4, 6); // Positions 5 and 6 (0-indexed)
+                switch (bankservId) {
+                    case "04": return 'EftUserHeader001';
+                    case "50": return 'EftStandardTransaction001';
+                    case "12": return 'EftContraRecord001';
+                    case "52": return 'EftContraRecord001';
+                    case "92": return 'EftUserTrailer001';
+                    default: return 'Unknown';
+                }
+            }
+            return 'Unknown';
+        }
+
+        function handleComparison() {
+            baseDisplay.innerHTML = '<h2>Base File</h2>'; // Clear previous content
+            newDisplay.innerHTML = '<h2>New File</h2>';
+
+            const baseLines = baseFileContent.split(/\r\n|\n/).filter(line => line.trim() !== '');
+            const newLines = newFileContent.split(/\r\n|\n/).filter(line => line.trim() !== '');
+
+            const maxLines = Math.max(baseLines.length, newLines.length);
+
+            for (let i = 0; i < maxLines; i++) {
+                const baseLine = baseLines[i];
+                const newLine = newLines[i];
+
+                if (baseLine !== undefined && newLine === undefined) {
+                    // Line removed in new file
+                    const baseBlock = createRecordBlock(baseLine, i, { diffClass: 'line-removed' });
+                    baseDisplay.appendChild(baseBlock);
+                    newDisplay.appendChild(createPlaceholderBlock('Line Removed'));
+                } else if (baseLine === undefined && newLine !== undefined) {
+                    // Line added in new file
+                    const newBlock = createRecordBlock(newLine, i, { diffClass: 'line-added' });
+                    newDisplay.appendChild(newBlock);
+                    baseDisplay.appendChild(createPlaceholderBlock('Line Added'));
+                } else if (baseLine !== newLine) {
+                    // Line changed
+                    const fieldDiffs = findFieldDifferences(baseLine, newLine);
+                    const baseBlock = createRecordBlock(baseLine, i, { diffClass: 'line-diff', fieldDiffs });
+                    const newBlock = createRecordBlock(newLine, i, { diffClass: 'line-diff', fieldDiffs });
+                    baseDisplay.appendChild(baseBlock);
+                    newDisplay.appendChild(newBlock);
+                } else {
+                    // Lines are identical
+                    const baseBlock = createRecordBlock(baseLine, i);
+                    const newBlock = createRecordBlock(newLine, i);
+                    baseDisplay.appendChild(baseBlock);
+                    newDisplay.appendChild(newBlock);
+                }
+            }
+        }
+
+        function findFieldDifferences(line1, line2) {
+            const recordType = getRecordType(line1); // Assume same record type for comparison
+            const fields = recordDefinitions[recordType] || [];
+            if (fields.length === 0) return [];
+
+            const diffs = [];
+            let currentPos = 0;
+            fields.forEach((field, fieldIndex) => {
+                const val1 = line1.substring(currentPos, currentPos + field.length);
+                const val2 = line2.substring(currentPos, currentPos + field.length);
+                if (val1 !== val2) {
+                    diffs.push(fieldIndex);
+                }
+                currentPos += field.length;
+            });
+            return diffs;
+        }
+
+        function createRecordBlock(line, lineIndex, diffInfo = {}) {
+            const { diffClass = '', fieldDiffs = [] } = diffInfo;
+
+            const recordType = getRecordType(line);
+            const fields = recordDefinitions[recordType] || [];
+
+            const recordBlock = document.createElement('div');
+            recordBlock.className = `record-block ${diffClass}`;
+            recordBlock.id = `record-block-${lineIndex}`;
+
+            // Raw Data Line
+            const rawDataLineDiv = document.createElement('div');
+            rawDataLineDiv.className = 'raw-data-line';
+
+            // Table
+            const table = document.createElement('table');
+            const a = table.createTHead().insertRow().insertCell();
+            a.colSpan = 2;
+            a.textContent = `Record Type: ${recordType}`;
+            const headerRow = table.insertRow();
+            const th1 = document.createElement('th');
+            th1.className = 'field-name-col';
+            th1.textContent = 'Field Name';
+            headerRow.appendChild(th1);
+            const th2 = document.createElement('th');
+            th2.textContent = 'Value';
+            headerRow.appendChild(th2);
+
+            let currentPos = 0;
+            fields.forEach((field, fieldIndex) => {
+                const fieldValue = line.substring(currentPos, currentPos + field.length);
+
+                // Span for raw line
+                const span = document.createElement('span');
+                span.textContent = fieldValue.replace(/ /g, '\u00A0');
+                span.dataset.fieldName = field.name;
+                span.dataset.fieldValue = fieldValue;
+                span.dataset.fieldStart = currentPos + 1;
+                span.dataset.fieldLength = field.length;
+                span.dataset.lineIndex = lineIndex;
+                span.dataset.fieldIndex = fieldIndex;
+                if (fieldDiffs.includes(fieldIndex)) {
+                    span.classList.add('field-diff');
+                }
+                span.addEventListener('mouseover', handleMouseOver);
+                span.addEventListener('mouseout', handleMouseOut);
+                rawDataLineDiv.appendChild(span);
+
+                // Row for table
+                const tr = table.insertRow();
+                tr.id = `row-${lineIndex}-${fieldIndex}`;
+                const tdName = tr.insertCell();
+                tdName.textContent = field.name;
+                const tdValue = tr.insertCell();
+                tdValue.textContent = fieldValue;
+                if (fieldDiffs.includes(fieldIndex)) {
+                    tr.classList.add('field-diff');
+                }
+
+                currentPos += field.length;
+            });
+
+            recordBlock.appendChild(rawDataLineDiv);
+            if (fields.length > 0) {
+                recordBlock.appendChild(table);
+            }
+            return recordBlock;
+        }
+
+        function createPlaceholderBlock(text) {
+            const block = document.createElement('div');
+            block.className = 'record-block';
+            const placeholder = document.createElement('div');
+            placeholder.className = 'placeholder-block';
+            placeholder.textContent = text;
+            block.appendChild(placeholder);
+            return block;
+        }
+
+        function handleMouseOver(event) {
+            const span = event.target;
+            const { fieldName, fieldValue, fieldStart, fieldLength, lineIndex, fieldIndex } = span.dataset;
+            span.classList.add('field-highlight');
+
+            // Highlight table row in both displays if it exists
+            const baseRow = document.querySelector(`#baseFileDisplay #row-${lineIndex}-${fieldIndex}`);
+            const newRow = document.querySelector(`#newFileDisplay #row-${lineIndex}-${fieldIndex}`);
+            if (baseRow) baseRow.classList.add('table-highlight');
+            if (newRow) newRow.classList.add('table-highlight');
+
+            infoPanel.textContent = `Field: ${fieldName} | Value: "${fieldValue}" | Pos: ${fieldStart}-${parseInt(fieldStart) + parseInt(fieldLength) - 1} | Len: ${fieldLength}`;
+        }
+
+        function handleMouseOut(event) {
+            const span = event.target;
+            const { lineIndex, fieldIndex } = span.dataset;
+            span.classList.remove('field-highlight');
+
+            const baseRow = document.querySelector(`#baseFileDisplay #row-${lineIndex}-${fieldIndex}`);
+            const newRow = document.querySelector(`#newFileDisplay #row-${lineIndex}-${fieldIndex}`);
+            if (baseRow) baseRow.classList.remove('table-highlight');
+            if (newRow) newRow.classList.remove('table-highlight');
+
+            infoPanel.textContent = 'Mouse over a field to see details.';
+        }
+    </script>
+</body>
+</html>

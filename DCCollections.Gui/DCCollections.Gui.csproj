@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DCCollections.Models\DC-Models-Identifier.csproj" />
-    <ProjectReference Include="..\DCCollectionsRequest\DCCollectionsRequest.csproj" />
+    <ProjectReference Include="..\DCCollectionsRequest\CollectionsRequest.csproj" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
 
