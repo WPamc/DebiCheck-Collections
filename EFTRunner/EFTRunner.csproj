@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EFT-Collections\EFT-Collections.csproj" />
+    <ProjectReference Include="..\EFT-Collections\EFTCollections.csproj" />
   </ItemGroup>
 
 </Project>
