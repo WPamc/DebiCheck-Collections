@@ -2,6 +2,8 @@ using System.Diagnostics;
 using DbConnection;
 using System.IO;
 using System.Data;
+using System.Drawing;
+using System.Linq;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 
@@ -564,6 +566,19 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void btnSearchFiles_Click(object sender, EventArgs e)
+        {
+            string term = txtSearchFiles.Text.Trim();
+
+            foreach (ListViewItem item in lvImportFiles.Items)
+            {
+                bool match = !string.IsNullOrEmpty(term) &&
+                             item.SubItems.Cast<ListViewItem.ListViewSubItem>()
+                                 .Any(sub => sub.Text.Contains(term, StringComparison.OrdinalIgnoreCase));
+                item.BackColor = match ? Color.Yellow : lvImportFiles.BackColor;
             }
         }
 
