@@ -361,7 +361,7 @@ namespace DCCollections.Gui
                 return;
 
             var hit = lvImportFiles.HitTest(e.Location);
-            if (hit.Item != null && hit.Item.SubItems.IndexOf(hit.SubItem) == 0)
+            if (hit.Item != null)
             {
                 lvImportFiles.SelectedItems.Clear();
                 hit.Item.Selected = true;
