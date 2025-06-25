@@ -98,7 +98,6 @@ namespace RMCollectionProcessor
                         GenerationNumber = generationNumber,
                         TransactionStatus = line1.TransactionStatus.Trim(),
                         ContractReference = line1.ContractReferenceNumber.Trim(),
-                       // OriginalPaymentInformation = line1.OriginalPmtInfId.Trim()
                     };
                 }
                 else if (currentTransaction != null)
@@ -106,7 +105,8 @@ namespace RMCollectionProcessor
                     if (record is StatusUserSetTransactionLine02 line2)
                     {
                         currentTransaction.ActionDate = line2.ActionDate.Trim();
-                        currentTransaction.EffectiveDate = line2.EffectiveDate.Trim();
+                        var trimmedEffectiveDate = line2.EffectiveDate.Trim();
+                        currentTransaction.EffectiveDate = string.IsNullOrEmpty(trimmedEffectiveDate) ? null : trimmedEffectiveDate;
                     }
                     else if (record is StatusUserSetTransactionLine03 line3)
                     {
