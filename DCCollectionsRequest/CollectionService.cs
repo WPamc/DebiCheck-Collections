@@ -51,7 +51,15 @@ namespace RMCollectionProcessor
                     dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
                 case FileType.Reply:
-                    Console.Write("Unknown");
+                    var reply = parsed.OfType<ReplyTransmissionStatus900>().FirstOrDefault();
+                    if (reply != null)
+                    {
+                        int gen = 0;
+                        int.TryParse(reply.TransmissionNumber.Trim(), out gen);
+                        var st = reply.TransmissionStatus.Trim();
+                        var fileStatus = string.Equals(st, "ACCEPTED", StringComparison.OrdinalIgnoreCase) ? BankFileStatus.Submitted : BankFileStatus.Rejected;
+                        ImportReplyFile(gen, fileStatus);
+                    }
                     break;
                 case FileType.Unknown:
                     Console.Write("Unknown");
