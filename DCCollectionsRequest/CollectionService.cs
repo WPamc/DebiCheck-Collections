@@ -46,7 +46,7 @@ namespace RMCollectionProcessor
                     {
                         int genNum = 0;
                         int.TryParse(statusRecords.First().GenerationNumber, out genNum);
-                        ImportReoprtFile(genNum, BankFileStatus.Accepted);
+                        ImportReplyFile(genNum, BankFileStatus.Accepted);
                     }
                     dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
@@ -361,7 +361,7 @@ namespace RMCollectionProcessor
         /// </summary>
         /// <param name="generationNumber">The generation number extracted from the file.</param>
         /// <param name="status">The status to apply to the bank file.</param>
-        public void ImportReoprtFile(int generationNumber, BankFileStatus status)
+        public void ImportReplyFile(int generationNumber, BankFileStatus status)
         {
             var db = new DatabaseService();
             db.UpdateBankFileStatus(generationNumber, status);
