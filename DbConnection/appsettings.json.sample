@@ -1,6 +1,0 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=CollectionsDb;User Id=username;Password=password;"
-  },
-  "SqlQueriesPath": "SqlQueries"
-}
