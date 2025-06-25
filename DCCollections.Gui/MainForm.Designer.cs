@@ -57,6 +57,7 @@
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.ColumnHeader chSize;
         private System.Windows.Forms.ColumnHeader chModified;
+        private System.Windows.Forms.ColumnHeader chType;
 
         private void InitializeComponent()
         {
@@ -83,6 +84,7 @@
             chName = new ColumnHeader();
             chSize = new ColumnHeader();
             chModified = new ColumnHeader();
+            chType = new ColumnHeader();
             pnlImportTop = new Panel();
             btnImportParse = new Button();
             btnImportRead = new Button();
@@ -330,7 +332,7 @@
             // 
             // lvImportFiles
             // 
-            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chSize, chModified });
+            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chSize, chModified, chType });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
             lvImportFiles.Location = new Point(3, 35);
@@ -355,7 +357,12 @@
             // 
             chModified.Text = "Modified";
             chModified.Width = 200;
-            // 
+            //
+            // chType
+            //
+            chType.Text = "Type";
+            chType.Width = 120;
+            //
             // pnlImportTop
             // 
             pnlImportTop.Controls.Add(btnImportParse);

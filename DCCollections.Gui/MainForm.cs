@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Data;
 using RMCollectionProcessor.Models;
+using RMCollectionProcessor;
 
 namespace DCCollections.Gui
 {
@@ -308,6 +309,12 @@ namespace DCCollections.Gui
             {
                 txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
             }
+
+            if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
+            {
+                txtImportFolder.Text = _settings.ImportFolderPath;
+                LoadImportFiles(_settings.ImportFolderPath);
+            }
         }
 
         private void LoadOperationsFiles(string path)
@@ -332,6 +339,7 @@ namespace DCCollections.Gui
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 txtImportFolder.Text = fbd.SelectedPath;
+                _settings.ImportFolderPath = fbd.SelectedPath;
                 LoadImportFiles(fbd.SelectedPath);
             }
         }
@@ -341,6 +349,7 @@ namespace DCCollections.Gui
             try
             {
                 lvImportFiles.Items.Clear();
+                var processor = new FileProcessor();
                 foreach (var file in Directory.GetFiles(path))
                 {
                     var info = new FileInfo(file);
@@ -351,6 +360,16 @@ namespace DCCollections.Gui
                     };
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
+                    try
+                    {
+                        var parsed = processor.ProcessFile(info.FullName);
+                        var ft = FileTypeIdentifier.Identify(parsed);
+                        item.SubItems.Add(ft.ToString());
+                    }
+                    catch
+                    {
+                        item.SubItems.Add(FileType.Unknown.ToString());
+                    }
                     lvImportFiles.Items.Add(item);
                 }
             }
