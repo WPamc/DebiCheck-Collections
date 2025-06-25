@@ -219,6 +219,23 @@ END", conn);
         cmd.ExecuteNonQuery();
     }
 
+    /// <summary>
+    /// Updates the status of an existing bank file record using the generation number.
+    /// </summary>
+    /// <param name="generationNumber">The generation number of the bank file.</param>
+    /// <param name="status">The status to apply.</param>
+    public void UpdateBankFileStatus(int generationNumber, BankFileStatus status)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE [DRC].[dbo].[EDI_BANKFILES]
+   SET STATUS = @STATUS
+ WHERE [EDI_BANKFILES].GENERATIONNUMBER = @GENERATIONNUMBER;", conn);
+        cmd.Parameters.Add(new SqlParameter("@STATUS", SqlDbType.VarChar, 4) { Value = ((int)status).ToString() });
+        cmd.Parameters.Add(new SqlParameter("@GENERATIONNUMBER", SqlDbType.Int) { Value = generationNumber });
+        conn.Open();
+        cmd.ExecuteNonQuery();
+    }
+
     public BillingCollectionRequest? GetCollectionRequestByReference(string reference)
     {
         using var conn = new SqlConnection(_connectionString);
