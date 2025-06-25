@@ -454,6 +454,8 @@
             // 
             pnlImportTop.Controls.Add(btnImportParse);
             pnlImportTop.Controls.Add(btnImportRead);
+            pnlImportTop.Controls.Add(btnSearchFiles);
+            pnlImportTop.Controls.Add(txtSearchFiles);
             pnlImportTop.Controls.Add(btnImportBrowse);
             pnlImportTop.Controls.Add(txtImportFolder);
             pnlImportTop.Controls.Add(chkHideTestFiles);
@@ -512,6 +514,23 @@
             chkHideTestFiles.Text = "Hide Test Files";
             chkHideTestFiles.UseVisualStyleBackColor = true;
             chkHideTestFiles.CheckedChanged += chkHideTestFiles_CheckedChanged;
+            //
+            // txtSearchFiles
+            //
+            txtSearchFiles.Location = new Point(678, 5);
+            txtSearchFiles.Name = "txtSearchFiles";
+            txtSearchFiles.Size = new Size(150, 23);
+            txtSearchFiles.TabIndex = 5;
+            //
+            // btnSearchFiles
+            //
+            btnSearchFiles.Location = new Point(834, 4);
+            btnSearchFiles.Name = "btnSearchFiles";
+            btnSearchFiles.Size = new Size(75, 23);
+            btnSearchFiles.TabIndex = 6;
+            btnSearchFiles.Text = "Search";
+            btnSearchFiles.UseVisualStyleBackColor = true;
+            btnSearchFiles.Click += btnSearchFiles_Click;
             //
             // lblLiveOutput
             //
@@ -578,5 +597,7 @@
         private ColumnHeader chGenDate;
         private ColumnHeader chGenTime;
         private CheckBox chkHideTestFiles;
+        private TextBox txtSearchFiles;
+        private Button btnSearchFiles;
     }
 }
