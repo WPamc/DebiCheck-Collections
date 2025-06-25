@@ -42,10 +42,7 @@ namespace RMCollectionProcessor
                     break;
                 case FileType.StatusReport:
                     var statusRecords = ProcessStatusReport(parsed);
-                    if (statusRecords.Any())
-                    {
-                      
-                    }
+                 
                     dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
                 case FileType.Reply:

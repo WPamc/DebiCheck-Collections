@@ -146,7 +146,7 @@ END", conn);
         using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
 
-        using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANKFILES
                 (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
                  GENERATIONCOMPLETE, DELIVERED, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
              VALUES (@desc, @file, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
@@ -164,7 +164,7 @@ END", conn);
     public async Task UpdateBankFileDailyCounterEndAsync(int rowId, int dailyCounterEnd)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET DAILYCOUNTEREND = @end,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -178,7 +178,7 @@ END", conn);
     public async Task MarkBankFileGenerationCompleteAsync(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET GENERATIONCOMPLETE = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -191,7 +191,7 @@ END", conn);
     public async Task MarkBankFileDeliveredAsync(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET DELIVERED = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()

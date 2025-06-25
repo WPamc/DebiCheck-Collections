@@ -154,7 +154,7 @@ END", conn);
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
 
-        using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANKFILES
                 (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
                  GENERATIONCOMPLETE, DELIVERED, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
              VALUES (@desc, @file, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
@@ -172,7 +172,7 @@ END", conn);
     public int GetBankFileRowId(string fileName)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"SELECT ROWID FROM dbo.EDI_BANK_FILES WHERE FILENAME = @file", conn);
+        using var cmd = new SqlCommand(@"SELECT ROWID FROM dbo.EDI_BANKFILES WHERE FILENAME = @file", conn);
         cmd.Parameters.Add(new SqlParameter("@file", SqlDbType.VarChar, 100) { Value = fileName });
         conn.Open();
         var result = cmd.ExecuteScalar();
@@ -182,7 +182,7 @@ END", conn);
     public void UpdateBankFileDailyCounterEnd(int rowId, int dailyCounterEnd)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET DAILYCOUNTEREND = @end,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -196,7 +196,7 @@ END", conn);
     public void MarkBankFileGenerationComplete(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET GENERATIONCOMPLETE = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -209,7 +209,7 @@ END", conn);
     public void MarkBankFileDelivered(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
    SET DELIVERED = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -273,7 +273,7 @@ END", conn);
     /// Inserts a collection request record for each transaction in the generated file.
     /// </summary>
     /// <param name="records">Transaction records extracted from the live file.</param>
-    /// <param name="bankFileRowId">Row Id from EDI_BANK_FILES to relate requests back to the file.</param>
+    /// <param name="bankFileRowId">Row Id from EDI_BANKFILES to relate requests back to the file.</param>
     public void InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
     {
         var recordList = records.ToList();
