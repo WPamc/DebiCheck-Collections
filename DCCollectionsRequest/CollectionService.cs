@@ -42,6 +42,12 @@ namespace RMCollectionProcessor
                     break;
                 case FileType.StatusReport:
                     var statusRecords = ProcessStatusReport(parsed);
+                    if (statusRecords.Any())
+                    {
+                        int genNum = 0;
+                        int.TryParse(statusRecords.First().GenerationNumber, out genNum);
+                        ImportReoprtFile(genNum);
+                    }
                     dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
                 case FileType.Reply:
@@ -347,6 +353,16 @@ namespace RMCollectionProcessor
                     FileType = "RM Collections"
                 };
             }
+        }
+
+        /// <summary>
+        /// Imports a report file based on the provided generation number.
+        /// Placeholder for future implementation.
+        /// </summary>
+        /// <param name="generationNumber">The generation number extracted from the file.</param>
+        public void ImportReoprtFile(int generationNumber)
+        {
+            // TODO: Implement report file import logic using the generation number.
         }
     }
 }
