@@ -27,11 +27,11 @@ public class DatabaseService
     public async Task<List<DebtorCollectionData>> GetCollectionsAsync(int deductionDay)
     {
         var results = new List<DebtorCollectionData>();
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(_collectionsSql, conn);
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(_collectionsSql, conn);
         //cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
         await conn.OpenAsync();
-        await using var reader = await cmd.ExecuteReaderAsync();
+        using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
             var data = new DebtorCollectionData
@@ -56,10 +56,10 @@ public class DatabaseService
 
     private async Task<int> GetNextCounterAsync(string subclass1, string? subclass2)
     {
-        await using var conn = new SqlConnection(_connectionString);
+        using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
 
-        await using var cmd = new SqlCommand(@"SET NOCOUNT ON;
+        using var cmd = new SqlCommand(@"SET NOCOUNT ON;
 UPDATE dbo.EDI_GENERICCOUNTERS
    SET COUNTER = COUNTER + 1,
        LASTCHANGEBY = 99,
@@ -93,10 +93,10 @@ END", conn);
 
     private async Task<int> PeekCounterAsync(string subclass1, string? subclass2)
     {
-        await using var conn = new SqlConnection(_connectionString);
+        using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
 
-        await using var cmd = new SqlCommand(@"SELECT COUNTER
+        using var cmd = new SqlCommand(@"SELECT COUNTER
   FROM dbo.EDI_GENERICCOUNTERS
  WHERE DESCRIPTION = @desc
    AND SUBCLASS1 = @sub1
@@ -118,8 +118,8 @@ END", conn);
 
     public async Task SetDailyCounterAsync(DateTime date, int counterValue)
     {
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_GENERICCOUNTERS
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_GENERICCOUNTERS
    SET COUNTER = @val,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -143,10 +143,10 @@ END", conn);
 
     public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
     {
-        await using var conn = new SqlConnection(_connectionString);
+        using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
 
-        await using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
+        using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANK_FILES
                 (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
                  GENERATIONCOMPLETE, DELIVERED, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
              VALUES (@desc, @file, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
@@ -163,8 +163,8 @@ END", conn);
 
     public async Task UpdateBankFileDailyCounterEndAsync(int rowId, int dailyCounterEnd)
     {
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
    SET DAILYCOUNTEREND = @end,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -177,8 +177,8 @@ END", conn);
 
     public async Task MarkBankFileGenerationCompleteAsync(int rowId)
     {
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
    SET GENERATIONCOMPLETE = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
@@ -190,8 +190,8 @@ END", conn);
 
     public async Task MarkBankFileDeliveredAsync(int rowId)
     {
-        await using var conn = new SqlConnection(_connectionString);
-        await using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANK_FILES
    SET DELIVERED = 1,
        LASTCHANGEBY = 99,
        LASTCHANGEDATE = GETDATE()
