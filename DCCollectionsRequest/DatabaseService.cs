@@ -433,7 +433,15 @@ END", conn);
             insertCmd.Parameters.Add(new SqlParameter("@effectiveDate", SqlDbType.DateTime) { Value = (object?)effectiveDate ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@origContractRef", SqlDbType.VarChar, 14) { Value = r.ContractReference });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.OriginalPaymentInformation });
-            insertCmd.ExecuteNonQuery();
+            try
+            {
+                insertCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+
+                //throw;
+            }
 
             existingResponses.Add(r.OriginalPaymentInformation);
 
