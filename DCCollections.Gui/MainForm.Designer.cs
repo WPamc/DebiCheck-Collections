@@ -63,10 +63,8 @@
             chkTest = new CheckBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
-            lblLiveOutput = new Label();
             txtLiveOutputFolder = new TextBox();
             btnLiveOutputBrowse = new Button();
-            lblTestOutput = new Label();
             txtTestOutputFolder = new TextBox();
             btnTestOutputBrowse = new Button();
             tabParse = new TabPage();
@@ -79,20 +77,28 @@
             btnLookup = new Button();
             btnOpenCsv = new Button();
             tpImportFiles = new TabPage();
-            pnlImportTop = new Panel();
-            txtImportFolder = new TextBox();
-            btnImportBrowse = new Button();
-            btnImportRead = new Button();
-            btnImportParse = new Button();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
             chSize = new ColumnHeader();
             chModified = new ColumnHeader();
+            pnlImportTop = new Panel();
+            btnImportParse = new Button();
+            btnImportRead = new Button();
+            btnImportBrowse = new Button();
+            txtImportFolder = new TextBox();
+            lblLiveOutput = new Label();
+            lblTestOutput = new Label();
+            label1 = new Label();
+            label2 = new Label();
+            groupBox1 = new GroupBox();
+            label3 = new Label();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
             tabParse.SuspendLayout();
             tpImportFiles.SuspendLayout();
+            pnlImportTop.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // tabMain
@@ -109,13 +115,11 @@
             // 
             // tabOperations
             // 
+            tabOperations.Controls.Add(label3);
+            tabOperations.Controls.Add(groupBox1);
             tabOperations.Controls.Add(chkTest);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
-            tabOperations.Controls.Add(txtLiveOutputFolder);
-            tabOperations.Controls.Add(btnLiveOutputBrowse);
-            tabOperations.Controls.Add(txtTestOutputFolder);
-            tabOperations.Controls.Add(btnTestOutputBrowse);
             tabOperations.Location = new Point(4, 24);
             tabOperations.Name = "tabOperations";
             tabOperations.Padding = new Padding(3);
@@ -127,7 +131,7 @@
             // chkTest
             // 
             chkTest.AutoSize = true;
-            chkTest.Location = new Point(6, 122);
+            chkTest.Location = new Point(147, 82);
             chkTest.Name = "chkTest";
             chkTest.Size = new Size(68, 19);
             chkTest.TabIndex = 6;
@@ -136,7 +140,7 @@
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(6, 64);
+            btnGenerate.Location = new Point(95, 107);
             btnGenerate.Name = "btnGenerate";
             btnGenerate.Size = new Size(120, 23);
             btnGenerate.TabIndex = 2;
@@ -146,59 +150,45 @@
             // 
             // nudDay
             // 
-            nudDay.Location = new Point(6, 35);
+            nudDay.Location = new Point(177, 53);
             nudDay.Maximum = new decimal(new int[] { 31, 0, 0, 0 });
             nudDay.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudDay.Name = "nudDay";
-            nudDay.Size = new Size(120, 23);
+            nudDay.Size = new Size(38, 23);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            //
-            // lblLiveOutput
-            //
-            lblLiveOutput.AutoSize = true;
-            lblLiveOutput.Location = new Point(6, 157);
-            lblLiveOutput.Name = "lblLiveOutput";
-            lblLiveOutput.Size = new Size(115, 15);
-            lblLiveOutput.TabIndex = 7;
-            lblLiveOutput.Text = "Live Output Folder";
-            //
+            // 
             // txtLiveOutputFolder
-            //
-            txtLiveOutputFolder.Location = new Point(6, 175);
+            // 
+            txtLiveOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtLiveOutputFolder.Location = new Point(112, 58);
             txtLiveOutputFolder.Name = "txtLiveOutputFolder";
             txtLiveOutputFolder.Size = new Size(240, 23);
             txtLiveOutputFolder.TabIndex = 8;
-            //
+            // 
             // btnLiveOutputBrowse
-            //
-            btnLiveOutputBrowse.Location = new Point(252, 175);
+            // 
+            btnLiveOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLiveOutputBrowse.Location = new Point(358, 58);
             btnLiveOutputBrowse.Name = "btnLiveOutputBrowse";
             btnLiveOutputBrowse.Size = new Size(100, 23);
             btnLiveOutputBrowse.TabIndex = 9;
             btnLiveOutputBrowse.Text = "Browse";
             btnLiveOutputBrowse.UseVisualStyleBackColor = true;
             btnLiveOutputBrowse.Click += btnLiveOutputBrowse_Click;
-            //
-            // lblTestOutput
-            //
-            lblTestOutput.AutoSize = true;
-            lblTestOutput.Location = new Point(6, 204);
-            lblTestOutput.Name = "lblTestOutput";
-            lblTestOutput.Size = new Size(113, 15);
-            lblTestOutput.TabIndex = 10;
-            lblTestOutput.Text = "Test Output Folder";
-            //
+            // 
             // txtTestOutputFolder
-            //
-            txtTestOutputFolder.Location = new Point(6, 222);
+            // 
+            txtTestOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtTestOutputFolder.Location = new Point(112, 87);
             txtTestOutputFolder.Name = "txtTestOutputFolder";
             txtTestOutputFolder.Size = new Size(240, 23);
             txtTestOutputFolder.TabIndex = 11;
-            //
+            // 
             // btnTestOutputBrowse
-            //
-            btnTestOutputBrowse.Location = new Point(252, 222);
+            // 
+            btnTestOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnTestOutputBrowse.Location = new Point(358, 87);
             btnTestOutputBrowse.Name = "btnTestOutputBrowse";
             btnTestOutputBrowse.Size = new Size(100, 23);
             btnTestOutputBrowse.TabIndex = 12;
@@ -300,7 +290,7 @@
             btnOpenCsv.Click += btnOpenCsv_Click;
             // 
             // tpImportFiles
-            //
+            // 
             tpImportFiles.Controls.Add(lvImportFiles);
             tpImportFiles.Controls.Add(pnlImportTop);
             tpImportFiles.Location = new Point(4, 24);
@@ -310,66 +300,9 @@
             tpImportFiles.TabIndex = 2;
             tpImportFiles.Text = "Import Files";
             tpImportFiles.UseVisualStyleBackColor = true;
-
-            //
-            // pnlImportTop
-            //
-            pnlImportTop.Controls.Add(btnImportParse);
-            pnlImportTop.Controls.Add(btnImportRead);
-            pnlImportTop.Controls.Add(btnImportBrowse);
-            pnlImportTop.Controls.Add(txtImportFolder);
-            pnlImportTop.Dock = DockStyle.Top;
-            pnlImportTop.Location = new Point(3, 3);
-            pnlImportTop.Name = "pnlImportTop";
-            pnlImportTop.Size = new Size(1175, 32);
-            pnlImportTop.TabIndex = 0;
-
-            //
-            // txtImportFolder
-            //
-            txtImportFolder.Location = new Point(3, 5);
-            txtImportFolder.Name = "txtImportFolder";
-            txtImportFolder.Size = new Size(240, 23);
-            txtImportFolder.TabIndex = 0;
-
-            //
-            // btnImportBrowse
-            //
-            btnImportBrowse.Location = new Point(249, 4);
-            btnImportBrowse.Name = "btnImportBrowse";
-            btnImportBrowse.Size = new Size(100, 23);
-            btnImportBrowse.TabIndex = 1;
-            btnImportBrowse.Text = "Browse";
-            btnImportBrowse.UseVisualStyleBackColor = true;
-            btnImportBrowse.Click += btnImportBrowse_Click;
-
-            //
-            // btnImportRead
-            //
-            btnImportRead.Enabled = false;
-            btnImportRead.Location = new Point(355, 4);
-            btnImportRead.Name = "btnImportRead";
-            btnImportRead.Size = new Size(100, 23);
-            btnImportRead.TabIndex = 2;
-            btnImportRead.Text = "Read File";
-            btnImportRead.UseVisualStyleBackColor = true;
-            btnImportRead.Click += btnImportRead_Click;
-
-            //
-            // btnImportParse
-            //
-            btnImportParse.Enabled = false;
-            btnImportParse.Location = new Point(461, 4);
-            btnImportParse.Name = "btnImportParse";
-            btnImportParse.Size = new Size(100, 23);
-            btnImportParse.TabIndex = 3;
-            btnImportParse.Text = "Import";
-            btnImportParse.UseVisualStyleBackColor = true;
-            btnImportParse.Click += btnImportParse_Click;
-
-            //
+            // 
             // lvImportFiles
-            //
+            // 
             lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chSize, chModified });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
@@ -380,24 +313,132 @@
             lvImportFiles.UseCompatibleStateImageBehavior = false;
             lvImportFiles.View = View.Details;
             lvImportFiles.SelectedIndexChanged += lvImportFiles_SelectedIndexChanged;
-
-            //
+            // 
             // chName
-            //
+            // 
             chName.Text = "Name";
             chName.Width = 400;
-
-            //
+            // 
             // chSize
-            //
+            // 
             chSize.Text = "Size";
             chSize.Width = 100;
-
-            //
+            // 
             // chModified
-            //
+            // 
             chModified.Text = "Modified";
             chModified.Width = 200;
+            // 
+            // pnlImportTop
+            // 
+            pnlImportTop.Controls.Add(btnImportParse);
+            pnlImportTop.Controls.Add(btnImportRead);
+            pnlImportTop.Controls.Add(btnImportBrowse);
+            pnlImportTop.Controls.Add(txtImportFolder);
+            pnlImportTop.Dock = DockStyle.Top;
+            pnlImportTop.Location = new Point(3, 3);
+            pnlImportTop.Name = "pnlImportTop";
+            pnlImportTop.Size = new Size(1175, 32);
+            pnlImportTop.TabIndex = 0;
+            // 
+            // btnImportParse
+            // 
+            btnImportParse.Enabled = false;
+            btnImportParse.Location = new Point(461, 4);
+            btnImportParse.Name = "btnImportParse";
+            btnImportParse.Size = new Size(100, 23);
+            btnImportParse.TabIndex = 3;
+            btnImportParse.Text = "Import";
+            btnImportParse.UseVisualStyleBackColor = true;
+            btnImportParse.Click += btnImportParse_Click;
+            // 
+            // btnImportRead
+            // 
+            btnImportRead.Enabled = false;
+            btnImportRead.Location = new Point(355, 4);
+            btnImportRead.Name = "btnImportRead";
+            btnImportRead.Size = new Size(100, 23);
+            btnImportRead.TabIndex = 2;
+            btnImportRead.Text = "Read File";
+            btnImportRead.UseVisualStyleBackColor = true;
+            btnImportRead.Click += btnImportRead_Click;
+            // 
+            // btnImportBrowse
+            // 
+            btnImportBrowse.Location = new Point(249, 4);
+            btnImportBrowse.Name = "btnImportBrowse";
+            btnImportBrowse.Size = new Size(100, 23);
+            btnImportBrowse.TabIndex = 1;
+            btnImportBrowse.Text = "Browse";
+            btnImportBrowse.UseVisualStyleBackColor = true;
+            btnImportBrowse.Click += btnImportBrowse_Click;
+            // 
+            // txtImportFolder
+            // 
+            txtImportFolder.Location = new Point(3, 5);
+            txtImportFolder.Name = "txtImportFolder";
+            txtImportFolder.Size = new Size(240, 23);
+            txtImportFolder.TabIndex = 0;
+            // 
+            // lblLiveOutput
+            // 
+            lblLiveOutput.AutoSize = true;
+            lblLiveOutput.Location = new Point(6, 157);
+            lblLiveOutput.Name = "lblLiveOutput";
+            lblLiveOutput.Size = new Size(115, 15);
+            lblLiveOutput.TabIndex = 7;
+            lblLiveOutput.Text = "Live Output Folder";
+            // 
+            // lblTestOutput
+            // 
+            lblTestOutput.AutoSize = true;
+            lblTestOutput.Location = new Point(6, 204);
+            lblTestOutput.Name = "lblTestOutput";
+            lblTestOutput.Size = new Size(113, 15);
+            lblTestOutput.TabIndex = 10;
+            lblTestOutput.Text = "Test Output Folder";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(1, 91);
+            label1.Name = "label1";
+            label1.Size = new Size(105, 15);
+            label1.TabIndex = 13;
+            label1.Text = "Test Output Folder";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(1, 61);
+            label2.Name = "label2";
+            label2.Size = new Size(105, 15);
+            label2.TabIndex = 14;
+            label2.Text = "Live Output Folder";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(txtLiveOutputFolder);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(btnTestOutputBrowse);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(txtTestOutputFolder);
+            groupBox1.Controls.Add(btnLiveOutputBrowse);
+            groupBox1.Location = new Point(8, 166);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(470, 253);
+            groupBox1.TabIndex = 15;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Config";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(77, 55);
+            label3.Name = "label3";
+            label3.Size = new Size(85, 15);
+            label3.TabIndex = 15;
+            label3.Text = "Deduction Day";
             // 
             // MainForm
             // 
@@ -414,12 +455,19 @@
             tabParse.ResumeLayout(false);
             tabParse.PerformLayout();
             tpImportFiles.ResumeLayout(false);
-            tpImportFiles.PerformLayout();
+            pnlImportTop.ResumeLayout(false);
+            pnlImportTop.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TabPage tpImportFiles;
+        private Label label3;
+        private GroupBox groupBox1;
+        private Label label2;
+        private Label label1;
     }
 }
