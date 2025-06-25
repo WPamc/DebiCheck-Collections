@@ -44,9 +44,7 @@ namespace RMCollectionProcessor
                     var statusRecords = ProcessStatusReport(parsed);
                     if (statusRecords.Any())
                     {
-                        int genNum = 0;
-                        int.TryParse(statusRecords.First().GenerationNumber, out genNum);
-                        ImportReplyFile(genNum, BankFileStatus.Accepted);
+                      
                     }
                     dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
