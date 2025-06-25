@@ -18,17 +18,6 @@ namespace DCCollections.Gui
         private int _importSortColumn;
         private bool _importSortDescending;
 
-        private class FileListItem
-        {
-            public string Path { get; }
-            public FileListItem(string path) => Path = path;
-            public override string ToString()
-            {
-                var info = new FileInfo(Path);
-                return $"{info.Name} | C:{info.CreationTime:yyyy-MM-dd} M:{info.LastWriteTime:yyyy-MM-dd} | {info.Length} bytes";
-            }
-        }
-
         private class ListViewItemComparer : System.Collections.IComparer
         {
             private readonly int _column;
@@ -149,17 +138,6 @@ namespace DCCollections.Gui
             LoadOperationsFiles(AppContext.BaseDirectory);
         }
 
-        private void btnFolderBrowse_Click(object sender, EventArgs e)
-        {
-            using var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                txtFolder.Text = fbd.SelectedPath;
-                _settings.ParseFolderPath = fbd.SelectedPath;
-                LoadFolderFiles(fbd.SelectedPath);
-            }
-        }
-
         private void btnLiveOutputBrowse_Click(object sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
@@ -209,104 +187,6 @@ namespace DCCollections.Gui
             }
         }
 
-        private void LoadFolderFiles(string path)
-        {
-            try
-            {
-                lstFolderFiles.Items.Clear();
-                foreach (var file in Directory.GetFiles(path))
-                {
-                    lstFolderFiles.Items.Add(new FileListItem(file));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error");
-            }
-        }
-
-        private void lstFolderFiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            btnParseSelected.Enabled = lstFolderFiles.SelectedItem != null;
-        }
-
-        private void btnParseSelected_Click(object sender, EventArgs e)
-        {
-            if (lstFolderFiles.SelectedItem is FileListItem item)
-            {
-                try
-                {
-                    var result = _service.ParseFile(item.Path);
-                    _parsedRecords = result.Records;
-                    _currentFileType = result.FileType;
-                    txtRaw.Text = File.ReadAllText(item.Path);
-                    MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error");
-                }
-            }
-        }
-
-        private void btnLookup_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var reference = txtReference.Text.Trim();
-                if (string.IsNullOrEmpty(reference))
-                {
-                    MessageBox.Show("Enter a reference", "Info");
-                    return;
-                }
-
-                if (_parsedRecords == null)
-                {
-                    MessageBox.Show("Parse a file first", "Info");
-                    return;
-                }
-
-                foreach (var obj in _parsedRecords)
-                {
-                    if (obj is RMCollectionProcessor.Models.CollectionTxLine02 l2 && l2.MandateReference.Trim() == reference)
-                    {
-                        MessageBox.Show($"Found mandate reference in sequence {l2.RecordSequenceNumber}", "Result");
-                        return;
-                    }
-                    if (obj is RMCollectionProcessor.Models.CollectionTxLine03 l3 && l3.ContractReference.Trim() == reference)
-                    {
-                        MessageBox.Show($"Found contract reference in sequence {l3.RecordSequenceNumber}", "Result");
-                        return;
-                    }
-                }
-
-                MessageBox.Show("No record found", "Info");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error");
-            }
-        }
-
-        private void btnOpenCsv_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var csv = Path.Combine(AppContext.BaseDirectory, "transactions.csv");
-                if (File.Exists(csv))
-                {
-                    Process.Start(new ProcessStartInfo(csv) { UseShellExecute = true });
-                }
-                else
-                {
-                    MessageBox.Show($"File not found: {csv}", "Error");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error");
-            }
-        }
 
         private void btnCheckDuplicates_Click(object sender, EventArgs e)
         {
@@ -325,12 +205,6 @@ namespace DCCollections.Gui
 
         private void LoadInitialPaths()
         {
-            if (!string.IsNullOrWhiteSpace(_settings.ParseFolderPath) && Directory.Exists(_settings.ParseFolderPath))
-            {
-                txtFolder.Text = _settings.ParseFolderPath;
-                LoadFolderFiles(_settings.ParseFolderPath);
-            }
-
             if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
             {
                 LoadOperationsFiles(_settings.OperationFolderPath);

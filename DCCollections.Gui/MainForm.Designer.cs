@@ -28,7 +28,6 @@
         /// </summary>
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabOperations;
-        private System.Windows.Forms.TabPage tabParse;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
         private System.Windows.Forms.CheckBox chkTest;
@@ -40,14 +39,6 @@
         private System.Windows.Forms.Button btnTestOutputBrowse;
         private System.Windows.Forms.Button btnLiveOutputOpen;
         private System.Windows.Forms.Button btnTestOutputOpen;
-        private System.Windows.Forms.TextBox txtFolder;
-        private System.Windows.Forms.Button btnFolderBrowse;
-        private System.Windows.Forms.ListBox lstFolderFiles;
-        private System.Windows.Forms.Button btnParseSelected;
-        private System.Windows.Forms.TextBox txtRaw;
-        private System.Windows.Forms.TextBox txtReference;
-        private System.Windows.Forms.Button btnLookup;
-        private System.Windows.Forms.Button btnOpenCsv;
         private System.Windows.Forms.Panel pnlImportTop;
         private System.Windows.Forms.TextBox txtImportFolder;
         private System.Windows.Forms.Button btnImportBrowse;
@@ -86,15 +77,6 @@
             txtSearchFiles = new TextBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
-            tabParse = new TabPage();
-            txtRaw = new TextBox();
-            btnParseSelected = new Button();
-            lstFolderFiles = new ListBox();
-            btnFolderBrowse = new Button();
-            txtFolder = new TextBox();
-            txtReference = new TextBox();
-            btnLookup = new Button();
-            btnOpenCsv = new Button();
             tpImportFiles = new TabPage();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
@@ -117,7 +99,6 @@
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
-            tabParse.SuspendLayout();
             tpImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
             cmsImportFiles.SuspendLayout();
@@ -148,7 +129,6 @@
             // tabMain
             // 
             tabMain.Controls.Add(tabOperations);
-            tabMain.Controls.Add(tabParse);
             tabMain.Controls.Add(tpImportFiles);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
@@ -305,98 +285,6 @@
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // tabParse
-            // 
-            tabParse.Controls.Add(txtRaw);
-            tabParse.Controls.Add(btnParseSelected);
-            tabParse.Controls.Add(lstFolderFiles);
-            tabParse.Controls.Add(btnFolderBrowse);
-            tabParse.Controls.Add(txtFolder);
-            tabParse.Controls.Add(txtReference);
-            tabParse.Controls.Add(btnLookup);
-            tabParse.Controls.Add(btnOpenCsv);
-            tabParse.Location = new Point(4, 24);
-            tabParse.Name = "tabParse";
-            tabParse.Padding = new Padding(3);
-            tabParse.Size = new Size(1181, 609);
-            tabParse.TabIndex = 1;
-            tabParse.Text = "Parse Files";
-            tabParse.UseVisualStyleBackColor = true;
-            // 
-            // txtRaw
-            // 
-            txtRaw.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtRaw.Location = new Point(570, 35);
-            txtRaw.Multiline = true;
-            txtRaw.Name = "txtRaw";
-            txtRaw.ScrollBars = ScrollBars.Vertical;
-            txtRaw.Size = new Size(605, 575);
-            txtRaw.TabIndex = 4;
-            // 
-            // btnParseSelected
-            // 
-            btnParseSelected.Enabled = false;
-            btnParseSelected.Location = new Point(358, 6);
-            btnParseSelected.Name = "btnParseSelected";
-            btnParseSelected.Size = new Size(120, 23);
-            btnParseSelected.TabIndex = 3;
-            btnParseSelected.Text = "Parse File";
-            btnParseSelected.UseVisualStyleBackColor = true;
-            btnParseSelected.Click += btnParseSelected_Click;
-            // 
-            // lstFolderFiles
-            // 
-            lstFolderFiles.FormattingEnabled = true;
-            lstFolderFiles.ItemHeight = 15;
-            lstFolderFiles.Location = new Point(6, 35);
-            lstFolderFiles.Name = "lstFolderFiles";
-            lstFolderFiles.Size = new Size(560, 199);
-            lstFolderFiles.TabIndex = 2;
-            lstFolderFiles.SelectedIndexChanged += lstFolderFiles_SelectedIndexChanged;
-            // 
-            // btnFolderBrowse
-            // 
-            btnFolderBrowse.Location = new Point(252, 6);
-            btnFolderBrowse.Name = "btnFolderBrowse";
-            btnFolderBrowse.Size = new Size(100, 23);
-            btnFolderBrowse.TabIndex = 1;
-            btnFolderBrowse.Text = "Browse";
-            btnFolderBrowse.UseVisualStyleBackColor = true;
-            btnFolderBrowse.Click += btnFolderBrowse_Click;
-            // 
-            // txtFolder
-            // 
-            txtFolder.Location = new Point(6, 6);
-            txtFolder.Name = "txtFolder";
-            txtFolder.Size = new Size(240, 23);
-            txtFolder.TabIndex = 0;
-            // 
-            // txtReference
-            // 
-            txtReference.Location = new Point(6, 238);
-            txtReference.Name = "txtReference";
-            txtReference.Size = new Size(121, 23);
-            txtReference.TabIndex = 7;
-            // 
-            // btnLookup
-            // 
-            btnLookup.Location = new Point(6, 263);
-            btnLookup.Name = "btnLookup";
-            btnLookup.Size = new Size(120, 23);
-            btnLookup.TabIndex = 8;
-            btnLookup.Text = "Lookup Ref";
-            btnLookup.UseVisualStyleBackColor = true;
-            btnLookup.Click += btnLookup_Click;
-            // 
-            // btnOpenCsv
-            // 
-            btnOpenCsv.Location = new Point(132, 263);
-            btnOpenCsv.Name = "btnOpenCsv";
-            btnOpenCsv.Size = new Size(120, 23);
-            btnOpenCsv.TabIndex = 9;
-            btnOpenCsv.Text = "Open CSV";
-            btnOpenCsv.UseVisualStyleBackColor = true;
-            btnOpenCsv.Click += btnOpenCsv_Click;
             // 
             // tpImportFiles
             // 
@@ -582,8 +470,6 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
-            tabParse.ResumeLayout(false);
-            tabParse.PerformLayout();
             tpImportFiles.ResumeLayout(false);
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
