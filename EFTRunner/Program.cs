@@ -1,56 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using EFT_Collections;
 using System.IO;
 using System.Threading.Tasks;
+using EFT_Collections;
 
 /// <summary>
-/// A logical representation of a single EFT transaction (a collection from a customer).
-/// This class is used to pass dynamic transaction data to the Writer.
-/// </summary>
-public class EftTransaction
-{
-    /// <summary>
-    /// The 6-digit branch code of the customer's (debtor's) bank account.
-    /// </summary>
-    public string HomingBranch { get; set; }
-
-    /// <summary>
-    /// The 11-digit account number of the customer (debtor).
-    /// </eummary>
-    public string HomingAccountNumber { get; set; }
-
-    /// <summary>
-    /// The name of the customer (debtor) account holder.
-    /// </summary>
-    public string HomingAccountName { get; set; }
-
-    /// <summary>
-    /// The type of the customer's (debtor's) account.
-    /// 1=Current, 2=Savings, 3=Transmission, 4=Bond, 6=Subscription Share.
-    /// </summary>
-    public int AccountType { get; set; }
-
-    /// <summary>
-    /// The monetary value to be collected. E.g., 1501.00 for R1501.00.
-    /// </summary>
-    public decimal Amount { get; set; }
-
-    /// <summary>
-    /// The reference that will appear on the customer's (debtor's) bank statement.
-    /// This is crucial for reconciliation.
-    /// </summary>
-    public string UserReference { get; set; }
-}
-
-/// <summary>
-/// Main program to demonstrate the Writer usage.
+/// Console runner for generating EFT collection files.
 /// </summary>
 public class Program
 {
     public static async Task Main(string[] args)
     {
-        
         DateTime deductionDate = DateTime.Now;
         string dataSetStatus = "T";
         string fileName = "";
@@ -74,10 +34,6 @@ public class Program
             }
         }
 
-
-
-        // 1. Initialize the writer with your static creditor data from the sample file.
-
         var writer = new Writer(
             clientCode: creditorDefaults.clientCode,
             clientName: creditorDefaults.clientName,
@@ -90,7 +46,6 @@ public class Program
         );
 
         var db = new DatabaseService();
-
 
         int generationNumber;
         int startSequenceNumber;
@@ -105,8 +60,6 @@ public class Program
             startSequenceNumber = await db.GetNextDailyCounterAsync(deductionDate);
         }
 
-
-        // 2. Load collection transactions from the database.
         var collections = await db.GetCollectionsAsync(deductionDate.Day);
         var transactionsToProcess = new List<EftTransaction>();
         foreach (var c in collections)
@@ -123,12 +76,9 @@ public class Program
             });
         }
 
-        // 3. Define the parameters for this specific file generation.
-       
         fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
         int recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
 
-        // 4. Generate and write the file.
         long lastSequenceNumber = writer.WriteFile(
             fileName,
             transactionsToProcess,
