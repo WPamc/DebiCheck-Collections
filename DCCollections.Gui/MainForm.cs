@@ -1,5 +1,5 @@
-using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
+using DbConnection;
 using System.IO;
 using System.Data;
 using RMCollectionProcessor.Models;
@@ -9,7 +9,6 @@ namespace DCCollections.Gui
     public partial class MainForm : Form
     {
         private readonly RMCollectionProcessor.CollectionService _service;
-        private readonly IConfiguration _config;
         private object[]? _parsedRecords;
         private FileType _currentFileType;
         private readonly UserSettings _settings;
@@ -29,13 +28,8 @@ namespace DCCollections.Gui
         {
             InitializeComponent();
 
-            _config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: true)
-                .Build();
-
             // Display the connection string (without the password) to the user
-            var connStr = _config.GetConnectionString("DefaultConnection");
+            var connStr = DbConnection.AppConfig.ConnectionString;
             if (!string.IsNullOrWhiteSpace(connStr))
             {
                 var safeConn = RemovePassword(connStr);
@@ -69,7 +63,7 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(ofd.FileName, _config);
+                    var result = _service.ParseFile(ofd.FileName);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
@@ -88,7 +82,7 @@ namespace DCCollections.Gui
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
-                var file = _service.GenerateFile(day, _config, test, outFolder);
+                var file = _service.GenerateFile(day, test, outFolder);
                 MessageBox.Show($"File generated: {file}", "Success");
             }
             catch (Exception ex)
@@ -199,7 +193,7 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(item.Path,_config);
+                    var result = _service.ParseFile(item.Path);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     txtRaw.Text = File.ReadAllText(item.Path);
@@ -276,7 +270,7 @@ namespace DCCollections.Gui
             try
             {
                 int day = (int)nudDay.Value;
-                var table = _service.GetDuplicateCollections(day, _config);
+                var table = _service.GetDuplicateCollections(day);
                 dgvPossibleDuplicates.DataSource = table;
                 MessageBox.Show($"Found {table.Rows.Count} possible duplicates.", "Check Duplicates");
             }
@@ -378,7 +372,7 @@ namespace DCCollections.Gui
 
             try
             {
-                var result = _service.ParseFile(path, _config);
+                var result = _service.ParseFile(path);
                 _parsedRecords = result.Records;
                 _currentFileType = result.FileType;
                 MessageBox.Show($"Imported {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");

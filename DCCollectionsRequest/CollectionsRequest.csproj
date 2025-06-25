@@ -9,17 +9,14 @@
   <ItemGroup>
     <PackageReference Include="FileHelpers" Version="3.5.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DCCollections.Models\DC-Models-Identifier.csproj" />
+    <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="SqlQueries\*.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
