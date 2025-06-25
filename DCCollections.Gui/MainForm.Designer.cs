@@ -63,12 +63,14 @@
 
         private void InitializeComponent()
         {
+            btnSearchFiles = new Button();
             components = new System.ComponentModel.Container();
             btnTestOutputOpen = new Button();
             btnLiveOutputOpen = new Button();
             tabMain = new TabControl();
             tabOperations = new TabPage();
             label3 = new Label();
+            chkHideTestFiles = new CheckBox();
             groupBox1 = new GroupBox();
             txtLiveOutputFolder = new TextBox();
             label2 = new Label();
@@ -79,6 +81,7 @@
             dgvPossibleDuplicates = new DataGridView();
             btnCheckDuplicates = new Button();
             chkTest = new CheckBox();
+            txtSearchFiles = new TextBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
             tabParse = new TabPage();

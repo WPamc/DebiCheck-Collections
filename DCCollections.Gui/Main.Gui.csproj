@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DCCollections.Models\DCModelsIdentifier.csproj" />
     <ProjectReference Include="..\DCCollectionsRequest\DCCollections.csproj" />
     <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
