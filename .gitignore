@@ -408,3 +408,5 @@ FodyWeavers.xsd
 # Configuration files
 appsettings*.json
 /DCCollectionsRequest/appsettings.json
+/EFT-Collections/appsettings.json.old
+/DCCollectionsRequest/appsettings.json.old
