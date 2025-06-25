@@ -346,6 +346,7 @@ namespace DCCollections.Gui
                 txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
             }
 
+
             _importSortColumn = _settings.ImportSortColumn;
             _importSortDescending = _settings.ImportSortDescending;
 
@@ -396,7 +397,11 @@ namespace DCCollections.Gui
             try
             {
                 lvImportFiles.Items.Clear();
+
                 bool hideTests = chkHideTestFiles.Checked;
+
+                var processor = new FileProcessor();
+
                 foreach (var file in Directory.GetFiles(path))
                 {
                     var info = new FileInfo(file);
@@ -426,10 +431,22 @@ namespace DCCollections.Gui
                     item.SubItems.Add(genTime);
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
+
                     var desc = type.ToString();
                     if (!isLive && recordStatus.Length > 0)
                         desc += " (Test)";
                     item.SubItems.Add(desc);
+
+                    try
+                    {
+                        var parsed = processor.ProcessFile(info.FullName);
+                        var ft = FileTypeIdentifier.Identify(parsed);
+                        item.SubItems.Add(ft.ToString());
+                    }
+                    catch
+                    {
+                        item.SubItems.Add(FileType.Unknown.ToString());
+
                     lvImportFiles.Items.Add(item);
                 }
 

@@ -58,8 +58,10 @@
         private System.Windows.Forms.ColumnHeader chSize;
         private System.Windows.Forms.ColumnHeader chModified;
         private System.Windows.Forms.ColumnHeader chType;
+
         private System.Windows.Forms.ContextMenuStrip cmsImportFiles;
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
+
 
         private void InitializeComponent()
         {
@@ -410,6 +412,7 @@
             // 
             // lvImportFiles
             // 
+
             lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
