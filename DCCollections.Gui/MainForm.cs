@@ -410,8 +410,8 @@ namespace DCCollections.Gui
                     string recordStatus = string.Empty;
                     try
                     {
-                        var processor = new FileProcessor();
-                        var records = processor.ProcessFile(file);
+                        var fileProcessor = new FileProcessor();
+                        var records = fileProcessor.ProcessFile(file);
                         type = FileTypeIdentifier.Identify(records);
                         if (records.Length > 0 && records[0] is TransmissionHeader000 th)
                             recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
@@ -446,6 +446,7 @@ namespace DCCollections.Gui
                     catch
                     {
                         item.SubItems.Add(FileType.Unknown.ToString());
+                    }
 
                     lvImportFiles.Items.Add(item);
                 }
