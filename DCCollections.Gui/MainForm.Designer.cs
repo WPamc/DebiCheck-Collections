@@ -90,6 +90,8 @@
             tpImportFiles = new TabPage();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
+            chGenDate = new ColumnHeader();
+            chGenTime = new ColumnHeader();
             chSize = new ColumnHeader();
             chModified = new ColumnHeader();
             chType = new ColumnHeader();
@@ -399,7 +401,7 @@
             // 
             // lvImportFiles
             // 
-            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chSize, chModified, chType });
+            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
             lvImportFiles.Location = new Point(3, 35);
@@ -409,14 +411,25 @@
             lvImportFiles.UseCompatibleStateImageBehavior = false;
             lvImportFiles.View = View.Details;
             lvImportFiles.SelectedIndexChanged += lvImportFiles_SelectedIndexChanged;
+            lvImportFiles.ColumnClick += lvImportFiles_ColumnClick;
             // 
             // chName
-            // 
+            //
             chName.Text = "Name";
             chName.Width = 400;
-            // 
+
+            // chGenDate
+            //
+            chGenDate.Text = "Gen Date";
+            chGenDate.Width = 100;
+
+            // chGenTime
+            //
+            chGenTime.Text = "Gen Time";
+            chGenTime.Width = 80;
+            //
             // chSize
-            // 
+            //
             chSize.Text = "Size";
             chSize.Width = 100;
             // 
@@ -531,5 +544,7 @@
         private Label label1;
         private Button btnCheckDuplicates;
         private DataGridView dgvPossibleDuplicates;
+        private ColumnHeader chGenDate;
+        private ColumnHeader chGenTime;
     }
 }
