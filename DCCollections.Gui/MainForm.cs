@@ -13,6 +13,8 @@ namespace DCCollections.Gui
         private object[]? _parsedRecords;
         private FileType _currentFileType;
         private readonly UserSettings _settings;
+        private int _importSortColumn;
+        private bool _importSortDescending;
 
         private class FileListItem
         {
@@ -22,6 +24,26 @@ namespace DCCollections.Gui
             {
                 var info = new FileInfo(Path);
                 return $"{info.Name} | C:{info.CreationTime:yyyy-MM-dd} M:{info.LastWriteTime:yyyy-MM-dd} | {info.Length} bytes";
+            }
+        }
+
+        private class ListViewItemComparer : System.Collections.IComparer
+        {
+            private readonly int _column;
+            private readonly bool _desc;
+
+            public ListViewItemComparer(int column, bool desc)
+            {
+                _column = column;
+                _desc = desc;
+            }
+
+            public int Compare(object? x, object? y)
+            {
+                var lx = x as ListViewItem;
+                var ly = y as ListViewItem;
+                int result = string.Compare(lx?.SubItems[_column].Text, ly?.SubItems[_column].Text);
+                return _desc ? -result : result;
             }
         }
 
@@ -55,6 +77,22 @@ namespace DCCollections.Gui
             builder.Remove("Password");
             builder.Remove("Pwd");
             return builder.ConnectionString;
+        }
+
+        private static (string date, string time) ExtractGenerationInfo(string filename)
+        {
+            try
+            {
+                var parts = filename.Split('.');
+                if (parts.Length >= 2)
+                {
+                    var time = parts[^1];
+                    var date = parts[^2];
+                    return (date, time);
+                }
+            }
+            catch { }
+            return (string.Empty, string.Empty);
         }
 
         private void btnParse_Click(object sender, EventArgs e)
@@ -304,6 +342,9 @@ namespace DCCollections.Gui
                 txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
             }
 
+            _importSortColumn = _settings.ImportSortColumn;
+            _importSortDescending = _settings.ImportSortDescending;
+
             if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
             {
                 txtImportFolder.Text = _settings.ImportFolderPath;
@@ -356,15 +397,21 @@ namespace DCCollections.Gui
                     }
                     catch { }
 
+                    var (genDate, genTime) = ExtractGenerationInfo(info.Name);
                     var item = new ListViewItem(info.Name)
                     {
                         Tag = info.FullName
                     };
+                    item.SubItems.Add(genDate);
+                    item.SubItems.Add(genTime);
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
                     item.SubItems.Add(type.ToString());
                     lvImportFiles.Items.Add(item);
                 }
+
+                lvImportFiles.ListViewItemSorter = new ListViewItemComparer(_importSortColumn, _importSortDescending);
+                lvImportFiles.Sort();
             }
             catch (Exception ex)
             {
@@ -377,6 +424,20 @@ namespace DCCollections.Gui
             bool hasSelection = lvImportFiles.SelectedItems.Count > 0;
             btnImportRead.Enabled = hasSelection;
             btnImportParse.Enabled = hasSelection;
+        }
+
+        private void lvImportFiles_ColumnClick(object? sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == _importSortColumn)
+                _importSortDescending = !_importSortDescending;
+            else
+            {
+                _importSortColumn = e.Column;
+                _importSortDescending = false;
+            }
+
+            lvImportFiles.ListViewItemSorter = new ListViewItemComparer(_importSortColumn, _importSortDescending);
+            lvImportFiles.Sort();
         }
 
         private void btnImportParse_Click(object sender, EventArgs e)
@@ -424,6 +485,8 @@ namespace DCCollections.Gui
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+            _settings.ImportSortColumn = _importSortColumn;
+            _settings.ImportSortDescending = _importSortDescending;
             _settings.Save();
         }
     }
