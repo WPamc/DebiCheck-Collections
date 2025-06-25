@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+using DbConnection;
 using System.IO;
 using System.Linq;
 using RMCollectionProcessor.Models;
@@ -16,13 +16,10 @@ public class DatabaseService
     private readonly string _collectionsSql;
     private readonly string _creditorDefaultsSql;
 
-    public DatabaseService(IConfiguration configuration)
+    public DatabaseService()
     {
-        if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("DefaultConnection missing");
-
+        var configuration = AppConfig.Configuration;
+        _connectionString = AppConfig.ConnectionString;
         var queriesPath = configuration["SqlQueriesPath"] ?? "SqlQueries";
         _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "Collections.sql"));
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));

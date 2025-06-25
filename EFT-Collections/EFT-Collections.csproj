@@ -13,16 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FileHelpers" Version="3.5.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="SqlQueries\Collections - Copy %282%29.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

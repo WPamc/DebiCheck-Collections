@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using EFT_Collections;
-using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -90,10 +89,7 @@ public class Program
             recordStatus: dataSetStatus
         );
 
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true)
-            .Build();
-        var db = new DatabaseService(configuration);
+        var db = new DatabaseService();
 
 
         int generationNumber;
