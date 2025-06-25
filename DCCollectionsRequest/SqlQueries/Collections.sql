@@ -1,4 +1,3 @@
-
 SELECT 
 
 
@@ -29,7 +28,7 @@ FROM (
                    DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS base_month
     FROM MEMBMANDATE_BANKHIST
 ) AS mmb
-INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID
+INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID and getdate() between mmb.FROMDATE and isnull(mmb.TODATE, getdate ())
 inner join    GetsavviDEBICheck dbc
  on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-26 12:00:00')
 WHERE DEDUCTIONDAY =@DEDUCTIONDAY and [day]=@DEDUCTIONDAY
