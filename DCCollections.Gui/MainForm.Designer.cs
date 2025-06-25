@@ -91,10 +91,13 @@
             label1 = new Label();
             label2 = new Label();
             groupBox1 = new GroupBox();
+            btnCheckDuplicates = new Button();
+            dgvPossibleDuplicates = new DataGridView();
             label3 = new Label();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
             tabParse.SuspendLayout();
             tpImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
@@ -117,6 +120,8 @@
             // 
             tabOperations.Controls.Add(label3);
             tabOperations.Controls.Add(groupBox1);
+            tabOperations.Controls.Add(dgvPossibleDuplicates);
+            tabOperations.Controls.Add(btnCheckDuplicates);
             tabOperations.Controls.Add(chkTest);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
@@ -430,6 +435,28 @@
             groupBox1.TabIndex = 15;
             groupBox1.TabStop = false;
             groupBox1.Text = "Config";
+
+            //
+            // btnCheckDuplicates
+            //
+            btnCheckDuplicates.Location = new Point(95, 136);
+            btnCheckDuplicates.Name = "btnCheckDuplicates";
+            btnCheckDuplicates.Size = new Size(120, 23);
+            btnCheckDuplicates.TabIndex = 16;
+            btnCheckDuplicates.Text = "Check Duplicates";
+            btnCheckDuplicates.UseVisualStyleBackColor = true;
+            btnCheckDuplicates.Click += btnCheckDuplicates_Click;
+
+            //
+            // dgvPossibleDuplicates
+            //
+            dgvPossibleDuplicates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvPossibleDuplicates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPossibleDuplicates.Location = new Point(484, 6);
+            dgvPossibleDuplicates.Name = "dgvPossibleDuplicates";
+            dgvPossibleDuplicates.RowTemplate.Height = 25;
+            dgvPossibleDuplicates.Size = new Size(691, 593);
+            dgvPossibleDuplicates.TabIndex = 17;
             // 
             // label3
             // 
@@ -452,6 +479,7 @@
             tabOperations.ResumeLayout(false);
             tabOperations.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
             tabParse.ResumeLayout(false);
             tabParse.PerformLayout();
             tpImportFiles.ResumeLayout(false);
@@ -469,5 +497,7 @@
         private GroupBox groupBox1;
         private Label label2;
         private Label label1;
+        private Button btnCheckDuplicates;
+        private DataGridView dgvPossibleDuplicates;
     }
 }

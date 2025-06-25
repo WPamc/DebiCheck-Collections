@@ -2,6 +2,7 @@ using FileHelpers;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using RMCollectionProcessor.Models;
@@ -267,6 +268,12 @@ namespace RMCollectionProcessor
         {
             var dbService = new DatabaseService(configuration);
             return dbService.GetCollectionRequestByReference(reference);
+        }
+
+        public DataTable GetDuplicateCollections(int deductionDay, IConfiguration configuration)
+        {
+            var dbService = new DatabaseService(configuration);
+            return dbService.GetDuplicateCollections(deductionDay);
         }
 
         private IEnumerable<TransactionRecord> ExtractTransactionRecords(string filePath, object[] parsed)
