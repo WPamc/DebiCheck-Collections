@@ -414,13 +414,13 @@ END", conn);
 
             DateTime.TryParse(r.ActionDate, out var actionDate);
 
-            bool isValid = DateTime.TryParseExact(
+            bool isEffectiveDateValid = DateTime.TryParseExact(
                 r.EffectiveDate,
                 "yyyyMMdd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var effectiveDate);
-            if (!isValid)
+            if (!isEffectiveDateValid)
             {
 
             }
@@ -430,7 +430,7 @@ END", conn);
             insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)r.RejectReasonCode ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)r.RejectReasonDescription ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = (object?)actionDate ?? DBNull.Value });
-            insertCmd.Parameters.Add(new SqlParameter("@effectiveDate", SqlDbType.DateTime) { Value = (object?)effectiveDate ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@effectiveDate", SqlDbType.DateTime) { Value = isEffectiveDateValid ? effectiveDate : DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@origContractRef", SqlDbType.VarChar, 14) { Value = r.ContractReference });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.OriginalPaymentInformation });
             try
