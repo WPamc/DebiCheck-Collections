@@ -14,6 +14,7 @@ public class Program
         DateTime deductionDate = DateTime.Now;
         string dataSetStatus = "T";
         string fileName = "";
+        string outputPath = AppContext.BaseDirectory;
         foreach (string arg in args)
         {
             var parts = arg.Split('=', 2);
@@ -23,6 +24,10 @@ public class Program
             if (name == "output")
             {
                 fileName = value;
+            }
+            else if (name == "outputpath")
+            {
+                outputPath = value;
             }
             else if (name == "date")
             {
@@ -81,13 +86,14 @@ public class Program
             transactionsToProcess,
             generationNumber,
             generationNumber,
-            startSequenceNumber);
+            startSequenceNumber,
+            outputPath);
 
         if (dataSetStatus != "T")
         {
             await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
             await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
         }
-        Console.WriteLine($"EFT file written to {fileName}");
+        Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
     }
 }

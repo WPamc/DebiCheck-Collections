@@ -90,14 +90,16 @@ public class EFTService
     }
 
     /// <summary>
-    /// Convenience method that writes the generated file to <paramref name="path"/>.
+    /// Convenience method that writes the generated file to <paramref name="outputPath"/> using
+    /// <paramref name="path"/> as the file name.
     /// </summary>
     public long WriteFile(
         string path,
         List<EftTransaction> transactions,
         int transmissionNumber,
         int userGenerationNumber,
-        long startSequenceNumber)
+        long startSequenceNumber,
+        string? outputPath = null)
     {
         string content = GenerateFile(
             transactions,
@@ -105,7 +107,12 @@ public class EFTService
             userGenerationNumber,
             startSequenceNumber,
             out long lastSequenceNumber);
-        File.WriteAllText(path, content);
+        string directory = outputPath ?? AppContext.BaseDirectory;
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        File.WriteAllText(Path.Combine(directory, path), content);
         return lastSequenceNumber;
     }
 
