@@ -31,6 +31,8 @@
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.NumericUpDown nudDay;
         private System.Windows.Forms.CheckBox chkTest;
+        private System.Windows.Forms.RadioButton rdoDebiCheck;
+        private System.Windows.Forms.RadioButton rdoEft;
         private System.Windows.Forms.Label lblLiveOutput;
         private System.Windows.Forms.TextBox txtLiveOutputFolder;
         private System.Windows.Forms.Button btnLiveOutputBrowse;
@@ -74,6 +76,8 @@
             dgvPossibleDuplicates = new DataGridView();
             btnCheckDuplicates = new Button();
             chkTest = new CheckBox();
+            rdoDebiCheck = new RadioButton();
+            rdoEft = new RadioButton();
             txtSearchFiles = new TextBox();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
@@ -144,6 +148,8 @@
             tabOperations.Controls.Add(dgvPossibleDuplicates);
             tabOperations.Controls.Add(btnCheckDuplicates);
             tabOperations.Controls.Add(chkTest);
+            tabOperations.Controls.Add(rdoDebiCheck);
+            tabOperations.Controls.Add(rdoEft);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
             tabOperations.Location = new Point(4, 24);
@@ -264,9 +270,33 @@
             chkTest.TabIndex = 6;
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
-            // 
+            //
+            // rdoDebiCheck
+            //
+            rdoDebiCheck.AutoSize = true;
+            rdoDebiCheck.Checked = true;
+            rdoDebiCheck.Location = new Point(95, 24);
+            rdoDebiCheck.Name = "rdoDebiCheck";
+            rdoDebiCheck.Size = new Size(79, 19);
+            rdoDebiCheck.TabIndex = 18;
+            rdoDebiCheck.TabStop = true;
+            rdoDebiCheck.Text = "DebiCheck";
+            rdoDebiCheck.UseVisualStyleBackColor = true;
+            rdoDebiCheck.CheckedChanged += rdoFileType_CheckedChanged;
+            //
+            // rdoEft
+            //
+            rdoEft.AutoSize = true;
+            rdoEft.Location = new Point(180, 24);
+            rdoEft.Name = "rdoEft";
+            rdoEft.Size = new Size(42, 19);
+            rdoEft.TabIndex = 19;
+            rdoEft.Text = "EFT";
+            rdoEft.UseVisualStyleBackColor = true;
+            rdoEft.CheckedChanged += rdoFileType_CheckedChanged;
+            //
             // btnGenerate
-            // 
+            //
             btnGenerate.Location = new Point(95, 107);
             btnGenerate.Name = "btnGenerate";
             btnGenerate.Size = new Size(120, 23);

@@ -496,11 +496,16 @@ namespace DCCollections.Gui
         {
             groupBox1.Enabled = enabled;
             btnGenerate.Enabled = enabled;
-            btnCheckDuplicates.Enabled = enabled;
+            btnCheckDuplicates.Enabled = enabled && rdoDebiCheck.Checked;
             chkTest.Enabled = enabled;
             nudDay.Enabled = enabled;
             dgvPossibleDuplicates.Enabled = enabled;
             UseWaitCursor = !enabled;
+        }
+
+        private void rdoFileType_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCheckDuplicates.Enabled = rdoDebiCheck.Checked;
         }
 
         private void btnSearchFiles_Click(object sender, EventArgs e)
