@@ -27,6 +27,13 @@ namespace DCCollections.Gui
             }
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            var area = Screen.FromControl(this).WorkingArea;
+            Size = new System.Drawing.Size((int)(area.Width * 0.9), (int)(area.Height * 0.9));
+        }
+
         private void InitializeComponent()
         {
             lblFileName = new Label();
