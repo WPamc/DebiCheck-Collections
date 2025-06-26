@@ -12,7 +12,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         DateTime deductionDate = DateTime.Now;
-        string dataSetStatus = "L";
+        string dataSetStatus = "T";
         string fileName = "";
         foreach (string arg in args)
         {
