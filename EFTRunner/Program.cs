@@ -42,6 +42,6 @@ public class Program
                 else { isTest = false; }
             }
         }
-        await EFTService.GenerateEFTFile(deductionDate, isTest, outputPath);
+        EFTService.GenerateEFTFile(deductionDate, isTest, outputPath);
     }
 }
