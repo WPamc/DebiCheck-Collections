@@ -124,7 +124,7 @@ namespace DCCollections.Gui
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
-                var file = await Task.Run(() => _dcCollectionservice.GenerateFile(day, test, outFolder));
+                var file = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, test, outFolder));
                 MessageBox.Show($"File generated: {file}", "Success");
                 using var form = new FilePreviewForm(file);
                 form.ShowDialog(this);

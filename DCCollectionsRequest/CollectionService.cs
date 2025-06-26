@@ -133,7 +133,7 @@ namespace RMCollectionProcessor
         }
 
 
-        public string GenerateFile(int deductionDay, bool isTest = false, string? outputFolder = null)
+        public string GenerateDCFile(int deductionDay, bool isTest = false, string? outputFolder = null)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
