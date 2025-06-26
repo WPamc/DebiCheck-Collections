@@ -76,6 +76,32 @@ namespace RMCollectionProcessor
 
             Type? selectedType = null;
 
+            string recordId2Char = recordLine.Substring(0, 2);
+            if (recordId2Char == "08")
+            {
+                if (_lastProcessedRecordType == typeof(CollectionHeader080))
+                {
+                    selectedType = typeof(CollectionTxLine01);
+
+                }
+                else if (_lastProcessedRecordType == typeof(CollectionTxLine01))
+                {
+                    selectedType = typeof(CollectionTxLine02);
+                }
+                else if (_lastProcessedRecordType == typeof(CollectionTxLine02))
+                {
+                    selectedType = typeof(CollectionTxLine03);
+                }
+
+                if (selectedType != null)
+                {
+                    _lastProcessedRecordType = selectedType;
+                    return selectedType;
+                }
+               
+            }
+            
+
             if (recordLine.Length >= 3)
             {
                 string recordId = recordLine.Substring(0, 3);
@@ -138,15 +164,7 @@ namespace RMCollectionProcessor
                 }
             }
 
-            if (selectedType == null && recordLine.Length >= 2)
-            {
-                string recordId2Char = recordLine.Substring(0, 2);
-                if (recordId2Char == "08")
-                {
-                    if (_lastProcessedRecordType == typeof(CollectionTxLine01)) selectedType = typeof(CollectionTxLine02);
-                    else if (_lastProcessedRecordType == typeof(CollectionTxLine02)) selectedType = typeof(CollectionTxLine03);
-                }
-            }
+
 
             if (selectedType != null)
             {
