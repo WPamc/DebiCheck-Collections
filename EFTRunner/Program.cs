@@ -12,7 +12,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         DateTime deductionDate = DateTime.Now;
-        string dataSetStatus = "T";
+        string dataSetStatus = "L";
         string fileName = "";
         foreach (string arg in args)
         {
@@ -57,10 +57,10 @@ public class Program
         else
         {
             generationNumber = await db.GetNextGenerationNumberAsync();
-            startSequenceNumber = await db.GetNextDailyCounterAsync(deductionDate);
+            startSequenceNumber = await db.GetNextDailyCounterAsync(DateTime.Today);
         }
 
-        var collections = await db.GetCollectionsAsync(deductionDate.Day);
+        var collections = await db.GetCollectionsAsync(deductionDate);
         var transactionsToProcess = new List<EftTransaction>();
         foreach (var c in collections)
         {
@@ -77,17 +77,21 @@ public class Program
         }
 
         fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
-        int recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
-
+        int recordId = 0;
+        if (dataSetStatus != "T")
+        {
+            recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
+        }
         long lastSequenceNumber = writer.WriteFile(
             fileName,
             transactionsToProcess,
             generationNumber,
             generationNumber,
             startSequenceNumber);
-        await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
+
         if (dataSetStatus != "T")
         {
+            await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
             await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
         }
         Console.WriteLine($"EFT file written to {fileName}");

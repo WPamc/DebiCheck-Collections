@@ -24,12 +24,12 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
-    public async Task<List<DebtorCollectionData>> GetCollectionsAsync(int deductionDay)
+    public async Task<List<DebtorCollectionData>> GetCollectionsAsync(DateTime deductionDay)
     {
         var results = new List<DebtorCollectionData>();
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(_collectionsSql, conn);
-        //cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
+        cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Date) { Value = deductionDay });
         await conn.OpenAsync();
         using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())

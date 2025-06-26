@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EFTRunner": {
+      "commandName": "Project",
+      "commandLineArgs": "date=2025/06/27"
+    }
+  }
+}
