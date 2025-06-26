@@ -12,7 +12,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         DateTime deductionDate = DateTime.Now;
-        string dataSetStatus = "T";
+        bool isTest = true;
         string fileName = "";
         string outputPath = AppContext.BaseDirectory;
         foreach (string arg in args)
@@ -35,9 +35,13 @@ public class Program
             }
             else if (name == "mode")
             {
-                dataSetStatus = value.ToUpperInvariant() == "T" ? "T" : "L";
+                if (value.ToUpperInvariant() == "T")
+                {
+                    isTest = true;
+                }
+                else { isTest = false; }
             }
         }
-        await EFTService.GenerateEFTFile(deductionDate, dataSetStatus, outputPath);
+        await EFTService.GenerateEFTFile(deductionDate, isTest, outputPath);
     }
 }

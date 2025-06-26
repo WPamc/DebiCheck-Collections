@@ -276,19 +276,19 @@ public class EFTService
     /// <summary>
     /// Generates an EFT file using database data and writes it to disk.
     /// </summary>
-    public static async Task GenerateEFTFile(DateTime deductionDate, string recordStatus, string outputPath)
+    public static async Task GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
     {
         string fileName = string.Empty;
         var writer = new EFTService(
             deductionDate: deductionDate,
-            recordStatus: recordStatus
+            recordStatus: isTest?"T":"L"
         );
 
         var db = new DatabaseService();
 
         int generationNumber;
         int startSequenceNumber;
-        if (recordStatus == "T")
+        if (isTest)
         {
             generationNumber = (await db.PeekGenerationNumberAsync()) + 1;
             startSequenceNumber = (await db.PeekDailyCounterAsync(deductionDate)) + 1;
@@ -317,7 +317,7 @@ public class EFTService
 
         fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
         int recordId = 0;
-        if (recordStatus != "T")
+        if (isTest)
         {
             recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
         }
@@ -330,7 +330,7 @@ public class EFTService
             fileName,
             outputPath);
 
-        if (recordStatus != "T")
+        if (isTest)
         {
             await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
             await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
