@@ -12,7 +12,7 @@ namespace DCCollections.Gui
 {
     public partial class MainForm : Form
     {
-        private readonly RMCollectionProcessor.CollectionService _service;
+        private readonly RMCollectionProcessor.CollectionService _dcCollectionservice;
         private object[]? _parsedRecords;
         private FileType _currentFileType;
         private readonly UserSettings _settings;
@@ -55,7 +55,7 @@ namespace DCCollections.Gui
                 Text = $"Collections - {safeConn}";
             }
 
-            _service = new RMCollectionProcessor.CollectionService();
+            _dcCollectionservice = new RMCollectionProcessor.CollectionService();
             _settings = UserSettings.Load();
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
@@ -103,7 +103,7 @@ namespace DCCollections.Gui
             {
                 try
                 {
-                    var result = _service.ParseFile(ofd.FileName);
+                    var result = _dcCollectionservice.ParseFile(ofd.FileName);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
@@ -124,7 +124,7 @@ namespace DCCollections.Gui
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
-                var file = await Task.Run(() => _service.GenerateFile(day, test, outFolder));
+                var file = await Task.Run(() => _dcCollectionservice.GenerateFile(day, test, outFolder));
                 MessageBox.Show($"File generated: {file}", "Success");
                 using var form = new FilePreviewForm(file);
                 form.ShowDialog(this);
@@ -210,7 +210,7 @@ namespace DCCollections.Gui
             try
             {
                 int day = (int)nudDay.Value;
-                var table = _service.GetDuplicateCollections(day);
+                var table = _dcCollectionservice.GetDuplicateCollections(day);
                 dgvPossibleDuplicates.DataSource = table;
                 MessageBox.Show($"Found {table.Rows.Count} possible duplicates.", "Check Duplicates");
             }
@@ -443,7 +443,7 @@ namespace DCCollections.Gui
                     if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    await Task.Run(() => _service.ParseFile(path));
+                    await Task.Run(() => _dcCollectionservice.ParseFile(path));
                 }
 
                 MessageBox.Show("Import complete.", "Success");
