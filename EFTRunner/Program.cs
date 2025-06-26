@@ -34,7 +34,7 @@ public class Program
             }
         }
 
-        var writer = new RecordBuilder(
+        var writer = new EFTService(
             clientCode: creditorDefaults.clientCode,
             clientName: creditorDefaults.clientName,
             bankservUserCode: creditorDefaults.bankservUserCode,
