@@ -38,13 +38,16 @@ public class EFTService
 
     /// <summary>
     /// Generates the full, multi-line string for an EFT file based on a list of transactions.
+    /// When <paramref name="path"/> is provided the content is written to disk.
     /// </summary>
     public string GenerateFile(
         List<EftTransaction> transactions,
         int transmissionNumber,
         int userGenerationNumber,
         long startSequenceNumber,
-        out long lastSequenceNumber)
+        out long lastSequenceNumber,
+        string? path = null,
+        string? outputPath = null)
     {
         var records = new List<object>();
         long firstSequenceNumber = startSequenceNumber;
@@ -86,35 +89,19 @@ public class EFTService
         };
 
         lastSequenceNumber = currentSequenceNumber;
-        return engine.WriteString(records.ToArray());
+        string content = engine.WriteString(records.ToArray());
+        if (path != null)
+        {
+            string directory = outputPath ?? AppContext.BaseDirectory;
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            File.WriteAllText(Path.Combine(directory, path), content);
+        }
+        return content;
     }
 
-    /// <summary>
-    /// Convenience method that writes the generated file to <paramref name="outputPath"/> using
-    /// <paramref name="path"/> as the file name.
-    /// </summary>
-    public long WriteFile(
-        string path,
-        List<EftTransaction> transactions,
-        int transmissionNumber,
-        int userGenerationNumber,
-        long startSequenceNumber,
-        string? outputPath = null)
-    {
-        string content = GenerateFile(
-            transactions,
-            transmissionNumber,
-            userGenerationNumber,
-            startSequenceNumber,
-            out long lastSequenceNumber);
-        string directory = outputPath ?? AppContext.BaseDirectory;
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-        File.WriteAllText(Path.Combine(directory, path), content);
-        return lastSequenceNumber;
-    }
 
     private TransmissionHeader000 CreateTransmissionHeader(int transmissionNumber)
     {
