@@ -81,12 +81,13 @@ public class Program
         {
             recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
         }
-        long lastSequenceNumber = writer.WriteFile(
-            fileName,
+        writer.GenerateFile(
             transactionsToProcess,
             generationNumber,
             generationNumber,
             startSequenceNumber,
+            out long lastSequenceNumber,
+            fileName,
             outputPath);
 
         if (dataSetStatus != "T")
