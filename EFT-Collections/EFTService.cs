@@ -272,4 +272,70 @@ public class EFTService
         }
         return null;
     }
+
+    /// <summary>
+    /// Generates an EFT file using database data and writes it to disk.
+    /// </summary>
+    public static async Task GenerateEFTFile(DateTime deductionDate, string recordStatus, string outputPath)
+    {
+        string fileName = string.Empty;
+        var writer = new EFTService(
+            deductionDate: deductionDate,
+            recordStatus: recordStatus
+        );
+
+        var db = new DatabaseService();
+
+        int generationNumber;
+        int startSequenceNumber;
+        if (recordStatus == "T")
+        {
+            generationNumber = (await db.PeekGenerationNumberAsync()) + 1;
+            startSequenceNumber = (await db.PeekDailyCounterAsync(deductionDate)) + 1;
+        }
+        else
+        {
+            generationNumber = await db.GetNextGenerationNumberAsync();
+            startSequenceNumber = await db.GetNextDailyCounterAsync(DateTime.Today);
+        }
+
+        var collections = await db.GetCollectionsAsync(deductionDate);
+        var transactionsToProcess = new List<EftTransaction>();
+        foreach (var c in collections)
+        {
+            int.TryParse(c.AccountType, out int accType);
+            transactionsToProcess.Add(new EftTransaction
+            {
+                HomingBranch = c.DebtorBankBranch,
+                HomingAccountNumber = c.DebtorAccountNumber,
+                HomingAccountName = c.DebtorName,
+                AccountType = accType,
+                Amount = c.InstructedAmount,
+                UserReference = c.ContractReference + "_" + generationNumber.ToString()
+            });
+        }
+
+        fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
+        int recordId = 0;
+        if (recordStatus != "T")
+        {
+            recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
+        }
+        writer.GenerateFile(
+            transactionsToProcess,
+            generationNumber,
+            generationNumber,
+            startSequenceNumber,
+            out long lastSequenceNumber,
+            fileName,
+            outputPath);
+
+        if (recordStatus != "T")
+        {
+            await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
+            await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
+        }
+        Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
+
+    }
 }
