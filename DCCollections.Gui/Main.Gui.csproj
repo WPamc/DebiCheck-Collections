@@ -17,6 +17,7 @@
     <ProjectReference Include="..\DCCollections.Models\DCModelsIdentifier.csproj" />
     <ProjectReference Include="..\DCCollectionsRequest\DCCollections.csproj" />
     <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
+    <ProjectReference Include="..\EFT-Collections\EFTCollections.csproj" />
   </ItemGroup>
 
 </Project>
