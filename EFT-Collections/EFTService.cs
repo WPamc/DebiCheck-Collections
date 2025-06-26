@@ -10,7 +10,6 @@ using FileHelpers;
 /// </summary>
 public class EFTService
 {
-    // Static Creditor Information
     private readonly string _clientCode;
     private readonly string _clientName;
     private readonly string _bankservUserCode;
@@ -24,14 +23,14 @@ public class EFTService
     /// <summary>
     /// Initializes the writer with the static details of the creditor.
     /// </summary>
-    public EFTService(string clientCode, string clientName, string bankservUserCode, string creditorBranch, string creditorAccount, string creditorAbbreviation, DateTime deductionDate, string recordStatus = "L", string typeOfService = "SAMEDAY")
+    public EFTService(DateTime deductionDate, string recordStatus = "T", string typeOfService = creditorDefaults.typeOfService)
     {
-        _clientCode = clientCode;
-        _clientName = clientName;
-        _bankservUserCode = bankservUserCode;
-        _creditorBranch = creditorBranch;
-        _creditorAccount = creditorAccount;
-        _creditorAbbreviation = creditorAbbreviation;
+        _clientCode = creditorDefaults.clientCode;
+        _clientName = creditorDefaults.clientName;
+        _bankservUserCode = creditorDefaults.bankservUserCode;
+        _creditorBranch = creditorDefaults.creditorBranch;
+        _creditorAccount = creditorDefaults.creditorAccount;
+        _creditorAbbreviation = creditorDefaults.creditorAbbreviation;
         _deductionDate = deductionDate;
         _typeOfService = typeOfService;
         _recordStatus = recordStatus;
@@ -51,13 +50,10 @@ public class EFTService
         long firstSequenceNumber = startSequenceNumber;
         long currentSequenceNumber = firstSequenceNumber;
 
-        // 1. Create Transmission Header
         records.Add(CreateTransmissionHeader(transmissionNumber));
 
-        // 2. Create User Header
         records.Add(CreateUserHeader(_deductionDate, firstSequenceNumber, userGenerationNumber));
 
-        // 3. Create Standard Transaction Records
         decimal totalDebitValue = 0;
         long homingAccountHash = 0;
 
@@ -65,22 +61,18 @@ public class EFTService
         {
             records.Add(CreateStandardTransaction(tx, currentSequenceNumber, _deductionDate));
             totalDebitValue += tx.Amount;
-            homingAccountHash += long.Parse(tx.HomingAccountNumber); // Simplified hash for example
+            homingAccountHash += long.Parse(tx.HomingAccountNumber);
             currentSequenceNumber++;
         }
 
-        // 4. Create Contra Record
         var contraRecord = CreateContraRecord(totalDebitValue, currentSequenceNumber, _deductionDate);
         records.Add(contraRecord);
-        homingAccountHash += long.Parse(_creditorAccount); // Add contra account to hash
+        homingAccountHash += long.Parse(_creditorAccount);
 
-        // 5. Create User Trailer
         records.Add(CreateUserTrailer(firstSequenceNumber, currentSequenceNumber, _deductionDate, transactions.Count, totalDebitValue, homingAccountHash));
 
-        // 6. Create Transmission Trailer
-        records.Add(CreateTransmissionTrailer(records.Count + 1)); // +1 to account for the trailer itself
+        records.Add(CreateTransmissionTrailer(records.Count + 1));
 
-        // Use FileHelpers MultiRecordEngine to write the objects to a string
         var engine = new MultiRecordEngine(
             typeof(TransmissionHeader000),
             typeof(EftUserHeader001),
@@ -116,8 +108,6 @@ public class EFTService
         File.WriteAllText(path, content);
         return lastSequenceNumber;
     }
-
-    // --- Private Helper Methods for Record Creation ---
 
     private TransmissionHeader000 CreateTransmissionHeader(int transmissionNumber)
     {

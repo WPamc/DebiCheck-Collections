@@ -35,12 +35,6 @@ public class Program
         }
 
         var writer = new EFTService(
-            clientCode: creditorDefaults.clientCode,
-            clientName: creditorDefaults.clientName,
-            bankservUserCode: creditorDefaults.bankservUserCode,
-            creditorBranch: creditorDefaults.creditorBranch,
-            creditorAccount: creditorDefaults.creditorAccount,
-            creditorAbbreviation: creditorDefaults.creditorAbbreviation,
             deductionDate: deductionDate,
             recordStatus: dataSetStatus
         );

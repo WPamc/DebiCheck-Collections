@@ -7,4 +7,5 @@ public static class creditorDefaults
     public const string creditorAccount = "04097772529";
     public const string creditorAbbreviation = "AUL";
     public const string UserCode = bankservUserCode;
+    public const string typeOfService = "SAMEDAY";
 }
