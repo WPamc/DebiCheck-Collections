@@ -34,7 +34,7 @@ public class Program
             }
         }
 
-        var writer = new Writer(
+        var writer = new RecordBuilder(
             clientCode: creditorDefaults.clientCode,
             clientName: creditorDefaults.clientName,
             bankservUserCode: creditorDefaults.bankservUserCode,
