@@ -19,6 +19,7 @@ namespace DCCollections.Gui
         private int _importSortColumn;
         private bool _importSortDescending;
         private ProgressBar _pbImport;
+        private ProgressBar _pbOperations;
 
         private class ListViewItemComparer : System.Collections.IComparer
         {
@@ -62,6 +63,8 @@ namespace DCCollections.Gui
             chkHideTestFiles.Checked = true;
             _pbImport = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
             tpImportFiles.Controls.Add(_pbImport);
+            _pbOperations = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
+            tabOperations.Controls.Add(_pbOperations);
             lvImportFiles.MultiSelect = true;
             LoadInitialPaths();
         }
@@ -112,19 +115,28 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnGenerate_Click(object sender, EventArgs e)
+        private async void btnGenerate_Click(object sender, EventArgs e)
         {
+            SetOperationsUiState(false);
+            _pbOperations.Visible = true;
             try
             {
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
-                var file = _service.GenerateFile(day, test, outFolder);
+                var file = await Task.Run(() => _service.GenerateFile(day, test, outFolder));
                 MessageBox.Show($"File generated: {file}", "Success");
+                using var form = new FilePreviewForm(file);
+                form.ShowDialog(this);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+            finally
+            {
+                _pbOperations.Visible = false;
+                SetOperationsUiState(true);
             }
         }
 
@@ -477,6 +489,17 @@ namespace DCCollections.Gui
         {
             pnlImportTop.Enabled = enabled;
             lvImportFiles.Enabled = enabled;
+            UseWaitCursor = !enabled;
+        }
+
+        private void SetOperationsUiState(bool enabled)
+        {
+            groupBox1.Enabled = enabled;
+            btnGenerate.Enabled = enabled;
+            btnCheckDuplicates.Enabled = enabled;
+            chkTest.Enabled = enabled;
+            nudDay.Enabled = enabled;
+            dgvPossibleDuplicates.Enabled = enabled;
             UseWaitCursor = !enabled;
         }
 
