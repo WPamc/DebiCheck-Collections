@@ -8,7 +8,7 @@ using FileHelpers;
 /// Generates EFT collection file content and writes it to disk.
 /// Logic previously embedded in <c>Program.cs</c> is now encapsulated here.
 /// </summary>
-public class Writer
+public class RecordBuilder
 {
     // Static Creditor Information
     private readonly string _clientCode;
@@ -24,7 +24,7 @@ public class Writer
     /// <summary>
     /// Initializes the writer with the static details of the creditor.
     /// </summary>
-    public Writer(string clientCode, string clientName, string bankservUserCode, string creditorBranch, string creditorAccount, string creditorAbbreviation, DateTime deductionDate, string recordStatus = "L", string typeOfService = "SAMEDAY")
+    public RecordBuilder(string clientCode, string clientName, string bankservUserCode, string creditorBranch, string creditorAccount, string creditorAbbreviation, DateTime deductionDate, string recordStatus = "L", string typeOfService = "SAMEDAY")
     {
         _clientCode = clientCode;
         _clientName = clientName;

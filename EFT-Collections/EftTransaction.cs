@@ -4,7 +4,7 @@ namespace EFT_Collections
 {
     /// <summary>
     /// A logical representation of a single EFT transaction (a collection from a customer).
-    /// This class is used to pass dynamic transaction data to the Writer.
+    /// This class is used to pass dynamic transaction data to the RecordBuilder.
     /// </summary>
     public class EftTransaction
     {
