@@ -38,17 +38,22 @@ public class Program
                 dataSetStatus = value.ToUpperInvariant() == "T" ? "T" : "L";
             }
         }
+        await GenerateEFTFile(deductionDate, dataSetStatus,  outputPath);
+    }
 
+    private static async Task GenerateEFTFile(DateTime deductionDate, string test, string outputPath)
+    {
+        string fileName = "";
         var writer = new EFTService(
             deductionDate: deductionDate,
-            recordStatus: dataSetStatus
+            recordStatus: test
         );
 
         var db = new DatabaseService();
 
         int generationNumber;
         int startSequenceNumber;
-        if (dataSetStatus == "T")
+        if (test == "T")
         {
             generationNumber = (await db.PeekGenerationNumberAsync()) + 1;
             startSequenceNumber = (await db.PeekDailyCounterAsync(deductionDate)) + 1;
@@ -77,7 +82,7 @@ public class Program
 
         fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
         int recordId = 0;
-        if (dataSetStatus != "T")
+        if (test != "T")
         {
             recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
         }
@@ -90,11 +95,12 @@ public class Program
             fileName,
             outputPath);
 
-        if (dataSetStatus != "T")
+        if (test != "T")
         {
             await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
             await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
+        
     }
 }
