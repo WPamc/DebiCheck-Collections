@@ -276,7 +276,7 @@ public class EFTService
     /// <summary>
     /// Generates an EFT file using database data and writes it to disk.
     /// </summary>
-    public static async Task GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
+    public static string GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
     {
         string fileName = string.Empty;
         var writer = new EFTService(
@@ -290,16 +290,16 @@ public class EFTService
         int startSequenceNumber;
         if (isTest)
         {
-            generationNumber = (await db.PeekGenerationNumberAsync()) + 1;
-            startSequenceNumber = (await db.PeekDailyCounterAsync(deductionDate)) + 1;
+            generationNumber = db.PeekGenerationNumberAsync().GetAwaiter().GetResult() + 1;
+            startSequenceNumber = db.PeekDailyCounterAsync(deductionDate).GetAwaiter().GetResult() + 1;
         }
         else
         {
-            generationNumber = await db.GetNextGenerationNumberAsync();
-            startSequenceNumber = await db.GetNextDailyCounterAsync(DateTime.Today);
+            generationNumber = db.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
+            startSequenceNumber = db.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
         }
 
-        var collections = await db.GetCollectionsAsync(deductionDate);
+        var collections = db.GetCollectionsAsync(deductionDate).GetAwaiter().GetResult();
         var transactionsToProcess = new List<EftTransaction>();
         foreach (var c in collections)
         {
@@ -319,7 +319,7 @@ public class EFTService
         int recordId = 0;
         if (isTest)
         {
-            recordId = await db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
+            recordId = db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber).GetAwaiter().GetResult();
         }
         writer.GenerateFile(
             transactionsToProcess,
@@ -332,10 +332,11 @@ public class EFTService
 
         if (isTest)
         {
-            await db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber);
-            await db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber);
+            db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber).GetAwaiter().GetResult();
+            db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber).GetAwaiter().GetResult();
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
+        return Path.Combine(outputPath, fileName);
 
     }
 }
