@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFTRunner", "..\EFTRunner\E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileProcessor", "..\FileProcessor\FileProcessor.csproj", "{BEC1E467-34B2-1659-505A-9C6ED89E46C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{ADD173CC-C210-885E-1A91-4AE99EBEA858}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADD173CC-C210-885E-1A91-4AE99EBEA858}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADD173CC-C210-885E-1A91-4AE99EBEA858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC1E467-34B2-1659-505A-9C6ED89E46C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC1E467-34B2-1659-505A-9C6ED89E46C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC1E467-34B2-1659-505A-9C6ED89E46C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC1E467-34B2-1659-505A-9C6ED89E46C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

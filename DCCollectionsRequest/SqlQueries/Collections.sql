@@ -1,3 +1,4 @@
+
 SELECT 
 
 
@@ -30,8 +31,31 @@ FROM (
 ) AS mmb
 INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID and getdate() between mmb.FROMDATE and isnull(mmb.TODATE, getdate ())
 inner join    GetsavviDEBICheck dbc
- on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-27 12:00:00')
+ on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-04-28 12:00:00')
  inner join MEMB_HPHISTS mh on mm.MEMBID = mh.membid 
  
  and getdate() between mh.OPFROMDT and isnull(mh.OPTHRUDT,getdate())
 WHERE DEDUCTIONDAY =@DEDUCTIONDAY and [day]=@DEDUCTIONDAY
+
+and mm.subssn not in (
+'MGS605275',
+'MGS589298',
+'MGS174660',
+'MGS695365',
+'MGS708141',
+'MGS845016',
+'MGS778135',
+'MGS541901',
+'MGS844959',
+'MGS844977',
+'MGS844985',
+'MGS845241',
+'MGS845243',
+'MGS845249',
+'MGS845591',
+'MGS845842',
+'MGS846383',
+'MGS846429',
+'MGS846497',
+'MGS849411',
+'MGS589298')
