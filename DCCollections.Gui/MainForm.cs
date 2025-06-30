@@ -554,8 +554,8 @@ namespace DCCollections.Gui
                 int dcDaily = dcDb.GetCurrentDailyCounter(DateTime.Today);
 
                 var eftDb = new EFT_Collections.DatabaseService();
-                int eftGen = eftDb.PeekGenerationNumberAsync().GetAwaiter().GetResult();
-                int eftDaily = eftDb.PeekDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+                int eftGen = eftDb.PeekGenerationNumber();
+                int eftDaily = eftDb.PeekDailyCounter(DateTime.Today);
 
                 lblDcGenerationNumber.Text = $"DC GenerationNumber: {dcGen}";
                 lblDcDailyCounter.Text = $"DC DailyCounter: {dcDaily}";

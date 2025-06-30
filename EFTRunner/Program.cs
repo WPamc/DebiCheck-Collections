@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using EFT_Collections;
 
 /// <summary>
@@ -9,10 +8,10 @@ using EFT_Collections;
 /// </summary>
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
         var db = new DatabaseService();
-        await db.EnsureDailyCounterForTodayAsync();
+        db.EnsureDailyCounterForToday();
         DateTime deductionDate = DateTime.Now;
         bool isTest =false;
         string fileName = "";
