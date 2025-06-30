@@ -332,7 +332,7 @@ public class EFTService
 
         fileName = $"ZR{creditorDefaults.clientCode}.AUL.DATA.{DateTime.Now:yyMMdd.HHmmss}";
         int recordId = 0;
-        if (isTest)
+        if (!isTest)
         {
             recordId = db.CreateBankFileRecord(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
         }
@@ -345,10 +345,12 @@ public class EFTService
             fileName,
             outputPath);
 
-        if (isTest)
+        if (!isTest)
         {
+            db.InsertCollectionRequests(collections, recordId);
             db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);
             db.SetDailyCounter(deductionDate, (int)lastSequenceNumber);
+            db.MarkBankFileGenerationComplete(recordId);
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
         return Path.Combine(outputPath, fileName);

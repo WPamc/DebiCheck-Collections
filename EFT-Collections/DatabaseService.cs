@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using DbConnection;
 
 namespace EFT_Collections;
@@ -203,6 +204,37 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
         conn.Open();
         cmd.ExecuteNonQuery();
+    }
+
+    public void InsertCollectionRequests(IEnumerable<DebtorCollectionData> records, int bankFileRowId)
+    {
+        var recordList = records.ToList();
+        if (!recordList.Any()) return;
+
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        foreach (var r in recordList)
+        {
+            using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
+            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+            var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
+            if (exists > 0) continue;
+
+            using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
+                (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
+                 RESULT, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID, METHOD)
+             VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
+                 0, 99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = r.RequestedCollectionDate });
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.ContractReference });
+            cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
+            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+            cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });
+            cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
+            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
+            cmd.ExecuteNonQuery();
+        }
     }
 
     public void MarkBankFileDelivered(int rowId)
