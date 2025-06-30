@@ -287,6 +287,12 @@ public class EFTService
     /// </summary>
     public static string GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
     {
+        if (DateTime.Now.Year == deductionDate.Year && DateTime.Now.Month == deductionDate.Month
+            && DateTime.Now.Day >= deductionDate.Day)
+        {
+            deductionDate = DateTime.Now.AddDays(1);
+        }
+        
         string fileName = string.Empty;
         var writer = new EFTService(
             deductionDate: deductionDate,
