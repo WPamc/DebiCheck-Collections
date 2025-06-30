@@ -2,6 +2,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using DbConnection;
 using RMCollectionProcessor.Models;
 
 namespace FileProcessor
@@ -49,6 +52,14 @@ namespace FileProcessor
                     var destinationPath = Path.Combine(destinationFolder, fileName);
                     File.Copy(file, destinationPath, true);
                     Console.WriteLine($"{Path.GetFileName(file)}: {status} {fileType}");
+                    if (fileType == FileType.Reply && int.TryParse(generation, out var genNum))
+                    {
+                        var related = GetFileNameByGenerationNumber(genNum);
+                        if (!string.IsNullOrEmpty(related))
+                        {
+                            Console.WriteLine(related);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -93,6 +104,16 @@ namespace FileProcessor
             }
 
             return string.Empty;
+        }
+
+        private static string GetFileNameByGenerationNumber(int generationNumber)
+        {
+            using var conn = new SqlConnection(AppConfig.ConnectionString);
+            using var cmd = new SqlCommand("SELECT FILENAME FROM dbo.EDI_BANKFILES WHERE GENERATIONNUMBER = @gen", conn);
+            cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
+            conn.Open();
+            var result = cmd.ExecuteScalar();
+            return result?.ToString() ?? string.Empty;
         }
 
 
