@@ -1,11 +1,12 @@
 
 using System;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Data;
-using Microsoft.Data.SqlClient;
 using DbConnection;
+using Microsoft.Data.SqlClient;
 using RMCollectionProcessor.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FileProcessor
 {
@@ -13,7 +14,7 @@ namespace FileProcessor
     {
         static void Main(string[] args)
         {
-            var sourceFolder = args.Length > 0 ? args[0] : null;
+            var sourceFolder = @"C:\AbsaArchive\tests\ZR07675";
             if (string.IsNullOrWhiteSpace(sourceFolder))
             {
                 Console.WriteLine("Enter the folder path:");
