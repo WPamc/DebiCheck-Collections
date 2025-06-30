@@ -1,6 +1,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using RMCollectionProcessor.Models;
 
 namespace FileProcessor
@@ -38,7 +39,14 @@ namespace FileProcessor
                         ? Path.Combine(statusFolder, fileType.ToString())
                         : statusFolder;
                     Directory.CreateDirectory(destinationFolder);
-                    var destinationPath = Path.Combine(destinationFolder, Path.GetFileName(file));
+                    var generation = GetGenerationNumber(parsedRecords, fileType);
+                    var fileName = Path.GetFileName(file);
+                    if (!string.IsNullOrWhiteSpace(generation) &&
+                        (fileType == FileType.StatusReport || fileType == FileType.Reply))
+                    {
+                        fileName = $"{generation}_{fileName}";
+                    }
+                    var destinationPath = Path.Combine(destinationFolder, fileName);
                     File.Copy(file, destinationPath, true);
                     Console.WriteLine($"{Path.GetFileName(file)}: {status} {fileType}");
                 }
@@ -59,6 +67,29 @@ namespace FileProcessor
             if (parsedRecords.Length > 0 && parsedRecords[0] is TransmissionHeader000 th)
             {
                 return th.RecordStatus?.Trim().ToUpperInvariant() ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Extracts the generation number from the parsed records for the specified file type.
+        /// </summary>
+        /// <param name="parsedRecords">The parsed records.</param>
+        /// <param name="fileType">The detected file type.</param>
+        /// <returns>The generation number or an empty string.</returns>
+        private static string GetGenerationNumber(object[] parsedRecords, FileType fileType)
+        {
+            if (fileType == FileType.StatusReport)
+            {
+                var header = parsedRecords.OfType<StatusUserSetHeader080>().FirstOrDefault();
+                return header?.BankServUserCodeGenerationNumber.Trim() ?? string.Empty;
+            }
+
+            if (fileType == FileType.Reply)
+            {
+                var reply = parsedRecords.OfType<ReplyTransmissionStatus900>().FirstOrDefault();
+                return reply?.TransmissionNumber.Trim() ?? string.Empty;
             }
 
             return string.Empty;
