@@ -32,6 +32,11 @@ namespace FileProcessor
                     var parsedRecords = processor.ProcessFile(file);
                     var fileType = FileTypeIdentifier.Identify(parsedRecords);
                     Console.WriteLine($"{Path.GetFileName(file)}: {fileType}");
+
+                    var destinationFolder = Path.Combine(sourceFolder, fileType.ToString());
+                    Directory.CreateDirectory(destinationFolder);
+                    var destinationPath = Path.Combine(destinationFolder, Path.GetFileName(file));
+                    File.Copy(file, destinationPath, true);
                 }
                 catch (Exception ex)
                 {
