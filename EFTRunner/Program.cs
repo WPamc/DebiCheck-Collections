@@ -11,6 +11,8 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        var db = new DatabaseService();
+        await db.EnsureDailyCounterForTodayAsync();
         DateTime deductionDate = DateTime.Now;
         bool isTest =false;
         string fileName = "";
