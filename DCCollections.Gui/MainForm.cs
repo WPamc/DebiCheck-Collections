@@ -505,7 +505,7 @@ namespace DCCollections.Gui
 
         private void SetOperationsUiState(bool enabled)
         {
-            groupBox1.Enabled = enabled;
+            grpConfig.Enabled = enabled;
             btnGenerate.Enabled = enabled;
             btnCheckDuplicates.Enabled = enabled && rdoDebiCheck.Checked;
             chkTest.Enabled = enabled;
