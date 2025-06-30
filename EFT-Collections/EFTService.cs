@@ -290,16 +290,16 @@ public class EFTService
         int startSequenceNumber;
         if (isTest)
         {
-            generationNumber = db.PeekGenerationNumberAsync().GetAwaiter().GetResult() + 1;
-            startSequenceNumber = db.PeekDailyCounterAsync(deductionDate).GetAwaiter().GetResult() + 1;
+            generationNumber = db.PeekGenerationNumber() + 1;
+            startSequenceNumber = db.PeekDailyCounter(deductionDate) + 1;
         }
         else
         {
-            generationNumber = db.GetNextGenerationNumberAsync().GetAwaiter().GetResult();
-            startSequenceNumber = db.GetNextDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+            generationNumber = db.GetNextGenerationNumber();
+            startSequenceNumber = db.GetNextDailyCounter(DateTime.Today);
         }
 
-        var collections = db.GetCollectionsAsync(deductionDate).GetAwaiter().GetResult();
+        var collections = db.GetCollections(deductionDate);
         var transactionsToProcess = new List<EftTransaction>();
         foreach (var c in collections)
         {
@@ -319,7 +319,7 @@ public class EFTService
         int recordId = 0;
         if (isTest)
         {
-            recordId = db.CreateBankFileRecordAsync(Path.GetFileName(fileName), generationNumber, startSequenceNumber).GetAwaiter().GetResult();
+            recordId = db.CreateBankFileRecord(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
         }
         writer.GenerateFile(
             transactionsToProcess,
@@ -332,8 +332,8 @@ public class EFTService
 
         if (isTest)
         {
-            db.UpdateBankFileDailyCounterEndAsync(recordId, (int)lastSequenceNumber).GetAwaiter().GetResult();
-            db.SetDailyCounterAsync(deductionDate, (int)lastSequenceNumber).GetAwaiter().GetResult();
+            db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);
+            db.SetDailyCounter(deductionDate, (int)lastSequenceNumber);
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
         return Path.Combine(outputPath, fileName);

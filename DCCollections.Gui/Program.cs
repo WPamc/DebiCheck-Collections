@@ -11,7 +11,7 @@ namespace DCCollections.Gui
             var dcDb = new DatabaseService();
             dcDb.EnsureDailyCounterForToday();
             var eftDb = new EFT_Collections.DatabaseService();
-            eftDb.EnsureDailyCounterForTodayAsync().GetAwaiter().GetResult();
+            eftDb.EnsureDailyCounterForToday();
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
         }

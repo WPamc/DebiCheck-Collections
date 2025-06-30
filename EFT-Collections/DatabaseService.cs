@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Threading.Tasks;
 using DbConnection;
 
 namespace EFT_Collections;
@@ -24,15 +23,14 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
-    public async Task<List<DebtorCollectionData>> GetCollectionsAsync(DateTime deductionDay)
+    public List<DebtorCollectionData> GetCollections(DateTime deductionDay)
     {
         var results = new List<DebtorCollectionData>();
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(_collectionsSql, conn);
-        //cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Date) { Value = deductionDay });
-        await conn.OpenAsync();
-        using var reader = await cmd.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
+        conn.Open();
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
         {
             var data = new DebtorCollectionData
             {
@@ -48,16 +46,15 @@ public class DatabaseService
         return results;
     }
 
-    public CreditorDefaults GetCreditorDefaultsAsync(int creditorId)
+    public CreditorDefaults GetCreditorDefaults(int creditorId)
     {
-        // Stubbed method - would normally query using _creditorDefaultsSql
         return new CreditorDefaults();
     }
 
-    private async Task<int> GetNextCounterAsync(string subclass1, string? subclass2)
+    private int GetNextCounter(string subclass1, string? subclass2)
     {
         using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
+        conn.Open();
 
         using var cmd = new SqlCommand(@"SET NOCOUNT ON;
 UPDATE dbo.EDI_GENERICCOUNTERS
@@ -81,20 +78,20 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
         cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
 
-        var result = await cmd.ExecuteScalarAsync();
+        var result = cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
-    public Task<int> GetNextGenerationNumberAsync()
-        => GetNextCounterAsync("EFT GENERATIONNUMBER", null);
+    public int GetNextGenerationNumber()
+        => GetNextCounter("EFT GENERATIONNUMBER", null);
 
-    public Task<int> GetNextDailyCounterAsync(DateTime date)
-        => GetNextCounterAsync("EFT DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
+    public int GetNextDailyCounter(DateTime date)
+        => GetNextCounter("EFT DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
 
-    private async Task<int> PeekCounterAsync(string subclass1, string? subclass2)
+    private int PeekCounter(string subclass1, string? subclass2)
     {
         using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
+        conn.Open();
 
         using var cmd = new SqlCommand(@"SELECT COUNTER
   FROM dbo.EDI_GENERICCOUNTERS
@@ -106,17 +103,17 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@sub1", SqlDbType.VarChar, 100) { Value = subclass1 });
         cmd.Parameters.Add(new SqlParameter("@sub2", SqlDbType.VarChar, 100) { Value = (object?)subclass2 ?? DBNull.Value });
 
-        var result = await cmd.ExecuteScalarAsync();
+        var result = cmd.ExecuteScalar();
         return result == null ? 0 : Convert.ToInt32(result);
     }
 
-    public Task<int> PeekGenerationNumberAsync()
-        => PeekCounterAsync("EFT GENERATIONNUMBER", null);
+    public int PeekGenerationNumber()
+        => PeekCounter("EFT GENERATIONNUMBER", null);
 
-    public Task<int> PeekDailyCounterAsync(DateTime date)
-        => PeekCounterAsync("EFT DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
+    public int PeekDailyCounter(DateTime date)
+        => PeekCounter("EFT DAILYCOUNTER", date.ToString("yyyy-MM-dd"));
 
-    public async Task SetDailyCounterAsync(DateTime date, int counterValue)
+    public void SetDailyCounter(DateTime date, int counterValue)
     {
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(@"UPDATE dbo.EDI_GENERICCOUNTERS
@@ -137,11 +134,11 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
         cmd.Parameters.Add(new SqlParameter("@sub", SqlDbType.VarChar, 100) { Value = date.ToString("yyyy-MM-dd") });
         cmd.Parameters.Add(new SqlParameter("@val", SqlDbType.Int) { Value = counterValue });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 
-    public async Task EnsureDailyCounterForTodayAsync()
+    public void EnsureDailyCounterForToday()
     {
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(@"IF NOT EXISTS (
@@ -157,14 +154,14 @@ END", conn);
 
         cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
         cmd.Parameters.Add(new SqlParameter("@sub", SqlDbType.VarChar, 100) { Value = DateTime.Today.ToString("yyyy-MM-dd") });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 
-    public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
+    public int CreateBankFileRecord(string fileName, int generationNumber, int dailyCounterStart)
     {
         using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
+        conn.Open();
 
         using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANKFILES
                 (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
@@ -177,11 +174,11 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
         cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.Int) { Value = dailyCounterStart });
 
-        var result = await cmd.ExecuteScalarAsync();
+        var result = cmd.ExecuteScalar();
         return Convert.ToInt32(result);
     }
 
-    public async Task UpdateBankFileDailyCounterEndAsync(int rowId, int dailyCounterEnd)
+    public void UpdateBankFileDailyCounterEnd(int rowId, int dailyCounterEnd)
     {
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
@@ -191,11 +188,11 @@ END", conn);
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
         cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.Int) { Value = dailyCounterEnd });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 
-    public async Task MarkBankFileGenerationCompleteAsync(int rowId)
+    public void MarkBankFileGenerationComplete(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
@@ -204,11 +201,11 @@ END", conn);
        LASTCHANGEDATE = GETDATE()
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 
-    public async Task MarkBankFileDeliveredAsync(int rowId)
+    public void MarkBankFileDelivered(int rowId)
     {
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
@@ -217,7 +214,7 @@ END", conn);
        LASTCHANGEDATE = GETDATE()
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
-        await conn.OpenAsync();
-        await cmd.ExecuteNonQueryAsync();
+        conn.Open();
+        cmd.ExecuteNonQuery();
     }
 }
