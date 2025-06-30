@@ -305,7 +305,9 @@ END", conn);
     /// <param name="bankFileRowId">Row Id from EDI_BANKFILES to relate requests back to the file.</param>
     public void InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
     {
-        var recordList = records.ToList();
+        var recordList = records
+            .Where(r => string.Equals(r.DataSetStatus.Trim(), "L", StringComparison.OrdinalIgnoreCase))
+            .ToList();
         if (!recordList.Any()) return;
 
         if (bankFileRowId <= 0)
