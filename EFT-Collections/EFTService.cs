@@ -31,7 +31,16 @@ public class EFTService
         _creditorBranch = creditorDefaults.creditorBranch;
         _creditorAccount = creditorDefaults.creditorAccount;
         _creditorAbbreviation = creditorDefaults.creditorAbbreviation;
-        _deductionDate = deductionDate;
+        if (DateTime.Now.Year == deductionDate.Year && DateTime.Now.Month == deductionDate.Month
+            && DateTime.Now.Day >= deductionDate.Day)
+        {
+            _deductionDate = DateTime.Now.AddDays(1);
+        }
+        else
+        {
+            _deductionDate = deductionDate;
+        }
+       
         _typeOfService = typeOfService;
         _recordStatus = recordStatus;
     }
