@@ -28,10 +28,13 @@
     <None Update="SqlQueries\Collections - Copy %283%29.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SqlQueries\Collections - Copy %284%29.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SqlQueries\Collections - Copy.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SqlQueries\Collections.sql">
+    <None Update="SqlQueries\EFTCollections.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SqlQueries\CreditorDefaults.sql">

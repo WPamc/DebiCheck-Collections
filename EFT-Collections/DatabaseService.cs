@@ -20,7 +20,7 @@ public class DatabaseService
         var configuration = AppConfig.Configuration;
         _connectionString = AppConfig.ConnectionString;
         var queriesPath = configuration["SqlQueriesPath"] ?? "SqlQueries";
-        _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "Collections.sql"));
+        _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "EFTCollections.sql"));
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
@@ -29,7 +29,7 @@ public class DatabaseService
         var results = new List<DebtorCollectionData>();
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(_collectionsSql, conn);
-        cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Date) { Value = deductionDay });
+        //cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Date) { Value = deductionDay });
         await conn.OpenAsync();
         using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())

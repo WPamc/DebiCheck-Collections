@@ -1,4 +1,4 @@
-﻿DECLARE @DATEREQUESTED AS DATE = '2025/06/27'
+﻿DECLARE @DATEREQUESTED AS DATE = '2025/06/30'
 
  SELECT  z.SUBSSN,
   isnull(mm.BRANCHCODE,'') HomingBranch,
@@ -22,7 +22,7 @@ z.AMOUNTREQUESTED Amount ,
         -- otherwise fall back to the month-end
         ELSE EOMONTH(EffectiveBillingMonth) end DATEREQUESTED
 
-from BILLING_SPEC_INSTRUCTIONS z
+from BILLING_SPECINSTRUCTIONS z
   inner JOIN MEMB_MASTERS MM ON MM.SUBSSN =  z.SUBSSN AND RLSHIP = 1 
   AND  CASE
         WHEN EffectiveBillingMonth IS NULL

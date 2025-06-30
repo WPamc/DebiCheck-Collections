@@ -315,7 +315,7 @@ namespace DCCollections.Gui
                         var fileProcessor = new FileProcessor();
                         var records = fileProcessor.ProcessFile(file);
                         type = FileTypeIdentifier.Identify(records);
-                        if (records.Length > 0 && records[0] is TransmissionHeader000 th)
+                        if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
                             recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
                     }
                     catch { }

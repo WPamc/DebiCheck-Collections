@@ -21,7 +21,7 @@ public class DatabaseService
         var configuration = AppConfig.Configuration;
         _connectionString = AppConfig.ConnectionString;
         var queriesPath = configuration["SqlQueriesPath"] ?? "SqlQueries";
-        _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "Collections.sql"));
+        _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "DCCollections.sql"));
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
@@ -35,23 +35,32 @@ public class DatabaseService
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            var data = new DebtorCollectionData
+            try
             {
-                PaymentInformation = reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty,
-                RequestedCollectionDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RequestedCollectionDate))),
-                TrackingPeriod = reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))),
-                DebitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty,
-                EntryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty,
-                InstructedAmount = Convert.ToDecimal(reader["InstructedAmount"]),
-                MandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty,
-                DebtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty,
-                DebtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty,
-                DebtorAccountNumber = reader[nameof(DebtorCollectionData.DebtorAccountNumber)].ToString() ?? string.Empty,
-                AccountType = reader[nameof(DebtorCollectionData.AccountType)].ToString() ?? string.Empty,
-                ContractReference = reader[nameof(DebtorCollectionData.ContractReference)].ToString() ?? string.Empty,
-                RelatedCycleDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RelatedCycleDate)))
-            };
-            results.Add(data);
+
+                var data = new DebtorCollectionData
+                {
+                    PaymentInformation = reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty,
+                    RequestedCollectionDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RequestedCollectionDate))),
+                    TrackingPeriod = reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))),
+                    DebitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty,
+                    EntryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty,
+                    InstructedAmount = Convert.ToDecimal(reader["InstructedAmount"]),
+                    MandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty,
+                    DebtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty,
+                    DebtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty,
+                    DebtorAccountNumber = reader[nameof(DebtorCollectionData.DebtorAccountNumber)].ToString() ?? string.Empty,
+                    AccountType = reader[nameof(DebtorCollectionData.AccountType)].ToString() ?? string.Empty,
+                    ContractReference = reader[nameof(DebtorCollectionData.ContractReference)].ToString() ?? string.Empty,
+                    RelatedCycleDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RelatedCycleDate)))
+                };
+                results.Add(data);
+            }
+            catch (Exception ex)
+            {
+
+               // throw;
+            }
         }
         return results;
     }

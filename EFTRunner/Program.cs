@@ -12,9 +12,13 @@ public class Program
     public static async Task Main(string[] args)
     {
         DateTime deductionDate = DateTime.Now;
-        bool isTest = true;
+        bool isTest =false;
         string fileName = "";
-        string outputPath = AppContext.BaseDirectory;
+        string outputPath = @"C:\AbsaArchive\Live";
+        if (new DirectoryInfo(outputPath).Exists == false)
+        {
+            throw new Exception("Output Path does not exist");
+        }
         foreach (string arg in args)
         {
             var parts = arg.Split('=', 2);

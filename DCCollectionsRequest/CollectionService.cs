@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using RMCollectionProcessor.Models;
+using System.Security.Cryptography;
 
 namespace RMCollectionProcessor
 {
@@ -147,7 +148,12 @@ namespace RMCollectionProcessor
 
             var now = DateTime.Now;
             var cutOffTime = new TimeSpan(01, 30, 0);
-            if (now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
+            int testDate =  DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            if (deductionDay > testDate) {
+                deductionDay = testDate;
+            }
+            if ((now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)||
+                now.Date > new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
             {
                 foreach (var collection in collections)
                 {
