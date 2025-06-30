@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 using EFT_Collections;
+using DCService = global::DatabaseService;
 
 namespace DCCollections.Gui
 {
@@ -68,6 +69,7 @@ namespace DCCollections.Gui
             tabOperations.Controls.Add(_pbOperations);
             lvImportFiles.MultiSelect = true;
             LoadInitialPaths();
+            LoadCounters();
         }
 
         private static string RemovePassword(string connection)
@@ -538,6 +540,32 @@ namespace DCCollections.Gui
             _settings.ImportSortColumn = _importSortColumn;
             _settings.ImportSortDescending = _importSortDescending;
             _settings.Save();
+        }
+
+        /// <summary>
+        /// Retrieves the latest counter values from the database and displays them.
+        /// </summary>
+        private void LoadCounters()
+        {
+            try
+            {
+                var dcDb = new DCService();
+                int dcGen = dcDb.GetCurrentGenerationNumber();
+                int dcDaily = dcDb.GetCurrentDailyCounter(DateTime.Today);
+
+                var eftDb = new EFT_Collections.DatabaseService();
+                int eftGen = eftDb.PeekGenerationNumberAsync().GetAwaiter().GetResult();
+                int eftDaily = eftDb.PeekDailyCounterAsync(DateTime.Today).GetAwaiter().GetResult();
+
+                lblDcGenerationNumber.Text = $"DC GenerationNumber: {dcGen}";
+                lblDcDailyCounter.Text = $"DC DailyCounter: {dcDaily}";
+                lblEftGenerationNumber.Text = $"EFT GenerationNumber: {eftGen}";
+                lblEftDailyCounter.Text = $"EFT DailyCounter: {eftDaily}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
     }
 }
