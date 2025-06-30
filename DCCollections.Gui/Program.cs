@@ -8,8 +8,10 @@ namespace DCCollections.Gui
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            var dcDb = new DatabaseService();
+            dcDb.EnsureDailyCounterForToday();
+            var eftDb = new EFT_Collections.DatabaseService();
+            eftDb.EnsureDailyCounterForTodayAsync().GetAwaiter().GetResult();
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
         }

@@ -141,6 +141,26 @@ END", conn);
         await cmd.ExecuteNonQueryAsync();
     }
 
+    public async Task EnsureDailyCounterForTodayAsync()
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"IF NOT EXISTS (
+SELECT 1 FROM dbo.EDI_GENERICCOUNTERS
+ WHERE DESCRIPTION = @desc
+   AND SUBCLASS1 = 'EFT DAILYCOUNTER'
+   AND SUBCLASS2 = @sub)
+BEGIN
+    INSERT INTO dbo.EDI_GENERICCOUNTERS
+        (DESCRIPTION, SUBCLASS1, SUBCLASS2, COUNTER, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
+    VALUES (@desc, 'EFT DAILYCOUNTER', @sub, 0, 99, GETDATE(), 99, GETDATE());
+END", conn);
+
+        cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
+        cmd.Parameters.Add(new SqlParameter("@sub", SqlDbType.VarChar, 100) { Value = DateTime.Today.ToString("yyyy-MM-dd") });
+        await conn.OpenAsync();
+        await cmd.ExecuteNonQueryAsync();
+    }
+
     public async Task<int> CreateBankFileRecordAsync(string fileName, int generationNumber, int dailyCounterStart)
     {
         using var conn = new SqlConnection(_connectionString);
