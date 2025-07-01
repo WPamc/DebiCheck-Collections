@@ -34,6 +34,8 @@ namespace RMCollectionProcessor
 
             var fileType = FileTypeIdentifier.Identify(parsed);
             var dbService = new DatabaseService();
+            int statusFound = 0;
+            int statusInserted = 0;
             switch (fileType)
             {
                 case FileType.CollectionRequest:
@@ -43,8 +45,8 @@ namespace RMCollectionProcessor
                     break;
                 case FileType.StatusReport:
                     var statusRecords = ProcessStatusReport(parsed);
-                 
-                    dbService.InsertCollectionResponses(statusRecords, filePath);
+                    statusFound = statusRecords.Count();
+                    statusInserted = dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
                 case FileType.Reply:
                     var reply = parsed.OfType<ReplyTransmissionStatus900>().FirstOrDefault();
@@ -65,7 +67,7 @@ namespace RMCollectionProcessor
                     break;
             }
 
-            return new ParseResult(parsed, fileType);
+            return new ParseResult(parsed, fileType, statusFound, statusInserted);
         }
 
         /// <summary>
