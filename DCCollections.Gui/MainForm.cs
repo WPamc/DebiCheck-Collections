@@ -440,6 +440,8 @@ namespace DCCollections.Gui
 
             try
             {
+                int totalFound = 0;
+                int totalInserted = 0;
                 foreach (ListViewItem item in lvImportFiles.SelectedItems)
                 {
                     var tagObj = item.Tag;
@@ -461,10 +463,21 @@ namespace DCCollections.Gui
                     if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    await Task.Run(() => _dcCollectionservice.ParseFile(path));
+                    var result = await Task.Run(() => _dcCollectionservice.ParseFile(path));
+                    if (result.FileType == FileType.StatusReport)
+                    {
+                        totalFound += result.StatusRecordsFound;
+                        totalInserted += result.StatusRecordsInserted;
+                    }
                 }
 
-                MessageBox.Show("Import complete.", "Success");
+                var msg = "Import complete.";
+                if (totalFound > 0)
+                {
+                    msg += $" Inserted {totalInserted} of {totalFound} status records.";
+                }
+
+                MessageBox.Show(msg, "Success");
             }
             catch (Exception ex)
             {
