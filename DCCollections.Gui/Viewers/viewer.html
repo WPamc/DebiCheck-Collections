@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed-Width File Viewer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        #fileInput {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .record-container {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .raw-text-container {
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            white-space: pre;
+            font-family: monospace;
+            cursor: default;
+            word-break: break-all;
+            user-select: none; /* Prevent text selection interference */
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            .field-table th, .field-table td {
+                border: 1px solid #dee2e6;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .field-table th {
+                background-color: #e9ecef;
+            }
+
+        .highlight-text {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .highlight-row {
+            background-color: #b8daff; /* Light blue for table row */
+        }
+
+        .record-type-label {
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 5px;
+        }
+
+        .error-message {
+            color: red;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Fixed-Width File Viewer</h1>
+    <input type="file" id="fileInput" accept=".txt,.*">
+    <div id="output"></div>
+
+    <script>
+        const recordModels = {
+            TransmissionHeader000: {
+                name: "TransmissionHeader000",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "RecordStatus", length: 1 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "UserName", length: 30 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "Destination", length: 5 },
+                    { name: "Filler1", length: 119 },
+                    { name: "ForLdUsersUse", length: 20 }
+                ]
+            },
+            CollectionHeader080: {
+                name: "CollectionHeader080",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "BankServRecordId", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "FirstSequenceNumber", length: 6 },
+                    { name: "UserGenerationNumber", length: 4 },
+                    { name: "ServiceType", length: 8 },
+                    { name: "CreationDateTime", length: 19 },
+                    { name: "TotalTransactions", length: 15 },
+                    { name: "PaymentInfoId", length: 20 },
+                    { name: "AccountTypeCorrection", length: 1 },
+                    { name: "Filler", length: 115 }
+                ]
+            },
+            CollectionTxLine01: {
+                name: "CollectionTxLine01",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "BankServRecordId", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "LineCount", length: 2 },
+                    { name: "InitiatingParty", length: 35 },
+                    { name: "PaymentInformation", length: 35 },
+                    { name: "RequestedCollectionDate", length: 19 },
+                    { name: "CreditorName", length: 35 },
+                    { name: "CreditorContactDetails", length: 30 },
+                    { name: "CreditorAbbreviatedShortName", length: 10 },
+                    { name: "Filler", length: 16 }
+                ]
+            },
+            CollectionTxLine02: {
+                name: "CollectionTxLine02",
+                fields: [
+                    { name: "RecordIdentifier", length: 2 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "LineCount", length: 2 },
+                    { name: "CreditorEmail", length: 90 },
+                    { name: "CreditorAccountNumber", length: 19 },
+                    { name: "CreditorBankBranch", length: 6 },
+                    { name: "TrackingPeriod", length: 2 },
+                    { name: "DebitSequence", length: 4 },
+                    { name: "EntryClass", length: 4 },
+                    { name: "InstructedAmount", length: 14 },
+                    { name: "Currency", length: 3 },
+                    { name: "ChargeBearer", length: 4 },
+                    { name: "MandateReference", length: 22 },
+                    { name: "DebtorBankBranch", length: 6 },
+                    { name: "Filler", length: 14 }
+                ]
+            },
+            CollectionTxLine03: {
+                name: "CollectionTxLine03",
+                fields: [
+                    { name: "RecordIdentifier", length: 2 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "LineCount", length: 2 },
+                    { name: "DebtorName", length: 35 },
+                    { name: "DebtorAccountNumber", length: 19 },
+                    { name: "AccountType", length: 35 },
+                    { name: "ContractReference", length: 14 },
+                    { name: "RelatedCycleDate", length: 10 },
+                    { name: "Filler", length: 75 }
+                ]
+            },
+            CollectionTrailer080: {
+                name: "CollectionTrailer080",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "BankServRecordId", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "FirstSequenceNumber", length: 6 },
+                    { name: "LastSequenceNumber", length: 6 },
+                    { name: "NumberOfCollectionRecords", length: 15 },
+                    { name: "SumOfAcctNosAndAmounts", length: 18 },
+                    { name: "Filler", length: 143 }
+                ]
+            },
+            TransmissionTrailer999: {
+                name: "TransmissionTrailer999",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataSetStatus", length: 1 },
+                    { name: "NumberOfRecords", length: 9 },
+                    { name: "Filler", length: 185 }
+                ]
+            },
+            StatusUserSetHeader080: {
+                name: "StatusUserSetHeader080",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "BankServUserCodeGenerationNumber", length: 7 },
+                    { name: "RmService", length: 34 },
+                    { name: "Filler", length: 149 }
+                ]
+            },
+            StatusUserSetHeaderLine01: {
+                name: "StatusUserSetHeaderLine01",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "LineCount", length: 2 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "UserGenerationNumber", length: 4 },
+                    { name: "MemberNumberOfDebtorAgent", length: 6 },
+                    { name: "MemberNumberOfCreditorAgent", length: 6 },
+                    { name: "OriginalMessageId", length: 34 },
+                    { name: "GroupLevelRejectReasonCode", length: 6 },
+                    { name: "OriginalNumberOfDirectDebits", length: 15 },
+                    { name: "GroupLevelStatus", length: 4 },
+                    { name: "GroupLevelStatusCode", length: 4 },
+                    { name: "Filler", length: 87 }
+                ]
+            },
+            StatusUserSetHeaderLine02: {
+                name: "StatusUserSetHeaderLine02",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "LineCount", length: 2 },
+                    { name: "GroupLevelErrorCodeDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            StatusUserSetTransactionLine01: {
+                name: "StatusUserSetTransactionLine01",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "LineCount", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "UserGenerationNumber", length: 4 },
+                    { name: "OriginalPmtInfId", length: 23 },
+                    { name: "Filler1", length: 2 },
+                    { name: "OriginalEndToEndTransactionIdentifier", length: 35 },
+                    { name: "TransactionStatus", length: 4 },
+                    { name: "CreditorNameNotApplicable", length: 35 },
+                    { name: "Filler2", length: 4 },
+                    { name: "InstructedAmount", length: 14 },
+                    { name: "TransactionCurrency", length: 3 },
+                    { name: "SequenceType", length: 4 },
+                    { name: "MandateReferenceNumber", length: 22 },
+                    { name: "ContractReferenceNumber", length: 14 },
+                    { name: "AbbreviatedUltimateCreditorShortName", length: 10 }
+                ]
+            },
+            StatusUserSetTransactionLine02: {
+                name: "StatusUserSetTransactionLine02",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "LineCount", length: 2 },
+                    { name: "OriginalDebtorName", length: 35 },
+                    { name: "OriginalDebtorAccountNumber", length: 19 },
+                    { name: "OriginalDebtorAccountType", length: 35 },
+                    { name: "OriginalDebtorBankBranch", length: 6 },
+                    { name: "OriginalCreditorBankBranch", length: 6 },
+                    { name: "OriginalTrackingPeriod", length: 2 },
+                    { name: "OriginalDebitSequence", length: 4 },
+                    { name: "OriginalEntryClass", length: 4 },
+                    { name: "OriginalInstructedAmount", length: 14 },
+                    { name: "OriginalCurrency", length: 3 },
+                    { name: "OriginalChargeBearer", length: 4 },
+                    { name: "OriginalMandateReference", length: 22 },
+                    { name: "OriginalContractReference", length: 14 },
+                    { name: "OriginalRelatedCycleDate", length: 10 },
+                    { name: "Filler", length: 10 }
+                ]
+            },
+            StatusUserSetTransactionLine03: {
+                name: "StatusUserSetTransactionLine03",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "LineCount", length: 2 },
+                    { name: "TransactionReasonCode", length: 6 },
+                    { name: "TransactionReasonDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            StatusUserSetTransactionLine04: {
+                name: "StatusUserSetTransactionLine04",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "LineCount", length: 2 },
+                    { name: "TransactionReasonCode", length: 6 },
+                    { name: "TransactionReasonDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            StatusUserSetErrorRecord085: {
+                name: "StatusUserSetErrorRecord085",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "RecordSequenceNumber", length: 6 },
+                    { name: "UserGenerationNumber", length: 4 },
+                    { name: "OriginalPmtInfId", length: 23 },
+                    { name: "OriginalEndToEndTransactionIdentifier", length: 35 },
+                    { name: "ErrorReasonCode", length: 6 },
+                    { name: "ErrorReasonDescription", length: 135 },
+                    { name: "Filler", length: 10 }
+                ]
+            },
+            StatusUserSetTrailer084: {
+                name: "StatusUserSetTrailer084",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "FirstSequenceNumber", length: 6 },
+                    { name: "LastSequenceNumber", length: 6 },
+                    { name: "NumberOfRecords", length: 15 },
+                    { name: "SumOfAmounts", length: 18 },
+                    { name: "Filler", length: 143 }
+                ]
+            },
+            ReplyTransmissionStatus900: {
+                name: "ReplyTransmissionStatus900",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "TransmissionStatus", length: 4 },
+                    { name: "TransmissionStatusDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            ReplyUserSetStatus900: {
+                name: "ReplyUserSetStatus900",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "UserSetStatus", length: 4 },
+                    { name: "UserSetStatusDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            ReplyRejectedMessage901: {
+                name: "ReplyRejectedMessage901",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "RejectedMessageReasonCode", length: 6 },
+                    { name: "RejectedMessageReasonDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            },
+            ReplyTransmissionRejectReason901: {
+                name: "ReplyTransmissionRejectReason901",
+                fields: [
+                    { name: "RecordIdentifier", length: 3 },
+                    { name: "DataStatus", length: 1 },
+                    { name: "BankServRecordIdentifier", length: 2 },
+                    { name: "BankServUserCode", length: 4 },
+                    { name: "TransmissionDate", length: 8 },
+                    { name: "UserCode", length: 5 },
+                    { name: "TransmissionNumber", length: 7 },
+                    { name: "TransmissionRejectReasonCode", length: 6 },
+                    { name: "TransmissionRejectReasonDescription", length: 135 },
+                    { name: "Filler", length: 58 }
+                ]
+            }
+        };
+
+        // Pre-calculate start positions for fields
+        for (const modelKey in recordModels) {
+            let currentPos = 0;
+            recordModels[modelKey].fields.forEach(field => {
+                field.start = currentPos;
+                currentPos += field.length;
+                field.end = currentPos;
+            });
+            recordModels[modelKey].totalLength = currentPos;
+        }
+
+        let _lastProcessedRecordType = null;
+
+        function customRecordSelector(recordLine) {
+            if (typeof recordLine !== 'string' || recordLine.trim() === '') {
+                _lastProcessedRecordType = null;
+                return null;
+            }
+
+            let selectedType = null;
+
+            const recordId2Char = recordLine.substring(0, 2);
+            if (recordId2Char === "08") {
+                if (_lastProcessedRecordType === recordModels.CollectionHeader080) {
+                    selectedType = recordModels.CollectionTxLine01;
+                } else if (_lastProcessedRecordType === recordModels.CollectionTxLine01) {
+                    selectedType = recordModels.CollectionTxLine02;
+                } else if (_lastProcessedRecordType === recordModels.CollectionTxLine02) {
+                    selectedType = recordModels.CollectionTxLine03;
+                }
+
+                if (selectedType !== null) {
+                    _lastProcessedRecordType = selectedType;
+                    return selectedType;
+                }
+            }
+
+            if (recordLine.length >= 3) {
+                const recordId = recordLine.substring(0, 3);
+                switch (recordId) {
+                    case "000": selectedType = recordModels.TransmissionHeader000; break;
+                    case "999": selectedType = recordModels.TransmissionTrailer999; break;
+                    case "084": selectedType = recordModels.StatusUserSetTrailer084; break;
+                    case "085": selectedType = recordModels.StatusUserSetErrorRecord085; break;
+
+                    case "080":
+                        if (recordLine.length >= 7) {
+                            const bankservId = recordLine.substring(4, 6);
+                            if (bankservId === "04") selectedType = recordModels.CollectionHeader080;
+                            else if (bankservId === "92") selectedType = recordModels.CollectionTrailer080;
+                            else if (bankservId === "08") selectedType = recordModels.CollectionTxLine01; // This case is handled by _lastProcessedRecordType logic above, but kept for completeness based on C#
+                            else selectedType = recordModels.StatusUserSetHeader080;
+                        } else {
+                            selectedType = recordModels.StatusUserSetHeader080;
+                        }
+                        break;
+
+                    case "081":
+                        if (_lastProcessedRecordType === recordModels.StatusUserSetHeader080) selectedType = recordModels.StatusUserSetHeaderLine01;
+                        else if (_lastProcessedRecordType === recordModels.StatusUserSetHeaderLine01) selectedType = recordModels.StatusUserSetHeaderLine02;
+                        break;
+
+                    case "082":
+                        if (_lastProcessedRecordType === recordModels.StatusUserSetHeaderLine02 ||
+                            _lastProcessedRecordType === recordModels.StatusUserSetTransactionLine04 ||
+                            _lastProcessedRecordType === recordModels.StatusUserSetErrorRecord085) {
+                            selectedType = recordModels.StatusUserSetTransactionLine01;
+                        } else if (_lastProcessedRecordType === recordModels.StatusUserSetTransactionLine01) selectedType = recordModels.StatusUserSetTransactionLine02;
+                        else if (_lastProcessedRecordType === recordModels.StatusUserSetTransactionLine02) selectedType = recordModels.StatusUserSetTransactionLine03;
+                        else if (_lastProcessedRecordType === recordModels.StatusUserSetTransactionLine03) selectedType = recordModels.StatusUserSetTransactionLine04;
+                        break;
+
+                    case "900":
+                        if (recordLine.length >= 8) {
+                            const indicator900 = recordLine.substring(4, 7);
+                            if (indicator900 === "000") selectedType = recordModels.ReplyTransmissionStatus900;
+                            else if (indicator900 === "080") selectedType = recordModels.ReplyUserSetStatus900;
+                        }
+                        break;
+
+                    case "901":
+                        if (recordLine.length >= 8) {
+                            const indicator901 = recordLine.substring(4, 7);
+                            if (indicator901 === "080") selectedType = recordModels.ReplyRejectedMessage901;
+                            else if (indicator901 === "000") selectedType = recordModels.ReplyTransmissionRejectReason901;
+                        }
+                        break;
+                }
+            }
+
+            if (selectedType !== null) {
+                _lastProcessedRecordType = selectedType;
+            }
+            return selectedType;
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const content = e.target.result;
+                    processFileContent(content);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function processFileContent(content) {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+            const lines = content.split(/\r\n|\n|\r/); // Handle different line endings
+
+            lines.forEach((line, index) => {
+                if (line.trim() === '') return; // Skip empty lines
+
+                const recordContainer = document.createElement('div');
+                recordContainer.className = 'record-container';
+                recordContainer.id = `record-container-${index}`;
+
+                const rawTextContainer = document.createElement('div');
+                rawTextContainer.className = 'raw-text-container';
+                rawTextContainer.id = `raw-text-${index}`;
+                rawTextContainer.textContent = line; // Initial display
+                recordContainer.appendChild(rawTextContainer);
+
+                const model = customRecordSelector(line);
+                const recordTypeLabel = document.createElement('div');
+                recordTypeLabel.className = 'record-type-label';
+
+                if (model) {
+                    recordTypeLabel.textContent = `Record Type: ${model.name}`;
+                    recordContainer.appendChild(recordTypeLabel);
+
+                    const table = document.createElement('table');
+                    table.className = 'field-table';
+                    table.id = `table-${index}`;
+                    const header = table.createTHead().insertRow();
+                    header.insertCell().textContent = 'Field Name';
+                    header.insertCell().textContent = 'Value';
+                    header.insertCell().textContent = 'Start';
+                    header.insertCell().textContent = 'Length';
+
+                    const tbody = table.createTBody();
+                    let currentPos = 0;
+                    model.fields.forEach((field, fieldIndex) => {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-${fieldIndex}`;
+                        row.insertCell().textContent = field.name;
+                        const fieldValue = line.substring(field.start, field.end);
+                        row.insertCell().textContent = fieldValue;
+                        row.insertCell().textContent = field.start;
+                        row.insertCell().textContent = field.length;
+                        currentPos = field.end;
+                    });
+
+                    if (currentPos < line.length) {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-unmapped`;
+                        row.insertCell().textContent = "Unmapped Trailing Data";
+                        row.insertCell().textContent = line.substring(currentPos);
+                        row.insertCell().textContent = currentPos;
+                        row.insertCell().textContent = line.length - currentPos;
+                        row.style.fontStyle = "italic";
+                        row.style.color = "grey";
+                    }
+                    if (model.totalLength > line.length) {
+                        const row = tbody.insertRow();
+                        row.id = `row-${index}-shortfall`;
+                        row.insertCell().textContent = "Line Shorter Than Model";
+                        row.insertCell().textContent = `Expected ${model.totalLength}, Got ${line.length}`;
+                        row.setAttribute("colspan", "3");
+                        row.style.color = "orange";
+                    }
+
+
+                    recordContainer.appendChild(table);
+
+                    // Add mousemove listener to raw text
+                    rawTextContainer.addEventListener('mousemove', (e) => {
+                        handleRawTextMouseMove(e, line, model, index);
+                    });
+                    rawTextContainer.addEventListener('mouseleave', () => {
+                        clearHighlights(index, model, line);
+                    });
+
+                } else {
+                    recordTypeLabel.textContent = 'Record Type: Unknown';
+                    recordTypeLabel.classList.add('error-message');
+                    recordContainer.appendChild(recordTypeLabel);
+                }
+                outputDiv.appendChild(recordContainer);
+            });
+        }
+
+        let lastHighlightedField = { lineIndex: -1, fieldIndex: -1 };
+
+        function handleRawTextMouseMove(event, line, model, lineIndex) {
+            const rawTextContainer = document.getElementById(`raw-text-${lineIndex}`);
+            const table = document.getElementById(`table-${lineIndex}`);
+            if (!rawTextContainer || !table) return;
+
+            // Calculate character index from mouse position
+            // This is an approximation and might need refinement for precise character boundary detection
+            const rect = rawTextContainer.getBoundingClientRect();
+            const charWidth = rawTextContainer.scrollWidth / line.length; // Approximate char width
+            const mouseXInText = event.clientX - rect.left + rawTextContainer.scrollLeft;
+            const charIndex = Math.floor(mouseXInText / charWidth);
+
+            let currentFieldIndex = -1;
+            for (let i = 0; i < model.fields.length; i++) {
+                const field = model.fields[i];
+                if (charIndex >= field.start && charIndex < field.end) {
+                    currentFieldIndex = i;
+                    break;
+                }
+            }
+
+            if (lastHighlightedField.lineIndex === lineIndex && lastHighlightedField.fieldIndex === currentFieldIndex) {
+                return; // No change in highlighted field
+            }
+
+            // Clear previous highlights for this line
+            clearHighlights(lineIndex, model, line);
+
+            if (currentFieldIndex !== -1) {
+                const field = model.fields[currentFieldIndex];
+
+                // Highlight text segment
+                const prefix = line.substring(0, field.start);
+                const highlighted = line.substring(field.start, field.end);
+                const suffix = line.substring(field.end);
+                rawTextContainer.innerHTML = ''; // Clear existing content
+                rawTextContainer.appendChild(document.createTextNode(prefix));
+                const span = document.createElement('span');
+                span.className = 'highlight-text';
+                span.textContent = highlighted;
+                rawTextContainer.appendChild(span);
+                rawTextContainer.appendChild(document.createTextNode(suffix));
+
+                // Highlight table row
+                const row = document.getElementById(`row-${lineIndex}-${currentFieldIndex}`);
+                if (row) {
+                    row.classList.add('highlight-row');
+                }
+                lastHighlightedField = { lineIndex, fieldIndex: currentFieldIndex };
+            } else {
+                lastHighlightedField = { lineIndex, fieldIndex: -1 };
+            }
+        }
+
+        function clearHighlights(lineIndex, model, originalLine) {
+            const rawTextContainer = document.getElementById(`raw-text-${lineIndex}`);
+            if (rawTextContainer) {
+                rawTextContainer.textContent = originalLine; // Restore original text
+            }
+
+            const table = document.getElementById(`table-${lineIndex}`);
+            if (table) {
+                const rows = table.getElementsByTagName('tr');
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].classList.remove('highlight-row');
+                }
+            }
+            if (lastHighlightedField.lineIndex === lineIndex) {
+                lastHighlightedField = { lineIndex: -1, fieldIndex: -1 };
+            }
+        }
+
+    </script>
+</body>
+</html>
