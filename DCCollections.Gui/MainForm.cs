@@ -109,7 +109,12 @@ namespace DCCollections.Gui
                     var result = _dcCollectionservice.ParseFile(ofd.FileName);
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
-                    MessageBox.Show($"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).", "Success");
+                    var msg = $"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).";
+                    if (_currentFileType == FileType.StatusReport)
+                    {
+                        msg += $" Inserted {result.StatusRecordsInserted} of {result.StatusRecordsFound} status records.";
+                    }
+                    MessageBox.Show(msg, "Success");
                 }
                 catch (Exception ex)
                 {

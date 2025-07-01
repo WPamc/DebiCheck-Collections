@@ -381,10 +381,11 @@ END", conn);
     /// </summary>
     /// <param name="statusRecords">A collection of transaction data from the status report.</param>
     /// <param name="filePath">The path of the status report file being processed.</param>
-    public void InsertCollectionResponses(IEnumerable<StatusReportTransaction> statusRecords, string filePath)
+    public int InsertCollectionResponses(IEnumerable<StatusReportTransaction> statusRecords, string filePath)
     {
         var recordList = statusRecords.ToList();
-        if (!recordList.Any()) return;
+        int inserted = 0;
+        if (!recordList.Any()) return inserted;
 
         string fileName = Path.GetFileName(filePath);
         int bankFileRowId = GetBankFileRowId(fileName);
@@ -467,11 +468,10 @@ END", conn);
             try
             {
                 insertCmd.ExecuteNonQuery();
+                inserted++;
             }
             catch (Exception ex)
             {
-
-                //throw;
             }
 
             existingResponses.Add(r.OriginalPaymentInformation);
@@ -484,5 +484,7 @@ END", conn);
             updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             updateCmd.ExecuteNonQuery();
         }
+
+        return inserted;
     }
 }
