@@ -18,6 +18,7 @@ public class EftFileIdentifier
 {
     private readonly Dictionary<EftFileType, HashSet<Type>> _fileTypeSignatures;
     private readonly MultiRecordEngine _universalEngine;
+    private Type _lastProcessedRecordType;
 
     public EftFileIdentifier()
     {
@@ -70,8 +71,10 @@ public class EftFileIdentifier
             typeof(UnpaidSetHeader011),
             typeof(UnpaidTransactionDetail013),
             typeof(UnpaidSetTrailer014),
+            //typeof(RedirectsSetHeader016),
+            //typeof(RedirectsTransactionDetail017),
+            //typeof(RedirectsSetTrailer018),
             typeof(OutputFileTrailer019)
-        // Add other models here if they become relevant for identification
         )
         {
             RecordSelector = new RecordTypeSelector(CustomSelectorForAllEftTypes)
@@ -80,45 +83,97 @@ public class EftFileIdentifier
 
     /// <summary>
     /// Custom record selector for the universal FileHelpers engine.
-    /// Distinguishes between all known EFT record types based on identifiers.
+    /// Distinguishes between all known EFT record types based on identifiers and file structure context.
     /// </summary>
     private Type CustomSelectorForAllEftTypes(MultiRecordEngine engine, string recordLine)
     {
-        if (string.IsNullOrWhiteSpace(recordLine) || recordLine.Length < 3) return null;
+        if (string.IsNullOrWhiteSpace(recordLine) || recordLine.Length < 3)
+        {
+            _lastProcessedRecordType = null;
+            return null;
+        }
 
         string recId = recordLine.Substring(0, 3);
+        Type selectedType = null;
 
         switch (recId)
         {
-            case "000": return typeof(TransmissionHeader000);
-            case "999": return typeof(TransmissionTrailer999);
-            case "001": // EFT User Set records (Header, Transaction, Contra, Trailer)
-                if (recordLine.Length < 5) return null;
-                string bankservId = recordLine.Substring(4, 2); // Position 4, length 2 (0-indexed)
-                switch (bankservId)
+            case "000":
+                selectedType = typeof(TransmissionHeader000);
+                break;
+            case "999":
+                selectedType = typeof(TransmissionTrailer999);
+                break;
+            case "001": // EFT User Set records require contextual parsing
+                if (recordLine.Length < 5) break;
+                string bankservId = recordLine.Substring(4, 2);
+
+                if (bankservId == "04")
                 {
-                    case "04": return typeof(EftUserHeader001);    // Spec 5.1.2.1
-                    case "50": return typeof(EftStandardTransaction001); // Spec 5.1.2.2
-                    // A Contra Record can be identified by "52" (standard EFT) or "12" (often seen in specific bank implementations).
-                    // Both are mapped to the same EftContraRecord001 class to handle variations.
-                    case "52":
-                    case "12":
-                        return typeof(EftContraRecord001);       // Spec 5.1.2.3 uses "52", some contexts use "12"
-                    case "92": return typeof(EftUserTrailer001);      // Spec 5.1.2.4
-                    default: return null;
+                    selectedType = typeof(EftUserHeader001);
                 }
-            case "900": return typeof(ResponseStatus900);         // Spec 5.1.14.1, 5.1.14.3
-            case "901": return typeof(RejectionReason901);        // Spec 5.1.14.6
-            case "903": return typeof(AcceptedReportRecord903);   // Spec 5.1.14.5
-            case "010": return typeof(OutputFileHeader010);       // Spec 5.1.4.1
-            case "011": return typeof(UnpaidSetHeader011);        // Spec 5.1.4.2
-            case "013": return typeof(UnpaidTransactionDetail013);// Spec 5.1.4.3
-            case "014": return typeof(UnpaidSetTrailer014);       // Spec 5.1.4.4
-            case "019": return typeof(OutputFileTrailer019);      // Spec 5.1.4.8
-            // Add cases for "016" (RedirectsSetHeader), etc., if those models are implemented
-            default:
-                return null;
+                else if (bankservId == "92")
+                {
+                    selectedType = typeof(EftUserTrailer001);
+                }
+                else if (bankservId == "10" || bankservId == "50")
+                {
+                    // This is a standard transaction, can appear after header or another transaction
+                    if (_lastProcessedRecordType == typeof(EftUserHeader001) ||
+                        _lastProcessedRecordType == typeof(EftStandardTransaction001))
+                    {
+                        selectedType = typeof(EftStandardTransaction001);
+                    }
+                }
+                else if (bankservId == "12" || bankservId == "52")
+                {
+                    // This is a contra record, must appear after a standard transaction
+                    if (_lastProcessedRecordType == typeof(EftStandardTransaction001))
+                    {
+                        selectedType = typeof(EftContraRecord001);
+                    }
+                }
+                break;
+            case "900":
+                selectedType = typeof(ResponseStatus900);
+                break;
+            case "901":
+                selectedType = typeof(RejectionReason901);
+                break;
+            case "903":
+                selectedType = typeof(AcceptedReportRecord903);
+                break;
+            case "010":
+                selectedType = typeof(OutputFileHeader010);
+                break;
+            case "011":
+                selectedType = typeof(UnpaidSetHeader011);
+                break;
+            case "013":
+                selectedType = typeof(UnpaidTransactionDetail013);
+                break;
+            case "014":
+                selectedType = typeof(UnpaidSetTrailer014);
+                break;
+            //case "016":
+            //    selectedType = typeof(RedirectsSetHeader016);
+            //    break;
+            //case "017":
+            //    selectedType = typeof(RedirectsTransactionDetail017);
+            //    break;
+            //case "018":
+            //    selectedType = typeof(RedirectsSetTrailer018);
+            //    break;
+            case "019":
+                selectedType = typeof(OutputFileTrailer019);
+                break;
         }
+
+        if (selectedType != null)
+        {
+            _lastProcessedRecordType = selectedType;
+        }
+        return selectedType;
     }
 
     /// <summary>
@@ -133,6 +188,8 @@ public class EftFileIdentifier
         {
             return EftFileType.Unknown;
         }
+
+        _lastProcessedRecordType = null; // Reset state for each new file identification
 
         string fileName = Path.GetFileName(filePath).ToUpperInvariant();
         EftFileType hintedType = EftFileType.Unknown;
