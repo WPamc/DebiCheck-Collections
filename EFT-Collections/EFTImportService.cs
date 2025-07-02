@@ -124,10 +124,28 @@ namespace EFT_Collections
                 bankFileId = db.CreateBankFileRecord(fileName, 0, 0);
             }
 
-            var unpaidData = records.OfType<UnpaidTransactionDetail013>().ToList();
-            if (unpaidData.Any())
+            string currentActionDate = string.Empty;
+            var detailBuffer = new List<UnpaidTransactionDetail013>();
+            foreach (var record in records)
             {
-                db.InsertUnpaidTransactions(unpaidData, bankFileId);
+                switch (record)
+                {
+                    case UnpaidSetHeader011 header:
+                        if (detailBuffer.Any())
+                        {
+                            db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
+                            detailBuffer.Clear();
+                        }
+                        currentActionDate = header.ActionDateForDataSet;
+                        break;
+                    case UnpaidTransactionDetail013 detail:
+                        detailBuffer.Add(detail);
+                        break;
+                }
+            }
+            if (detailBuffer.Any())
+            {
+                db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
             }
 
             var redirectData = records.OfType<RedirectsTransactionDetail017>().ToList();
