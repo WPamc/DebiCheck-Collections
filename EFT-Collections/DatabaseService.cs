@@ -24,7 +24,7 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
-    public int InsertUnpaidTransactions(IEnumerable<UnpaidTransactionDetail013> records, int bankFileRowId)
+    public int InsertUnpaidTransactions(IEnumerable<UnpaidTransactionDetail013> records, int bankFileRowId, string actionDateForDataSet)
     {
         int inserted = 0;
         if (!records.Any()) return inserted;
@@ -44,7 +44,7 @@ public class DatabaseService
                  VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
                      0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
-            DateTime.TryParse(r.ActionDate, out var dateRequested);
+            DateTime.TryParse(actionDateForDataSet, out var dateRequested);
             decimal.TryParse(r.AmountInCents, out var amountRequestedInCents);
             var amountRequested = amountRequestedInCents / 100m;
 
@@ -54,7 +54,7 @@ public class DatabaseService
             cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference });
             cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
             cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
-            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 2 }); // EFT
+            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 2 });
             try
             {
                 inserted += cmd.ExecuteNonQuery();
