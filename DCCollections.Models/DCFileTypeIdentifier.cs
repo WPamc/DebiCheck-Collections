@@ -5,7 +5,7 @@ namespace RMCollectionProcessor.Models
     /// <summary>
     /// Defines the types of RM files that can be processed.
     /// </summary>
-    public enum FileType
+    public enum DCFileType
     {
         /// <summary>
         /// The file type could not be determined.
@@ -28,40 +28,40 @@ namespace RMCollectionProcessor.Models
     /// <summary>
     /// Provides functionality to identify the type of a parsed RM file.
     /// </summary>
-    public static class FileTypeIdentifier
+    public static class DCFileTypeIdentifier
     {
         /// <summary>
         /// Identifies the file type by inspecting the parsed record objects.
         /// </summary>
         /// <param name="parsedRecords">An array of record objects parsed by the FileHelpers engine.</param>
-        /// <returns>The identified <see cref="FileType"/>.</returns>
-        public static FileType Identify(object[] parsedRecords)
+        /// <returns>The identified <see cref="DCFileType"/>.</returns>
+        public static DCFileType Identify(object[] parsedRecords)
         {
             if (parsedRecords == null || parsedRecords.Length == 0)
             {
-                return FileType.Unknown;
+                return DCFileType.Unknown;
             }
 
             foreach (var record in parsedRecords)
             {
                 if (record is CollectionHeader080)
                 {
-                    return FileType.CollectionRequest;
+                    return DCFileType.CollectionRequest;
                 }
                 if (record is StatusUserSetHeader080)
                 {
-                    return FileType.StatusReport;
+                    return DCFileType.StatusReport;
                 }
                 if (record is ReplyTransmissionStatus900 ||
                     record is ReplyUserSetStatus900 ||
                     record is ReplyRejectedMessage901 ||
                     record is ReplyTransmissionRejectReason901)
                 {
-                    return FileType.Reply;
+                    return DCFileType.Reply;
                 }
             }
 
-            return FileType.Unknown;
+            return DCFileType.Unknown;
         }
     }
 }

@@ -32,23 +32,23 @@ namespace RMCollectionProcessor
             var processor = new FileProcessor();
             var parsed = processor.ProcessFile(filePath);
 
-            var fileType = FileTypeIdentifier.Identify(parsed);
+            var fileType = DCFileTypeIdentifier.Identify(parsed);
             var dbService = new DatabaseService();
             int statusFound = 0;
             int statusInserted = 0;
             switch (fileType)
             {
-                case FileType.CollectionRequest:
+                case DCFileType.CollectionRequest:
                     var txRecords = ExtractTransactionRecords(filePath, parsed);
                     dbService.InsertCollectionRequests(txRecords, 0);
                     _store.AddRecords(txRecords);
                     break;
-                case FileType.StatusReport:
+                case DCFileType.StatusReport:
                     var statusRecords = ProcessStatusReport(parsed);
                     statusFound = statusRecords.Count();
                     statusInserted = dbService.InsertCollectionResponses(statusRecords, filePath);
                     break;
-                case FileType.Reply:
+                case DCFileType.Reply:
                     var reply = parsed.OfType<ReplyTransmissionStatus900>().FirstOrDefault();
                     if (reply != null)
                     {
@@ -59,7 +59,7 @@ namespace RMCollectionProcessor
                         ImportReplyFile(gen, fileStatus);
                     }
                     break;
-                case FileType.Unknown:
+                case DCFileType.Unknown:
                     Console.Write("Unknown");
                     break;
                 default:

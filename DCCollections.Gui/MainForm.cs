@@ -18,7 +18,7 @@ namespace DCCollections.Gui
     {
         private readonly RMCollectionProcessor.CollectionService _dcCollectionservice;
         private object[]? _parsedRecords;
-        private FileType _currentFileType;
+        private DCFileType _currentFileType;
         private readonly UserSettings _settings;
         private int _importSortColumn;
         private bool _importSortDescending;
@@ -126,7 +126,7 @@ namespace DCCollections.Gui
                     _parsedRecords = result.Records;
                     _currentFileType = result.FileType;
                     var msg = $"Parsed {_parsedRecords.Length} records (Type: {_currentFileType}).";
-                    if (_currentFileType == FileType.StatusReport)
+                    if (_currentFileType == DCFileType.StatusReport)
                     {
                         msg += $" Inserted {result.StatusRecordsInserted} of {result.StatusRecordsFound} status records.";
                     }
@@ -293,7 +293,7 @@ namespace DCCollections.Gui
                 //lstFiles.Items.Clear();
                 foreach (var file in Directory.GetFiles(path))
                 {
-                  //  lstFiles.Items.Add(new FileListItem(file));
+                    //  lstFiles.Items.Add(new FileListItem(file));
                 }
             }
             catch (Exception ex)
@@ -336,23 +336,35 @@ namespace DCCollections.Gui
                 {
                     var info = new FileInfo(file);
                     var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
-                    FileType type = FileType.Unknown;
+                    DCFileType dcType = DCFileType.Unknown;
                     EftFileType eftType = EftFileType.Unknown;
                     string recordStatus = string.Empty;
+
                     try
                     {
-                        var fileProcessor = new FileProcessor();
-                        var records = fileProcessor.ProcessFile(file);
-                        type = FileTypeIdentifier.Identify(records);
-                        if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
-                            recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
-                    }
-                    catch
-                    {
+
                         eftType = eftIdentifier.IdentifyFileType(file);
-                        if (eftType != EftFileType.Unknown)
-                            recordStatus = GetEftRecordStatus(file);
                     }
+                    catch (Exception ex)
+                    {
+
+                        //throw;
+                    }
+                    if (eftType  == EftFileType.Unknown)
+                        try
+                        {
+                            var fileProcessor = new FileProcessor();
+                            var records = fileProcessor.ProcessFile(file);
+                            dcType = DCFileTypeIdentifier.Identify(records);
+                            if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
+                                recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
+                        }
+                        catch
+                        {
+                            eftType = eftIdentifier.IdentifyFileType(file);
+                            if (eftType != EftFileType.Unknown)
+                                recordStatus = GetEftRecordStatus(file);
+                        }
 
                     bool isLive = recordStatus.Length == 0 || recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
                     if (hideTests && !isLive)
@@ -368,7 +380,7 @@ namespace DCCollections.Gui
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
 
-                    var desc = type != FileType.Unknown ? type.ToString() : eftType.ToString();
+                    var desc = dcType != DCFileType.Unknown ? dcType.ToString() : eftType.ToString();
                     if (!isLive && recordStatus.Length > 0)
                         desc += " (Test)";
                     item.SubItems.Add(desc);
@@ -376,12 +388,12 @@ namespace DCCollections.Gui
                     try
                     {
                         var parsed = processor.ProcessFile(info.FullName);
-                        var ft = FileTypeIdentifier.Identify(parsed);
+                        var ft = DCFileTypeIdentifier.Identify(parsed);
                         item.SubItems.Add(ft.ToString());
                     }
                     catch
                     {
-                        var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : FileType.Unknown.ToString();
+                        var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : DCFileType.Unknown.ToString();
                         item.SubItems.Add(eftTypeStr);
                     }
 
@@ -492,7 +504,7 @@ namespace DCCollections.Gui
                         continue;
 
                     var result = await Task.Run(() => _dcCollectionservice.ParseFile(path));
-                    if (result.FileType == FileType.StatusReport)
+                    if (result.FileType == DCFileType.StatusReport)
                     {
                         totalFound += result.StatusRecordsFound;
                         totalInserted += result.StatusRecordsInserted;

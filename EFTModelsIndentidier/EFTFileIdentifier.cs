@@ -11,7 +11,8 @@ public enum EftFileType
     Unknown,
     CollectionSubmission,
     ImmediateResponse,
-    EftOutput
+    EftOutput,
+    EmptyTransmission
 }
 
 public class EftFileIdentifier
@@ -232,6 +233,14 @@ public class EftFileIdentifier
         }
 
         var foundRecordTypes = new HashSet<Type>(parsedRecords.Select(r => r.GetType()));
+
+        // Special case: Empty Transmission File
+        if (parsedRecords.Length == 2 &&
+            foundRecordTypes.Contains(typeof(TransmissionHeader000)) &&
+            foundRecordTypes.Contains(typeof(TransmissionTrailer999)))
+        {
+            return EftFileType.EmptyTransmission;
+        }
 
         // 2. Check hinted type first if a hint was found
         if (hintedType != EftFileType.Unknown)

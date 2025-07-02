@@ -35,7 +35,7 @@ namespace FileProcessor
                 try
                 {
                     var parsedRecords = processor.ProcessFile(file);
-                    var fileType = FileTypeIdentifier.Identify(parsedRecords);
+                    var fileType = DCFileTypeIdentifier.Identify(parsedRecords);
                     var status = GetRecordStatus(parsedRecords);
                     var statusFolder = Path.Combine(sourceFolder, status == "L" ? "Live" : "Test");
                     Directory.CreateDirectory(statusFolder);
@@ -46,14 +46,14 @@ namespace FileProcessor
                     var generation = GetGenerationNumber(parsedRecords, fileType);
                     var fileName = Path.GetFileName(file);
                     if (!string.IsNullOrWhiteSpace(generation) &&
-                        (fileType == FileType.StatusReport || fileType == FileType.Reply))
+                        (fileType == DCFileType.StatusReport || fileType == DCFileType.Reply))
                     {
                         fileName = $"{generation}_{fileName}";
                     }
                     var destinationPath = Path.Combine(destinationFolder, fileName);
                     File.Copy(file, destinationPath, true);
                     Console.WriteLine($"{Path.GetFileName(file)}: {status} {fileType}");
-                    if (fileType == FileType.Reply && int.TryParse(generation, out var genNum))
+                    if (fileType == DCFileType.Reply && int.TryParse(generation, out var genNum))
                     {
                         var related = GetFileNameByGenerationNumber(genNum);
                         if (!string.IsNullOrEmpty(related))
@@ -90,15 +90,15 @@ namespace FileProcessor
         /// <param name="parsedRecords">The parsed records.</param>
         /// <param name="fileType">The detected file type.</param>
         /// <returns>The generation number or an empty string.</returns>
-        private static string GetGenerationNumber(object[] parsedRecords, FileType fileType)
+        private static string GetGenerationNumber(object[] parsedRecords, DCFileType fileType)
         {
-            if (fileType == FileType.StatusReport)
+            if (fileType == DCFileType.StatusReport)
             {
                 var header = parsedRecords.OfType<StatusUserSetHeader080>().FirstOrDefault();
                 return header?.BankServUserCodeGenerationNumber.Trim() ?? string.Empty;
             }
 
-            if (fileType == FileType.Reply)
+            if (fileType == DCFileType.Reply)
             {
                 var reply = parsedRecords.OfType<ReplyTransmissionStatus900>().FirstOrDefault();
                 return reply?.TransmissionNumber.Trim() ?? string.Empty;
