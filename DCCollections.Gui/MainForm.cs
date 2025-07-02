@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 using EFT_Collections;
+using DcGenResult = RMCollectionProcessor.Models.FileGenerationResult;
+using EftGenResult = EFT_Collections.FileGenerationResult;
 using DCService = global::DatabaseService;
 
 namespace DCCollections.Gui
@@ -132,20 +134,24 @@ namespace DCCollections.Gui
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
-                string file;
+                DcGenResult result;
                 if (rdoDebiCheck.Checked)
                 {
-                    file = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, test, outFolder));
+                    result = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, test, outFolder));
                 }
                 else
                 {
                     var date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, day);
                     string folder = outFolder ?? AppContext.BaseDirectory;
-                    file = await Task.Run(() => EFTService.GenerateEFTFile(date, test, folder));
+                    EftGenResult eftResult = await Task.Run(() => EFTService.GenerateEFTFile(date, test, folder));
+                    MessageBox.Show($"File generated: {eftResult.FilePath}\nDatabase updated with:\nBankFiles updated: {eftResult.BankFilesUpdated}\nCollection Requests updated: {eftResult.CollectionRequestsUpdated}", "Success");
+                    using var previewForm = new FilePreviewForm(eftResult.FilePath);
+                    previewForm.ShowDialog(this);
+                    return;
                 }
-                MessageBox.Show($"File generated: {file}", "Success");
-                using var form = new FilePreviewForm(file);
-                form.ShowDialog(this);
+                MessageBox.Show($"File generated: {result.FilePath}\nDatabase updated with:\nBankFiles updated: {result.BankFilesUpdated}\nCollection Requests updated: {result.CollectionRequestsUpdated}", "Success");
+                using var resultForm = new FilePreviewForm(result.FilePath);
+                resultForm.ShowDialog(this);
             }
             catch (Exception ex)
             {

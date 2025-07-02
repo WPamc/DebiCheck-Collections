@@ -303,12 +303,13 @@ END", conn);
     /// </summary>
     /// <param name="records">Transaction records extracted from the live file.</param>
     /// <param name="bankFileRowId">Row Id from EDI_BANKFILES to relate requests back to the file.</param>
-    public void InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
+    public int InsertCollectionRequests(IEnumerable<TransactionRecord> records, int bankFileRowId)
     {
         var recordList = records
             .Where(r => string.Equals(r.DataSetStatus.Trim(), "L", StringComparison.OrdinalIgnoreCase))
             .ToList();
-        if (!recordList.Any()) return;
+        int inserted = 0;
+        if (!recordList.Any()) return inserted;
 
         if (bankFileRowId <= 0)
         {
@@ -329,10 +330,8 @@ END", conn);
 
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
-        int counter = 0;
         foreach (var r in recordList)
         {
-            counter++;
             using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
             existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
@@ -357,11 +356,10 @@ END", conn);
             cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
             try
             {
-                cmd.ExecuteNonQuery();
+                inserted += cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch
             {
-
             }
         }
 
@@ -374,6 +372,7 @@ END", conn);
 
             UpdateBankFileDailyCounterEnd(bankFileRowId, maxSeq);
         }
+        return inserted;
     }
 
     /// <summary>

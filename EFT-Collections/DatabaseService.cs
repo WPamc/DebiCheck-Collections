@@ -206,10 +206,11 @@ END", conn);
         cmd.ExecuteNonQuery();
     }
 
-    public void InsertCollectionRequests(IEnumerable<DebtorCollectionData> records, int bankFileRowId)
+    public int InsertCollectionRequests(IEnumerable<DebtorCollectionData> records, int bankFileRowId)
     {
         var recordList = records.ToList();
-        if (!recordList.Any()) return;
+        int inserted = 0;
+        if (!recordList.Any()) return inserted;
 
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
@@ -233,8 +234,9 @@ END", conn);
             cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });
             cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
             cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
-            cmd.ExecuteNonQuery();
+            inserted += cmd.ExecuteNonQuery();
         }
+        return inserted;
     }
 
     public void MarkBankFileDelivered(int rowId)
