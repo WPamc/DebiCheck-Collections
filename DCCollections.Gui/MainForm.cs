@@ -17,6 +17,7 @@ namespace DCCollections.Gui
     public partial class MainForm : Form
     {
         private readonly RMCollectionProcessor.CollectionService _dcCollectionservice;
+        private readonly EFTImportService _eftImportService;
         private object[]? _parsedRecords;
         private DCFileType _currentFileType;
         private readonly UserSettings _settings;
@@ -60,6 +61,7 @@ namespace DCCollections.Gui
             }
 
             _dcCollectionservice = new RMCollectionProcessor.CollectionService();
+            _eftImportService = new EFTImportService();
             _settings = UserSettings.Load();
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
@@ -503,11 +505,28 @@ namespace DCCollections.Gui
                     if (status.Equals("T", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    var result = await Task.Run(() => _dcCollectionservice.ParseFile(path));
-                    if (result.FileType == DCFileType.StatusReport)
+                    var eftType = EftFileType.Unknown;
+                    try
                     {
-                        totalFound += result.StatusRecordsFound;
-                        totalInserted += result.StatusRecordsInserted;
+                        var identifier = new EftFileIdentifier();
+                        eftType = identifier.IdentifyFileType(path);
+                    }
+                    catch
+                    {
+                    }
+
+                    if (eftType != EftFileType.Unknown)
+                    {
+                        await Task.Run(() => _eftImportService.ParseFile(path));
+                    }
+                    else
+                    {
+                        var result = await Task.Run(() => _dcCollectionservice.ParseFile(path));
+                        if (result.FileType == DCFileType.StatusReport)
+                        {
+                            totalFound += result.StatusRecordsFound;
+                            totalInserted += result.StatusRecordsInserted;
+                        }
                     }
                 }
 

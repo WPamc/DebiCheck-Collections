@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
+    <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
   </ItemGroup>
 
   <ItemGroup>
