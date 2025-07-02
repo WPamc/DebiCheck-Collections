@@ -31,6 +31,19 @@ public class DatabaseService
         using var cmd = new SqlCommand(_collectionsSql, conn);
         conn.Open();
         using var reader = cmd.ExecuteReader();
+
+        bool HasColumn(IDataRecord record, string name)
+        {
+            for (int i = 0; i < record.FieldCount; i++)
+            {
+                if (record.GetName(i).Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         while (reader.Read())
         {
             var data = new DebtorCollectionData
@@ -40,7 +53,14 @@ public class DatabaseService
                 DebtorName = reader["HomingAccountName"].ToString() ?? string.Empty,
                 AccountType = reader["AccountType"].ToString() ?? string.Empty,
                 InstructedAmount = reader["Amount"] != DBNull.Value ? Convert.ToDecimal(reader["Amount"]) : 0m,
-                ContractReference = reader["UserReference"].ToString() ?? string.Empty
+                ContractReference = reader["UserReference"].ToString() ?? string.Empty,
+                RequestedCollectionDate = HasColumn(reader, "DATEREQUESTED") ? reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")) : default,
+                PaymentInformation = HasColumn(reader, nameof(DebtorCollectionData.PaymentInformation)) ? reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty : string.Empty,
+                TrackingPeriod = HasColumn(reader, nameof(DebtorCollectionData.TrackingPeriod)) ? reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))) : 3,
+                DebitSequence = HasColumn(reader, nameof(DebtorCollectionData.DebitSequence)) ? reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty : "RCUR",
+                EntryClass = HasColumn(reader, nameof(DebtorCollectionData.EntryClass)) ? reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty : "0021",
+                MandateReference = HasColumn(reader, nameof(DebtorCollectionData.MandateReference)) ? reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty : string.Empty,
+                RelatedCycleDate = HasColumn(reader, nameof(DebtorCollectionData.RelatedCycleDate)) ? reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RelatedCycleDate))) : DateTime.Now
             };
             results.Add(data);
         }
