@@ -99,7 +99,10 @@ namespace DCCollections.Gui
                     return (date, time);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
             return (string.Empty, string.Empty);
         }
 
@@ -113,7 +116,10 @@ namespace DCCollections.Gui
                     return line.Substring(3, 1).Trim();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
             return string.Empty;
         }
 
@@ -347,6 +353,7 @@ namespace DCCollections.Gui
                     }
                     catch (Exception ex)
                     {
+                        MessageBox.Show(ex.Message, "Error");
                     }
                     if (eftType  == EftFileType.Unknown)
                         try
@@ -357,8 +364,9 @@ namespace DCCollections.Gui
                             if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
                                 recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            MessageBox.Show(ex.Message, "Error");
                             eftType = eftIdentifier.IdentifyFileType(file);
                             if (eftType != EftFileType.Unknown)
                                 recordStatus = GetEftRecordStatus(file);
@@ -389,8 +397,9 @@ namespace DCCollections.Gui
                         var ft = DCFileTypeIdentifier.Identify(parsed);
                         item.SubItems.Add(ft.ToString());
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        MessageBox.Show(ex.Message, "Error");
                         var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : DCFileType.Unknown.ToString();
                         item.SubItems.Add(eftTypeStr);
                     }
@@ -507,8 +516,9 @@ namespace DCCollections.Gui
                         var identifier = new EftFileIdentifier();
                         eftType = identifier.IdentifyFileType(path);
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        MessageBox.Show(ex.Message, "Error");
                     }
 
                     if (eftType != EftFileType.Unknown)
