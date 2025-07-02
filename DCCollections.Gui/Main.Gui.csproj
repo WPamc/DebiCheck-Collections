@@ -18,6 +18,7 @@
     <ProjectReference Include="..\DCCollectionsRequest\DCCollections.csproj" />
     <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
     <ProjectReference Include="..\EFT-Collections\EFTCollections.csproj" />
+    <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
   </ItemGroup>
 
 </Project>

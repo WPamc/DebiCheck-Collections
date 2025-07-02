@@ -99,11 +99,12 @@ public class EftFileIdentifier
                 {
                     case "04": return typeof(EftUserHeader001);    // Spec 5.1.2.1
                     case "50": return typeof(EftStandardTransaction001); // Spec 5.1.2.2
-                    case "52": return typeof(EftContraRecord001);       // Spec 5.1.2.3
+                    // A Contra Record can be identified by "52" (standard EFT) or "12" (often seen in specific bank implementations).
+                    // Both are mapped to the same EftContraRecord001 class to handle variations.
+                    case "52":
+                    case "12":
+                        return typeof(EftContraRecord001);       // Spec 5.1.2.3 uses "52", some contexts use "12"
                     case "92": return typeof(EftUserTrailer001);      // Spec 5.1.2.4
-                    // Note: The original Writer's selector had "12" for Contra, which seems specific
-                    // to a different context than the primary EFT spec (5.1.2.3 uses "52").
-                    // Sticking to spec 5.1.2.x for this general identifier.
                     default: return null;
                 }
             case "900": return typeof(ResponseStatus900);         // Spec 5.1.14.1, 5.1.14.3

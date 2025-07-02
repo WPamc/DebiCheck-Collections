@@ -82,7 +82,9 @@ namespace EFT_Collections
     /// <summary>
     /// Represents the Contra Record, which balances the batch.
     /// Conforms to the specification in Section 5.1.2.3, pages 20-21.
-    /// Static values: RecordIdentifier = "001" or "020", BankservRecordId = "12" for Direct Credit Contra, TypeOfAccount = "1", EntryClass = "10"
+    /// Note: The BankservRecordId for a contra can vary. The standard EFT spec often uses "52",
+    /// but some bank-specific implementations (like Absa's) may use "12" for a Direct Credit Contra.
+    /// This model uses "12" as a default, but the file identifier is configured to recognize both.
     /// Example: UserReference = "MYCOMPANY CONTRA", AmountInCents = "00000123450" (Total of transactions)
     /// </summary>
     [FixedLengthRecord(FixedMode.AllowLessChars)]
@@ -90,7 +92,7 @@ namespace EFT_Collections
     {
         [FieldFixedLength(3)] public string RecordIdentifier;         // "001" or "020"
         [FieldFixedLength(1)] public string DataSetStatus;            // 'L' or 'T'
-        [FieldFixedLength(2)] public string BankservRecordId;         // "12" for Direct Credit Contra
+        [FieldFixedLength(2)] public string BankservRecordId;         // "12" (Direct Credit Contra) or "52"
         [FieldFixedLength(6)] public string UserBranch;               // e.g., "632005"
         [FieldFixedLength(11)] public string UserNominatedAccount;     // e.g., "40123456789"
         [FieldFixedLength(4)] public string UserCode;                 // e.g., "1234"
