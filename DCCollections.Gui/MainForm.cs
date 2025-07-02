@@ -3,11 +3,11 @@ using DbConnection;
 using System.IO;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using RMCollectionProcessor.Models;
 using RMCollectionProcessor;
 using EFT_Collections;
+using System.Linq;
 using DcGenResult = RMCollectionProcessor.Models.FileGenerationResult;
 using EftGenResult = EFT_Collections.FileGenerationResult;
 using DCService = global::DatabaseService;
@@ -99,6 +99,20 @@ namespace DCCollections.Gui
             }
             catch { }
             return (string.Empty, string.Empty);
+        }
+
+        private static string GetEftRecordStatus(string path)
+        {
+            try
+            {
+                var line = File.ReadLines(path).FirstOrDefault();
+                if (!string.IsNullOrWhiteSpace(line) && line.Length > 3)
+                {
+                    return line.Substring(3, 1).Trim();
+                }
+            }
+            catch { }
+            return string.Empty;
         }
 
         private void btnParse_Click(object sender, EventArgs e)
@@ -316,12 +330,14 @@ namespace DCCollections.Gui
                 bool hideTests = chkHideTestFiles.Checked;
 
                 var processor = new FileProcessor();
+                var eftIdentifier = new EftFileIdentifier();
 
                 foreach (var file in Directory.GetFiles(path))
                 {
                     var info = new FileInfo(file);
                     var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
                     FileType type = FileType.Unknown;
+                    EftFileType eftType = EftFileType.Unknown;
                     string recordStatus = string.Empty;
                     try
                     {
@@ -331,9 +347,14 @@ namespace DCCollections.Gui
                         if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
                             recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
                     }
-                    catch { }
+                    catch
+                    {
+                        eftType = eftIdentifier.IdentifyFileType(file);
+                        if (eftType != EftFileType.Unknown)
+                            recordStatus = GetEftRecordStatus(file);
+                    }
 
-                    bool isLive = recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
+                    bool isLive = recordStatus.Length == 0 || recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
                     if (hideTests && !isLive)
                         continue;
 
@@ -347,7 +368,7 @@ namespace DCCollections.Gui
                     item.SubItems.Add(size);
                     item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
 
-                    var desc = type.ToString();
+                    var desc = type != FileType.Unknown ? type.ToString() : eftType.ToString();
                     if (!isLive && recordStatus.Length > 0)
                         desc += " (Test)";
                     item.SubItems.Add(desc);
@@ -360,7 +381,8 @@ namespace DCCollections.Gui
                     }
                     catch
                     {
-                        item.SubItems.Add(FileType.Unknown.ToString());
+                        var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : FileType.Unknown.ToString();
+                        item.SubItems.Add(eftTypeStr);
                     }
 
                     lvImportFiles.Items.Add(item);
