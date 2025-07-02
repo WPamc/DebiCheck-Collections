@@ -19,74 +19,65 @@ public class EftFileIdentifier
 {
     private readonly Dictionary<EftFileType, HashSet<Type>> _fileTypeSignatures;
     private readonly MultiRecordEngine _universalEngine;
-    private Type _lastProcessedRecordType;
+    private static Type _lastProcessedRecordType;
 
     public EftFileIdentifier()
     {
         _fileTypeSignatures = new Dictionary<EftFileType, HashSet<Type>>
+    {
         {
+            EftFileType.CollectionSubmission, new HashSet<Type>
             {
-                EftFileType.CollectionSubmission, new HashSet<Type>
-                {
-                    typeof(TransmissionHeader000),
-                    typeof(EftUserHeader001), // Core for EFT user set
-                    // typeof(EftStandardTransaction001), // Optional for signature, but expected
-                    // typeof(EftContraRecord001),       // Optional for signature
-                    // typeof(EftUserTrailer001),       // Optional for signature
-                    typeof(TransmissionTrailer999)
-                }
-            },
-            {
-                EftFileType.ImmediateResponse, new HashSet<Type>
-                {
-                    typeof(TransmissionHeader000),
-                    typeof(ResponseStatus900), // Key differentiator
-                    typeof(TransmissionTrailer999)
-                }
-            },
-            {
-                EftFileType.EftOutput, new HashSet<Type> // Primarily for Unpaids based on current models
-                {
-                    typeof(OutputFileHeader010), // Key differentiator
-                    // typeof(UnpaidSetHeader011), // Optional for signature, but expected if data
-                    // typeof(UnpaidTransactionDetail013), // Optional
-                    typeof(OutputFileTrailer019)
-                }
+                typeof(TransmissionHeader000),
+                typeof(EftUserHeader001),
+                typeof(TransmissionTrailer999)
             }
-        };
+        },
+        {
+            EftFileType.ImmediateResponse, new HashSet<Type>
+            {
+                typeof(TransmissionHeader000),
+                typeof(ResponseStatus900),
+                typeof(TransmissionTrailer999)
+            }
+        },
+        {
+            EftFileType.EftOutput, new HashSet<Type>
+            {
+                typeof(OutputFileHeader010),
+                typeof(OutputFileTrailer019)
+            }
+        }
+    };
 
         _universalEngine = new MultiRecordEngine(
-            // Submission File Models
             typeof(TransmissionHeader000),
             typeof(EftUserHeader001),
             typeof(EftStandardTransaction001),
             typeof(EftContraRecord001),
             typeof(EftUserTrailer001),
             typeof(TransmissionTrailer999),
-            // Immediate Response File Models
             typeof(ResponseStatus900),
             typeof(RejectionReason901),
             typeof(AcceptedReportRecord903),
-            // Unpaid and Redirect Report Models
             typeof(OutputFileHeader010),
             typeof(UnpaidSetHeader011),
             typeof(UnpaidTransactionDetail013),
             typeof(UnpaidSetTrailer014),
-            //typeof(RedirectsSetHeader016),
-            //typeof(RedirectsTransactionDetail017),
-            //typeof(RedirectsSetTrailer018),
+            typeof(RedirectsSetHeader016),
+            typeof(RedirectsTransactionDetail017),
+            typeof(RedirectsSetTrailer018),
             typeof(OutputFileTrailer019)
         )
         {
-            RecordSelector = new RecordTypeSelector(CustomSelectorForAllEftTypes)
+            RecordSelector = new RecordTypeSelector(EftFileIdentifier.CustomSelectorForAllEftTypes)
         };
     }
-
     /// <summary>
     /// Custom record selector for the universal FileHelpers engine.
     /// Distinguishes between all known EFT record types based on identifiers and file structure context.
     /// </summary>
-    private Type CustomSelectorForAllEftTypes(MultiRecordEngine engine, string recordLine)
+    public static Type CustomSelectorForAllEftTypes(MultiRecordEngine engine, string recordLine)
     {
         if (string.IsNullOrWhiteSpace(recordLine) || recordLine.Length < 3)
         {
@@ -105,7 +96,7 @@ public class EftFileIdentifier
             case "999":
                 selectedType = typeof(TransmissionTrailer999);
                 break;
-            case "001": // EFT User Set records require contextual parsing
+            case "001":
                 if (recordLine.Length < 5) break;
                 string bankservId = recordLine.Substring(4, 2);
 
@@ -119,7 +110,6 @@ public class EftFileIdentifier
                 }
                 else if (bankservId == "10" || bankservId == "50")
                 {
-                    // This is a standard transaction, can appear after header or another transaction
                     if (_lastProcessedRecordType == typeof(EftUserHeader001) ||
                         _lastProcessedRecordType == typeof(EftStandardTransaction001))
                     {
@@ -128,7 +118,6 @@ public class EftFileIdentifier
                 }
                 else if (bankservId == "12" || bankservId == "52")
                 {
-                    // This is a contra record, must appear after a standard transaction
                     if (_lastProcessedRecordType == typeof(EftStandardTransaction001))
                     {
                         selectedType = typeof(EftContraRecord001);
@@ -156,15 +145,15 @@ public class EftFileIdentifier
             case "014":
                 selectedType = typeof(UnpaidSetTrailer014);
                 break;
-            //case "016":
-            //    selectedType = typeof(RedirectsSetHeader016);
-            //    break;
-            //case "017":
-            //    selectedType = typeof(RedirectsTransactionDetail017);
-            //    break;
-            //case "018":
-            //    selectedType = typeof(RedirectsSetTrailer018);
-            //    break;
+            case "016":
+                selectedType = typeof(RedirectsSetHeader016);
+                break;
+            case "017":
+                selectedType = typeof(RedirectsTransactionDetail017);
+                break;
+            case "018":
+                selectedType = typeof(RedirectsSetTrailer018);
+                break;
             case "019":
                 selectedType = typeof(OutputFileTrailer019);
                 break;
@@ -176,7 +165,6 @@ public class EftFileIdentifier
         }
         return selectedType;
     }
-
     /// <summary>
     /// Identifies the type of an EFT file by attempting to parse its records
     /// and matching against predefined signatures, with filename hints.

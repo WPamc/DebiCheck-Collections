@@ -315,4 +315,68 @@ namespace EFT_Collections
         [FieldFixedLength(14)] public string CreditAmountHashTotal;     // e.g., "0000000000000"
         [FieldFixedLength(130)] public string Filler;
     }
+    /// <summary>
+    /// Represents the header for a set of redirected transactions within an EFT Output File (Record ID "016").
+    /// Conforms to the specification in Section 5.1.4.5, page 33.
+    /// Static values: RecordIdentifier = "016"
+    /// Example: BankservUserCode = "1234", NominatedAccountNumber = "40123456789", ActionDateForDataSet = "20231027"
+    /// </summary>
+    [FixedLengthRecord(FixedMode.AllowLessChars)]
+    public class RedirectsSetHeader016
+    {
+        [FieldFixedLength(3)] public string RecordIdentifier;           // "016"
+        [FieldFixedLength(1)] public string DataSetStatus;              // 'L' or 'T'
+        [FieldFixedLength(4)] public string BankservUserCode;           // e.g., "1234"
+        [FieldFixedLength(6)] public string NominatedAccountBranch;     // e.g., "632005"
+        [FieldFixedLength(16)] public string NominatedAccountNumber;    // e.g., "0000040123456789"
+        [FieldFixedLength(2)] public string NominatedAccountType;       // Must be "01" Current Account.
+        [FieldFixedLength(8)] public string ActionDateForDataSet;       // e.g., "20231027"
+        [FieldFixedLength(158)] public string Filler;
+    }
+
+    /// <summary>
+    /// Represents the detailed record for a single redirected transaction (Record ID "017").
+    /// This provides the new account details for a successful but redirected payment.
+    /// Conforms to the specification in Section 5.1.4.6, pages 34-35.
+    /// Static values: RecordIdentifier = "017"
+    /// Example: OriginalSequenceNumber = "000001", RedirectNewHomingBranch = "632005", RedirectNewHomingAccountNumber = "40987654321"
+    /// </summary>
+    [FixedLengthRecord(FixedMode.AllowLessChars)]
+    public class RedirectsTransactionDetail017
+    {
+        [FieldFixedLength(3)] public string RecordIdentifier;                   // "017"
+        [FieldFixedLength(1)] public string DataSetStatus;                      // 'L' or 'T'
+        [FieldFixedLength(2)] public string TransactionType;                    // "50" (Debit), "10" (Credit)
+        [FieldFixedLength(8)] public string TransmissionDate;                   // e.g., "20231025"
+        [FieldFixedLength(6)] public string OriginalSequenceNumber;             // e.g., "000001"
+        [FieldFixedLength(6)] public string HomingAccountBranchCode;            // Original homing branch
+        [FieldFixedLength(16)] public string HomingAccountNumber;               // Original homing account
+        [FieldFixedLength(11)] public string AmountInCents;                     // e.g., "00000123450"
+        [FieldFixedLength(30)] public string UserReference;                     // Original user reference
+        [FieldFixedLength(6)] public string RedirectNewHomingBranch;            // e.g., "632005"
+        [FieldFixedLength(16)] public string RedirectNewHomingAccountNumber;    // e.g., "0000040987654321"
+        [FieldFixedLength(2)] public string RedirectNewHomingAccountType;       // e.g., "01"
+        [FieldFixedLength(6)] public string DistributionSequenceNumber;         // e.g., "123456"
+        [FieldFixedLength(30)] public string HomingAccountName;                 // Name from original transaction
+        [FieldFixedLength(55)] public string Filler;
+    }
+
+    /// <summary>
+    /// Represents the trailer for a set of redirected transactions, containing hash totals (Record ID "018").
+    /// Conforms to the specification in Section 5.1.4.7, page 35.
+    /// Static values: RecordIdentifier = "018"
+    /// Example: NumberOfDebitRecords = "000000001", DebitAmountHashTotal = "00000123450"
+    /// </summary>
+    [FixedLengthRecord(FixedMode.AllowLessChars)]
+    public class RedirectsSetTrailer018
+    {
+        [FieldFixedLength(3)] public string RecordIdentifier;           // "018"
+        [FieldFixedLength(1)] public string DataSetStatus;              // 'L' or 'T'
+        [FieldFixedLength(9)] public string NumberOfDebitRecords;       // e.g., "000000001"
+        [FieldFixedLength(9)] public string NumberOfCreditRecords;      // e.g., "000000000"
+        [FieldFixedLength(18)] public string HomingAccountHashTotal;    // e.g., "000148148148148148"
+        [FieldFixedLength(14)] public string DebitAmountHashTotal;      // e.g., "000000123450"
+        [FieldFixedLength(14)] public string CreditAmountHashTotal;     // e.g., "0000000000000"
+        [FieldFixedLength(130)] public string Filler;
+    }
 }

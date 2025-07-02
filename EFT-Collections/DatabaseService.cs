@@ -24,6 +24,59 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
+    public int InsertUnpaidTransactions(IEnumerable<UnpaidTransactionDetail013> records, int bankFileRowId)
+    {
+        int inserted = 0;
+        if (!records.Any()) return inserted;
+
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        foreach (var r in records)
+        {
+            using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
+            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference });
+            var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
+            if (exists > 0) continue;
+
+            using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
+                    (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
+                     RESULT,  CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID,METHOD)
+                 VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
+                     0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
+
+            DateTime.TryParse(r.ActionDate, out var dateRequested);
+            decimal.TryParse(r.AmountInCents, out var amountRequestedInCents);
+            var amountRequested = amountRequestedInCents / 100m;
+
+            cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.UserReference });
+            cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.UserReference });
+            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference });
+            cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
+            cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
+            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 2 }); // EFT
+            try
+            {
+                inserted += cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+        }
+
+        return inserted;
+    }
+
+    public int GetBankFileRowId(string fileName)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"SELECT ROWID FROM dbo.EDI_BANKFILES WHERE FILENAME = @file", conn);
+        cmd.Parameters.Add(new SqlParameter("@file", SqlDbType.VarChar, 100) { Value = fileName });
+        conn.Open();
+        var result = cmd.ExecuteScalar();
+        return result == null ? 0 : Convert.ToInt32(result);
+    }
+
     public List<DebtorCollectionData> GetCollections(DateTime deductionDay)
     {
         var results = new List<DebtorCollectionData>();
