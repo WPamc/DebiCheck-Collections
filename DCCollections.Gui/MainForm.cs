@@ -292,10 +292,8 @@ namespace DCCollections.Gui
         {
             try
             {
-                //lstFiles.Items.Clear();
                 foreach (var file in Directory.GetFiles(path))
                 {
-                    //  lstFiles.Items.Add(new FileListItem(file));
                 }
             }
             catch (Exception ex)
@@ -349,8 +347,6 @@ namespace DCCollections.Gui
                     }
                     catch (Exception ex)
                     {
-
-                        //throw;
                     }
                     if (eftType  == EftFileType.Unknown)
                         try
