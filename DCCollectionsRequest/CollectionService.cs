@@ -136,7 +136,7 @@ namespace RMCollectionProcessor
         }
 
 
-        public string GenerateDCFile(int deductionDay, bool isTest = false, string? outputFolder = null)
+        public FileGenerationResult GenerateDCFile(int deductionDay, bool isTest = false, string? outputFolder = null)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
@@ -269,15 +269,16 @@ namespace RMCollectionProcessor
 
             engine.WriteFile(fullPath, records);
 
+            int inserted = 0;
             if (!isTest)
             {
                 var txRecords = ExtractTransactionRecords(fullPath, records.ToArray());
-                dbService.InsertCollectionRequests(txRecords, fileRowId);
-
+                inserted = dbService.InsertCollectionRequests(txRecords, fileRowId);
                 dbService.MarkBankFileGenerationComplete(fileRowId);
             }
 
-            return fullPath;
+            int bankFilesUpdated = isTest ? 0 : 1;
+            return new FileGenerationResult(fullPath, bankFilesUpdated, inserted);
         }
 
         public BillingCollectionRequest? GetRequestByReference(string reference)

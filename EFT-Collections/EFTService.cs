@@ -285,7 +285,7 @@ public class EFTService
     /// <summary>
     /// Generates an EFT file using database data and writes it to disk.
     /// </summary>
-    public static string GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
+    public static FileGenerationResult GenerateEFTFile(DateTime deductionDate, bool isTest, string outputPath)
     {
         if (DateTime.Now.Year == deductionDate.Year && DateTime.Now.Month == deductionDate.Month
             && DateTime.Now.Day >= deductionDate.Day)
@@ -345,15 +345,17 @@ public class EFTService
             fileName,
             outputPath);
 
+        int inserted = 0;
         if (!isTest)
         {
-            db.InsertCollectionRequests(collections, recordId);
+            inserted = db.InsertCollectionRequests(collections, recordId);
             db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);
             db.SetDailyCounter(deductionDate, (int)lastSequenceNumber);
             db.MarkBankFileGenerationComplete(recordId);
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");
-        return Path.Combine(outputPath, fileName);
+        int bankFilesUpdated = isTest ? 0 : 1;
+        return new FileGenerationResult(Path.Combine(outputPath, fileName), bankFilesUpdated, inserted);
 
     }
 }
