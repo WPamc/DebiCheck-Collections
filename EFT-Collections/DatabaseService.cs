@@ -46,6 +46,8 @@ public class DatabaseService
 
         while (reader.Read())
         {
+            string contractRef = reader["Subssn"].ToString().Substring(3);
+
             var data = new DebtorCollectionData
             {
                 DebtorBankBranch = reader["HomingBranch"].ToString() ?? string.Empty,
@@ -53,9 +55,9 @@ public class DatabaseService
                 DebtorName = reader["HomingAccountName"].ToString() ?? string.Empty,
                 AccountType = reader["AccountType"].ToString() ?? string.Empty,
                 InstructedAmount = reader["Amount"] != DBNull.Value ? Convert.ToDecimal(reader["Amount"]) : 0m,
-                ContractReference = reader["UserReference"].ToString() ?? string.Empty,
+                ContractReference = contractRef,
                 RequestedCollectionDate = HasColumn(reader, "DATEREQUESTED") ? reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")) : default,
-                PaymentInformation = HasColumn(reader, nameof(DebtorCollectionData.PaymentInformation)) ? reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty : string.Empty,
+                PaymentInformation = reader["UserReference"].ToString() ?? string.Empty,
                 TrackingPeriod = HasColumn(reader, nameof(DebtorCollectionData.TrackingPeriod)) ? reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))) : 3,
                 DebitSequence = HasColumn(reader, nameof(DebtorCollectionData.DebitSequence)) ? reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty : "RCUR",
                 EntryClass = HasColumn(reader, nameof(DebtorCollectionData.EntryClass)) ? reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty : "0021",
