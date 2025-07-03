@@ -45,6 +45,7 @@ public class DatabaseService
             }
         }
 
+        var codeLookup = AppConfig.EftRejectionCodes;
         foreach (var r in records)
         {
             int originalRequestRowId = 0;
@@ -77,12 +78,15 @@ public class DatabaseService
                  REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
                  ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
                VALUES
-                (@reqId, @fileId, 'RJCT', @reasonCode, NULL, @actionDate, NULL,
+                (@reqId, @fileId, 'RJCT', @reasonCode, @reasonDesc, @actionDate, NULL,
                  NULL, @origPmtInfo, 99, GETDATE());", conn);
 
             insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
-            insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)r.RejectionReason ?? DBNull.Value });
+            var rejectCode = r.RejectionReason?.Trim();
+            codeLookup.TryGetValue(rejectCode ?? string.Empty, out var desc);
+            insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)rejectCode ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)desc ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = paymentInfo });
             try
