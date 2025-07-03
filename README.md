@@ -23,7 +23,11 @@ Create an `appsettings.json` file inside the `DbConnection` directory. It provid
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=CollectionsDb;User Id=username;Password=password;"
   },
-  "SqlQueriesPath": "SqlQueries"
+  "SqlQueriesPath": "SqlQueries",
+  "EftRejectionCodes": {
+    "000": "SUCCESSFUL",
+    "002": "NOT PROVIDED FOR"
+  }
 }
 ```
 

@@ -1,5 +1,7 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DbConnection
 {
@@ -25,5 +27,9 @@ namespace DbConnection
         public static string ConnectionString =>
             Configuration.GetConnectionString("DefaultConnection") ??
             throw new InvalidOperationException("DefaultConnection missing");
+
+        public static IReadOnlyDictionary<string, string> EftRejectionCodes =>
+            Configuration.GetSection("EftRejectionCodes").GetChildren()
+                .ToDictionary(c => c.Key, c => c.Value ?? string.Empty);
     }
 }
