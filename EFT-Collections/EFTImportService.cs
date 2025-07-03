@@ -48,33 +48,32 @@ namespace EFT_Collections
         /// </summary>
         /// <param name="filePath">The path to the EFT file to process.</param>
         /// <returns>A tuple containing the raw parsed records and the identified file type.</returns>
-        public (object[] Records, EftFileType FileType) ParseFile(string filePath)
+        public EftParseResult ParseFile(string filePath)
         {
             var fileType = _identifier.IdentifyFileType(filePath);
             if (fileType == EftFileType.Unknown || fileType == EftFileType.EmptyTransmission)
-            {
-                return (Array.Empty<object>(), fileType);
-            }
+                return new EftParseResult(Array.Empty<object>(), fileType, 0);
 
             var records = _engine.ReadFile(filePath);
             var db = new DatabaseService();
 
+            int inserted = 0;
             switch (fileType)
             {
                 case EftFileType.CollectionSubmission:
-                    ProcessCollectionSubmission(records, db);
+                    inserted = ProcessCollectionSubmission(records, db);
                     break;
 
                 case EftFileType.EftOutput:
-                    ProcessEftOutput(records, db, Path.GetFileName(filePath));
+                    inserted = ProcessEftOutput(records, db, Path.GetFileName(filePath));
                     break;
 
                 case EftFileType.ImmediateResponse:
-                    ProcessImmediateResponse(records, db);
+                    inserted = ProcessImmediateResponse(records, db);
                     break;
             }
 
-            return (records, fileType);
+            return new EftParseResult(records, fileType, inserted);
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace EFT_Collections
         /// </summary>
         /// <param name="records">The parsed records from the file.</param>
         /// <param name="db">The database service instance.</param>
-        private void ProcessCollectionSubmission(object[] records, DatabaseService db)
+        private int ProcessCollectionSubmission(object[] records, DatabaseService db)
         {
             var data = records
                 .OfType<EftStandardTransaction001>()
@@ -106,8 +105,10 @@ namespace EFT_Collections
 
             if (data.Any())
             {
-                db.InsertCollectionRequests(data, 0);
+                return db.InsertCollectionRequests(data, 0);
             }
+
+            return 0;
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace EFT_Collections
         /// <param name="records">The parsed records from the file.</param>
         /// <param name="db">The database service instance.</param>
         /// <param name="fileName">The name of the file being processed.</param>
-        private void ProcessEftOutput(object[] records, DatabaseService db, string fileName)
+        private int ProcessEftOutput(object[] records, DatabaseService db, string fileName)
         {
             var bankFileId = db.GetBankFileRowId(fileName);
             if (bankFileId == 0)
@@ -126,6 +127,7 @@ namespace EFT_Collections
 
             string currentActionDate = string.Empty;
             var detailBuffer = new List<UnpaidTransactionDetail013>();
+            int inserted = 0;
             foreach (var record in records)
             {
                 Type t = record.GetType();
@@ -134,7 +136,7 @@ namespace EFT_Collections
                     case UnpaidSetHeader011 header:
                         if (detailBuffer.Any())
                         {
-                            db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
+                            inserted += db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
                             detailBuffer.Clear();
                         }
                         currentActionDate = header.ActionDateForDataSet;
@@ -146,14 +148,10 @@ namespace EFT_Collections
             }
             if (detailBuffer.Any())
             {
-                db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
+                inserted += db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
             }
 
-            var redirectData = records.OfType<RedirectsTransactionDetail017>().ToList();
-            if (redirectData.Any())
-            {
-               // db.UpdateAccountsFromRedirects(redirectData, bankFileId);
-            }
+            return inserted;
         }
 
         /// <summary>
@@ -161,19 +159,11 @@ namespace EFT_Collections
         /// </summary>
         /// <param name="records">The parsed records from the file.</param>
         /// <param name="db">The database service instance.</param>
-        private void ProcessImmediateResponse(object[] records, DatabaseService db)
+        private int ProcessImmediateResponse(object[] records, DatabaseService db)
         {
             var statusUpdates = records.OfType<ResponseStatus900>().ToList();
-            if (statusUpdates.Any())
-            {
-                //db.UpdateBatchStatusFromResponse(statusUpdates);
-            }
-
             var rejectionDetails = records.OfType<RejectionReason901>().ToList();
-            if (rejectionDetails.Any())
-            {
-                //db.UpdateTransactionStatusFromRejections(rejectionDetails);
-            }
+            return statusUpdates.Count + rejectionDetails.Count;
         }
 
         /// <summary>
