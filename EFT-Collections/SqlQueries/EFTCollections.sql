@@ -1,5 +1,3 @@
-﻿DECLARE @DATEREQUESTED AS DATE = '2025/07/04'
-
  SELECT  z.SUBSSN,
   isnull(mm.BRANCHCODE,'') HomingBranch,
  isnull(mm.ACCNR, '') HomingAccountNumber ,
@@ -38,4 +36,3 @@ from BILLING_SPECINSTRUCTIONS z
 
         -- otherwise fall back to the month-end
         ELSE EOMONTH(EffectiveBillingMonth) end = @DATEREQUESTED
- 
