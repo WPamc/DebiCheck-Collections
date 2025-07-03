@@ -87,8 +87,9 @@ public class DatabaseService
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = paymentInfo });
             try
             {
-                insertCmd.ExecuteNonQuery();
-                inserted++;
+                int rows = insertCmd.ExecuteNonQuery();
+
+                inserted=inserted+rows;
             }
             catch
             {
