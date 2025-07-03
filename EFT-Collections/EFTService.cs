@@ -138,8 +138,8 @@ public class EFTService
             BankservUserCode = _bankservUserCode.PadRight(4),
             BankservCreationDate = _deductionDate.ToString("yyMMdd"),
             BankservPurgeDate = actionDate.AddDays(2).ToString("yyMMdd"),
-            FirstActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
-            LastActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
+            FirstActionDate = actionDate.ToString("yyMMdd"),
+            LastActionDate = actionDate.ToString("yyMMdd"),
             FirstSequenceNumber = firstSequence.ToString().PadLeft(6, '0'),
             UserGenerationNumber = generationNumber.ToString().PadLeft(4, '0'),
             TypeOfService = _typeOfService.PadRight(10),
@@ -187,7 +187,7 @@ public class EFTService
             HomingAccountNumber = tx.HomingAccountNumber.PadLeft(11, '0'),
             TypeOfAccount = tx.AccountType.ToString(),
             AmountInCents = amountInCents.ToString().PadLeft(11, '0'),
-            ActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
+            ActionDate = actionDate.ToString("yyMMdd"),
             EntryClass = "36",
             TaxCode = "0",
             Filler1 = "",
@@ -216,7 +216,7 @@ public class EFTService
             HomingAccountNumber = _creditorAccount.PadLeft(11, '0'),
             TypeOfAccount = "1",
             AmountInCents = amountInCents.ToString().PadLeft(11, '0'),
-            ActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
+            ActionDate = actionDate.ToString("yyMMdd"),
             EntryClass = "10",
             Filler1 = "0000",
             UserReference = $"{_creditorAbbreviation}       CONTRA".PadRight(30),
@@ -236,8 +236,8 @@ public class EFTService
             UserCode = _bankservUserCode.PadRight(4),
             FirstSequenceNumber = firstSeq.ToString().PadLeft(6, '0'),
             LastSequenceNumber = lastSeq.ToString().PadLeft(6, '0'),
-            FirstActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
-            LastActionDate = actionDate.AddDays(1).ToString("yyMMdd"),
+            FirstActionDate = actionDate.ToString("yyMMdd"),
+            LastActionDate = actionDate.ToString("yyMMdd"),
             NumberOfDebitRecords = debitCount.ToString().PadLeft(6, '0'),
             NumberOfCreditRecords = "1".PadLeft(6, '0'),
             NumberOfContraRecords = "1".PadLeft(6, '0'),
@@ -326,7 +326,7 @@ public class EFTService
                 HomingAccountName = c.DebtorName,
                 AccountType = accType,
                 Amount = c.InstructedAmount,
-                UserReference = c.ContractReference + "_" + generationNumber.ToString()
+                UserReference = c.PaymentInformation + "_" + generationNumber.ToString()
             });
         }
 
