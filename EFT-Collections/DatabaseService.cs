@@ -32,42 +32,75 @@ public class DatabaseService
 
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
+
+        var existingResponses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        using (var existingCmd = new SqlCommand(@"SELECT ORIGINALPAYMENTINFORMATION FROM dbo.BILLING_COLLECTIONRESPONSES WHERE EDIBANKFILEROWID = @fileId", conn))
+        {
+            existingCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+            using var reader = existingCmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var info = reader["ORIGINALPAYMENTINFORMATION"]?.ToString();
+                if (!string.IsNullOrEmpty(info)) existingResponses.Add(info);
+            }
+        }
+
         foreach (var r in records)
         {
-            using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
-            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference.Trim() });
-            var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
-            if (exists > 0) continue;
+            int originalRequestRowId = 0;
+            using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @ref", conn))
+            {
+                findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 50) { Value = r.UserReference.Trim() });
+                var result = findCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    originalRequestRowId = Convert.ToInt32(result);
+                }
+            }
 
-            using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
-                    (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
-                     RESULT,  CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID,METHOD)
-                 VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
-                     0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
+            if (originalRequestRowId == 0)
+            {
+                continue;
+            }
 
-            // DateTime.TryParse(actionDateForDataSet, out var dateRequested);
+            var paymentInfo = r.UserReference.Trim();
+            if (existingResponses.Contains(paymentInfo))
+            {
+                continue;
+            }
 
-            if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateRequested))
-                 throw new Exception($"Cannot parse dateRequested : {dateRequested}");
+            if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var actionDate))
+                throw new Exception($"Cannot parse dateRequested : {actionDateForDataSet}");
 
-            decimal.TryParse(r.AmountInCents, out var amountRequestedInCents);
-            var amountRequested = amountRequestedInCents / 100m;
+            using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
+                (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
+                 REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
+                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
+               VALUES
+                (@reqId, @fileId, 'RJCT', @reasonCode, NULL, @actionDate, NULL,
+                 NULL, @origPmtInfo, 99, GETDATE());", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
-            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.UserReference });
-            cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.UserReference });
-            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference.Trim() });
-            cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
-            cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
-            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 2 });
+            insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)r.RejectionReason ?? DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
+            insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = paymentInfo });
             try
             {
-                inserted += cmd.ExecuteNonQuery();
+                insertCmd.ExecuteNonQuery();
+                inserted++;
             }
             catch
             {
             }
+
+            using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
+                SET RESULT = 0, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
+                WHERE ROWID = @reqId;", conn);
+            updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            updateCmd.ExecuteNonQuery();
+
+            existingResponses.Add(paymentInfo);
         }
 
         return inserted;
