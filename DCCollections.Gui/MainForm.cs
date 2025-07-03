@@ -489,6 +489,7 @@ namespace DCCollections.Gui
             {
                 int totalFound = 0;
                 int totalInserted = 0;
+                int eftInserted = 0;
                 foreach (ListViewItem item in lvImportFiles.SelectedItems)
                 {
                     var tagObj = item.Tag;
@@ -523,7 +524,8 @@ namespace DCCollections.Gui
 
                     if (eftType != EftFileType.Unknown)
                     {
-                        await Task.Run(() => _eftImportService.ParseFile(path));
+                        var eftResult = await Task.Run(() => _eftImportService.ParseFile(path));
+                        eftInserted += eftResult.RecordsInserted;
                     }
                     else
                     {
@@ -537,6 +539,10 @@ namespace DCCollections.Gui
                 }
 
                 var msg = "Import complete.";
+                if (eftInserted > 0)
+                {
+                    msg += $" Inserted {eftInserted} EFT records.";
+                }
                 if (totalFound > 0)
                 {
                     msg += $" Inserted {totalInserted} of {totalFound} status records.";
