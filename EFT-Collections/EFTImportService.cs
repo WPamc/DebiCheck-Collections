@@ -128,6 +128,7 @@ namespace EFT_Collections
             var detailBuffer = new List<UnpaidTransactionDetail013>();
             foreach (var record in records)
             {
+                Type t = record.GetType();
                 switch (record)
                 {
                     case UnpaidSetHeader011 header:

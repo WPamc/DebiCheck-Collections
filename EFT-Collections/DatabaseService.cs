@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using DbConnection;
@@ -34,7 +35,7 @@ public class DatabaseService
         foreach (var r in records)
         {
             using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
-            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference });
+            existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference.Trim() });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
             if (exists > 0) continue;
 
@@ -44,14 +45,19 @@ public class DatabaseService
                  VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
                      0,  99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
-            DateTime.TryParse(actionDateForDataSet, out var dateRequested);
+            // DateTime.TryParse(actionDateForDataSet, out var dateRequested);
+
+            if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateRequested))
+                 throw new Exception($"Cannot parse dateRequested : {dateRequested}");
+
             decimal.TryParse(r.AmountInCents, out var amountRequestedInCents);
             var amountRequested = amountRequestedInCents / 100m;
 
             cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = (object)dateRequested });
             cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.UserReference });
             cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.UserReference });
-            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference });
+            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.UserReference.Trim() });
             cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = amountRequested });
             cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
             cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 2 });
