@@ -126,6 +126,10 @@ public class DatabaseService
         var results = new List<DebtorCollectionData>();
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(_collectionsSql, conn);
+        cmd.Parameters.Add(new SqlParameter("@DATEREQUESTED", SqlDbType.Date)
+        {
+            Value = deductionDay.Date
+        });
         conn.Open();
         using var reader = cmd.ExecuteReader();
 

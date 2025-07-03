@@ -163,7 +163,10 @@ namespace DCCollections.Gui
                 }
                 else
                 {
-                    var date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, day);
+                    DateTime today = DateTime.Today;
+                    DateTime date = day <= today.Day
+                        ? new DateTime(today.AddMonths(1).Year, today.AddMonths(1).Month, day)
+                        : new DateTime(today.Year, today.Month, day);
                     string folder = outFolder ?? AppContext.BaseDirectory;
                     EftGenResult eftResult = await Task.Run(() => EFTService.GenerateEFTFile(date, test, folder));
                     MessageBox.Show($"File generated: {eftResult.FilePath}\nDatabase updated with:\nBankFiles updated: {eftResult.BankFilesUpdated}\nCollection Requests updated: {eftResult.CollectionRequestsUpdated}", "Success");
