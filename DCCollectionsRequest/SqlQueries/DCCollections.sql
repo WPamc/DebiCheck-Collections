@@ -1,78 +1,12 @@
-
-SELECT 
-
-
-       CONVERT(datetime, DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
-              CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month))
-                   THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23) AS RequestedCollectionDate,
-       DEDUCTIONDAY,
-	   mmb.MANDATEUSERREF+'/'+   convert( varchar(10),
-	   CONVERT(datetime, DATEFROMPARTS(YEAR(base_month), MONTH(base_month),
-              CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month))
-                   THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23),23)  AS PaymentInformation,
-       3 AS TrackingPeriod,
-       'RCUR' AS DebitSequence,
-       '0021' AS EntryClass,
-       InstructedAmount AS InstructedAmount,
-       mmb.AUTHORISATIONREF AS MandateReference,
-       mmb.BRANCHCODE AS DebtorBankBranch,
-       mm.FIRSTNM,
-       mm.LASTNM AS DebtorName,
-       mmb.ACCNR AS DebtorAccountNumber,
-       mmb.ACCTYPE AS AccountType,
-       mmb.MANDATEUSERREF AS ContractReference,
-       GETDATE() AS RelatedCycleDate
-FROM (
-    SELECT *,
-           DATEADD(month,
-                   CASE WHEN DAY(GETDATE()) <= DEDUCTIONDAY THEN 0 ELSE 1 END,
-                   DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS base_month
-    FROM MEMBMANDATE_BANKHIST
-) AS mmb
-INNER JOIN MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID and getdate() between mmb.FROMDATE and isnull(mmb.TODATE, getdate ())
-inner join    GetsavviDEBICheck dbc
- on mm.subssn = dbc.subssn and (DeductionDate_RequestedCollectionDate = N'2025-05-31 12:00:00')
- inner join MEMB_HPHISTS mh on mm.MEMBID = mh.membid 
- 
- and getdate() between mh.OPFROMDT and isnull(mh.OPTHRUDT,getdate())
-WHERE DEDUCTIONDAY =@DEDUCTIONDAY and [day]=@DEDUCTIONDAY
-
-and mm.subssn not in ('MGS589298',
-'MGS174660',
-'MGS694952',
-'MGS125485',
-'MGS695365',
-'MGS846141',
-'MGS791031',
-'MGS620074',
-'MGS708141',
-'MGS609368',
-'MGS845016',
-'MGS739507',
-'MGS605275',
-'MGS778135',
-'MGS541901',
-'MGS622051',
-'MGS807510',
-'MGS823038',
-'MGS838723',
-'MGS842938',
-'MGS844959',
-'MGS844977',
-'MGS844985',
-'MGS845241',
-'MGS845243',
-'MGS845249',
-'MGS845251',
-'MGS845345',
-'MGS845370',
-'MGS845591',
-'MGS845842',
-'MGS846383',
-'MGS846429',
-'MGS846471',
-'MGS846497',
-'MGS846812',
-'MGS849410',
-'MGS849411',
-'MGS589298')
+SELECT CONVERT(datetime, DATEFROMPARTS(YEAR(mmb.base_month), MONTH(mmb.base_month), 
+CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month)) THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23) AS RequestedCollectionDate, mmb.DEDUCTIONDAY, 
+             mmb.MANDATEUSERREF + '/' + CONVERT(varchar(10), CONVERT(datetime, 
+             DATEFROMPARTS(YEAR(mmb.base_month), MONTH(mmb.base_month), CASE WHEN DEDUCTIONDAY > DAY(EOMONTH(base_month)) THEN DAY(EOMONTH(base_month)) ELSE DEDUCTIONDAY END), 23), 
+             23) AS PaymentInformation, 3 AS TrackingPeriod, 'RCUR' AS DebitSequence, '0021' AS EntryClass, mmb.AUTHORISATIONREF AS MandateReference, mmb.BRANCHCODE AS DebtorBankBranch, mm.FIRSTNM, mm.LASTNM AS DebtorName, mmb.ACCNR AS DebtorAccountNumber, 
+             mmb.ACCTYPE AS AccountType, mmb.MANDATEUSERREF AS ContractReference, GETDATE() AS RelatedCycleDate
+FROM   (SELECT MEMBID, BANK, BRANCHCODE, ACCNR, ACCTYPE, ACCHOLDNAME, DEDUCTIONDAY, MANDATEUSERREF, AUTHORISATIONREF, CURRHIST, FROMDATE, TODATE, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, SEQUENCE, ROWID, 
+                           DATEADD(month, CASE WHEN DAY(GETDATE()) <= DEDUCTIONDAY THEN 0 ELSE 1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS base_month
+             FROM    MEMBMANDATE_BANKHIST) AS mmb INNER JOIN
+             MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID AND GETDATE() BETWEEN mmb.FROMDATE AND ISNULL(mmb.TODATE, GETDATE()) INNER JOIN
+             MEMB_HPHISTS AS mh ON mm.MEMBID = mh.MEMBID AND GETDATE() BETWEEN mh.OPFROMDT AND ISNULL(mh.OPTHRUDT, GETDATE())
+WHERE (mmb.DEDUCTIONDAY =@DeductionDay)
