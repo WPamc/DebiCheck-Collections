@@ -1,16 +1,18 @@
-using System.Diagnostics;
-using DbConnection;
-using System.IO;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Threading.Tasks;
-using RMCollectionProcessor.Models;
-using RMCollectionProcessor;
-using EFT_Collections;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using DbConnection;
+using EFT_Collections;
+using RMCollectionProcessor;
+using RMCollectionProcessor.Models;
 using DcGenResult = RMCollectionProcessor.Models.FileGenerationResult;
-using EftGenResult = EFT_Collections.FileGenerationResult;
 using DCService = global::DatabaseService;
+using EftGenResult = EFT_Collections.FileGenerationResult;
 
 namespace DCCollections.Gui
 {
@@ -481,6 +483,33 @@ namespace DCCollections.Gui
             }
         }
 
+        /// <summary>
+        /// Extracts a DateTime from a filename based on common date/time patterns.
+        /// It prioritizes 'yyyyMMdd.HHmmss' and 'yyMMdd.HHmmss' formats.
+        /// </summary>
+        /// <param name="fileName">The filename to parse.</param>
+        /// <returns>A DateTime object if a valid date is found; otherwise, null.</returns>
+        private DateTime? ExtractDateTimeFromFileName(string fileName)
+        {
+            var mainMatch = Regex.Match(fileName, @"\.(\d{8}|\d{6})\.(\d{6})");
+
+            if (mainMatch.Success)
+            {
+                string datePart = mainMatch.Groups[1].Value;
+                string timePart = mainMatch.Groups[2].Value;
+                string combined = datePart + timePart;
+
+                string format = (datePart.Length == 8 ? "yyyyMMdd" : "yyMMdd") + "HHmmss";
+
+                if (DateTime.TryParseExact(combined, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
         private async void btnImportParse_Click(object sender, EventArgs e)
         {
             if (lvImportFiles.SelectedItems.Count == 0)
@@ -494,7 +523,15 @@ namespace DCCollections.Gui
                 int totalFound = 0;
                 int totalInserted = 0;
                 int eftInserted = 0;
-                foreach (ListViewItem item in lvImportFiles.SelectedItems)
+
+                var sortedItems = lvImportFiles.SelectedItems
+               .Cast<ListViewItem>()
+               .Select(item => new { Item = item, Date = ExtractDateTimeFromFileName(item.Text) })
+               .OrderBy(x => x.Date ?? DateTime.MinValue)
+               .Select(x => x.Item)
+               .ToList();
+
+                foreach (ListViewItem item in sortedItems)
                 {
                     var tagObj = item.Tag;
                     string? path = null;

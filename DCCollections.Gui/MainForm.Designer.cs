@@ -64,6 +64,11 @@
             btnLiveOutputOpen = new Button();
             tabMain = new TabControl();
             tabOperations = new TabPage();
+            grpCounters = new GroupBox();
+            lblEftDailyCounter = new Label();
+            lblEftGenerationNumber = new Label();
+            lblDcDailyCounter = new Label();
+            lblDcGenerationNumber = new Label();
             label3 = new Label();
             grpConfig = new GroupBox();
             txtLiveOutputFolder = new TextBox();
@@ -98,13 +103,9 @@
             lblTestOutput = new Label();
             cmsImportFiles = new ContextMenuStrip(components);
             previewToolStripMenuItem = new ToolStripMenuItem();
-            grpCounters = new GroupBox();
-            lblDcGenerationNumber = new Label();
-            lblDcDailyCounter = new Label();
-            lblEftGenerationNumber = new Label();
-            lblEftDailyCounter = new Label();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
+            grpCounters.SuspendLayout();
             grpConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
@@ -115,7 +116,7 @@
             // 
             // btnSearchFiles
             // 
-            btnSearchFiles.Location = new Point(834, 4);
+            btnSearchFiles.Location = new Point(1094, 4);
             btnSearchFiles.Name = "btnSearchFiles";
             btnSearchFiles.Size = new Size(75, 23);
             btnSearchFiles.TabIndex = 6;
@@ -175,6 +176,55 @@
             tabOperations.TabIndex = 0;
             tabOperations.Text = "Operations";
             tabOperations.UseVisualStyleBackColor = true;
+            // 
+            // grpCounters
+            // 
+            grpCounters.Controls.Add(lblEftDailyCounter);
+            grpCounters.Controls.Add(lblEftGenerationNumber);
+            grpCounters.Controls.Add(lblDcDailyCounter);
+            grpCounters.Controls.Add(lblDcGenerationNumber);
+            grpCounters.Location = new Point(8, 262);
+            grpCounters.Name = "grpCounters";
+            grpCounters.Size = new Size(544, 337);
+            grpCounters.TabIndex = 20;
+            grpCounters.TabStop = false;
+            grpCounters.Text = "Counters";
+            // 
+            // lblEftDailyCounter
+            // 
+            lblEftDailyCounter.AutoSize = true;
+            lblEftDailyCounter.Location = new Point(16, 97);
+            lblEftDailyCounter.Name = "lblEftDailyCounter";
+            lblEftDailyCounter.Size = new Size(110, 15);
+            lblEftDailyCounter.TabIndex = 3;
+            lblEftDailyCounter.Text = "EFT DailyCounter: 0";
+            // 
+            // lblEftGenerationNumber
+            // 
+            lblEftGenerationNumber.AutoSize = true;
+            lblEftGenerationNumber.Location = new Point(16, 72);
+            lblEftGenerationNumber.Name = "lblEftGenerationNumber";
+            lblEftGenerationNumber.Size = new Size(143, 15);
+            lblEftGenerationNumber.TabIndex = 2;
+            lblEftGenerationNumber.Text = "EFT GenerationNumber: 0";
+            // 
+            // lblDcDailyCounter
+            // 
+            lblDcDailyCounter.AutoSize = true;
+            lblDcDailyCounter.Location = new Point(16, 47);
+            lblDcDailyCounter.Name = "lblDcDailyCounter";
+            lblDcDailyCounter.Size = new Size(107, 15);
+            lblDcDailyCounter.TabIndex = 1;
+            lblDcDailyCounter.Text = "DC DailyCounter: 0";
+            // 
+            // lblDcGenerationNumber
+            // 
+            lblDcGenerationNumber.AutoSize = true;
+            lblDcGenerationNumber.Location = new Point(16, 22);
+            lblDcGenerationNumber.Name = "lblDcGenerationNumber";
+            lblDcGenerationNumber.Size = new Size(140, 15);
+            lblDcGenerationNumber.TabIndex = 0;
+            lblDcGenerationNumber.Text = "DC GenerationNumber: 0";
             // 
             // label3
             // 
@@ -406,7 +456,7 @@
             // btnImportParse
             // 
             btnImportParse.Enabled = false;
-            btnImportParse.Location = new Point(461, 4);
+            btnImportParse.Location = new Point(721, 4);
             btnImportParse.Name = "btnImportParse";
             btnImportParse.Size = new Size(100, 23);
             btnImportParse.TabIndex = 3;
@@ -417,7 +467,7 @@
             // btnImportRead
             // 
             btnImportRead.Enabled = false;
-            btnImportRead.Location = new Point(355, 4);
+            btnImportRead.Location = new Point(615, 4);
             btnImportRead.Name = "btnImportRead";
             btnImportRead.Size = new Size(100, 23);
             btnImportRead.TabIndex = 2;
@@ -427,14 +477,14 @@
             // 
             // txtSearchFiles
             // 
-            txtSearchFiles.Location = new Point(678, 5);
+            txtSearchFiles.Location = new Point(938, 5);
             txtSearchFiles.Name = "txtSearchFiles";
             txtSearchFiles.Size = new Size(150, 23);
             txtSearchFiles.TabIndex = 5;
             // 
             // btnImportBrowse
             // 
-            btnImportBrowse.Location = new Point(249, 4);
+            btnImportBrowse.Location = new Point(509, 4);
             btnImportBrowse.Name = "btnImportBrowse";
             btnImportBrowse.Size = new Size(100, 23);
             btnImportBrowse.TabIndex = 1;
@@ -446,13 +496,13 @@
             // 
             txtImportFolder.Location = new Point(3, 5);
             txtImportFolder.Name = "txtImportFolder";
-            txtImportFolder.Size = new Size(240, 23);
+            txtImportFolder.Size = new Size(500, 23);
             txtImportFolder.TabIndex = 0;
             // 
             // chkHideTestFiles
             // 
             chkHideTestFiles.AutoSize = true;
-            chkHideTestFiles.Location = new Point(567, 7);
+            chkHideTestFiles.Location = new Point(827, 7);
             chkHideTestFiles.Name = "chkHideTestFiles";
             chkHideTestFiles.Size = new Size(101, 19);
             chkHideTestFiles.TabIndex = 4;
@@ -491,42 +541,8 @@
             previewToolStripMenuItem.Text = "Preview";
             previewToolStripMenuItem.Click += previewToolStripMenuItem_Click;
             // 
-            // grpCounters
+            // MainForm
             // 
-            grpCounters.Controls.Add(lblEftDailyCounter);
-            grpCounters.Controls.Add(lblEftGenerationNumber);
-            grpCounters.Controls.Add(lblDcDailyCounter);
-            grpCounters.Controls.Add(lblDcGenerationNumber);
-            grpCounters.Location = new Point(8, 262);
-            grpCounters.Name = "grpCounters";
-            grpCounters.Size = new Size(544, 337);
-            grpCounters.TabIndex = 20;
-            grpCounters.TabStop = false;
-            grpCounters.Text = "Counters";
-            lblDcGenerationNumber.AutoSize = true;
-            lblDcGenerationNumber.Location = new Point(16, 22);
-            lblDcGenerationNumber.Name = "lblDcGenerationNumber";
-            lblDcGenerationNumber.Size = new Size(173, 15);
-            lblDcGenerationNumber.TabIndex = 0;
-            lblDcGenerationNumber.Text = "DC GenerationNumber: 0";
-            lblDcDailyCounter.AutoSize = true;
-            lblDcDailyCounter.Location = new Point(16, 47);
-            lblDcDailyCounter.Name = "lblDcDailyCounter";
-            lblDcDailyCounter.Size = new Size(145, 15);
-            lblDcDailyCounter.TabIndex = 1;
-            lblDcDailyCounter.Text = "DC DailyCounter: 0";
-            lblEftGenerationNumber.AutoSize = true;
-            lblEftGenerationNumber.Location = new Point(16, 72);
-            lblEftGenerationNumber.Name = "lblEftGenerationNumber";
-            lblEftGenerationNumber.Size = new Size(176, 15);
-            lblEftGenerationNumber.TabIndex = 2;
-            lblEftGenerationNumber.Text = "EFT GenerationNumber: 0";
-            lblEftDailyCounter.AutoSize = true;
-            lblEftDailyCounter.Location = new Point(16, 97);
-            lblEftDailyCounter.Name = "lblEftDailyCounter";
-            lblEftDailyCounter.Size = new Size(148, 15);
-            lblEftDailyCounter.TabIndex = 3;
-            lblEftDailyCounter.Text = "EFT DailyCounter: 0";
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1189, 637);
@@ -536,6 +552,8 @@
             tabMain.ResumeLayout(false);
             tabOperations.ResumeLayout(false);
             tabOperations.PerformLayout();
+            grpCounters.ResumeLayout(false);
+            grpCounters.PerformLayout();
             grpConfig.ResumeLayout(false);
             grpConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
