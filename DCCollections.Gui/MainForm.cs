@@ -51,7 +51,8 @@ namespace DCCollections.Gui
         public MainForm()
         {
             InitializeComponent();
-
+            lvImportFiles.HideSelection = false;
+            lvImportFiles.FullRowSelect= true;
             var connStr = DbConnection.AppConfig.ConnectionString;
             if (!string.IsNullOrWhiteSpace(connStr))
             {
@@ -358,7 +359,7 @@ namespace DCCollections.Gui
                     {
                         MessageBox.Show(ex.Message, "Error");
                     }
-                    if (eftType  == EftFileType.Unknown)
+                    if (eftType  == EftFileType.Unknown || eftType == EftFileType.EmptyTransmission)
                         try
                         {
                             var fileProcessor = new FileProcessor();
@@ -525,7 +526,7 @@ namespace DCCollections.Gui
                         MessageBox.Show(ex.Message, "Error");
                     }
 
-                    if (eftType != EftFileType.Unknown)
+                    if (eftType != EftFileType.Unknown && eftType != EftFileType.EmptyTransmission)
                     {
                         var eftResult = await Task.Run(() => _eftImportService.ParseFile(path));
                         eftInserted += eftResult.RecordsInserted;
