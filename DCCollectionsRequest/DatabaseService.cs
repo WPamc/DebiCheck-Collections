@@ -361,7 +361,14 @@ END", conn);
             using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
             existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
-            if (exists > 0) continue;
+            if (exists > 0) {
+
+                using var updateFileID = new SqlCommand($"update BILLING_COLLECTIONREQUESTS set EDIBANKFILEROWID = {bankFileRowId} where DEDUCTIONREFERENCE = @deductionReference", conn);
+                updateFileID.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+                //updateFileID.Parameters.Add(new SqlParameter("@bankFileRowId", SqlDbType.Int) { Value = bankFileRowId });
+                var update = Convert.ToInt32(updateFileID.ExecuteScalar());
+                continue; 
+            }
 
             using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
