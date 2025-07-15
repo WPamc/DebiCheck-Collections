@@ -122,8 +122,11 @@ namespace EFT_Collections
             var bankFileId = db.GetBankFileRowId(fileName);
             if (bankFileId == 0)
             {
-                bankFileId = db.CreateBankFileRecord(fileName, 0, 0);
+                bankFileId = db.CreateBankFileRecord(fileName, 0, 0, EftFileType.EftOutput.ToString(), 0, 0);
             }
+
+            int transactionCount = 0;
+            decimal total = 0m;
 
             string currentActionDate = string.Empty;
             var detailBuffer = new List<UnpaidTransactionDetail013>();
@@ -143,6 +146,8 @@ namespace EFT_Collections
                         break;
                     case UnpaidTransactionDetail013 detail:
                         detailBuffer.Add(detail);
+                        transactionCount++;
+                        total += ParseAmount(detail.AmountInCents);
                         break;
                 }
             }
@@ -150,6 +155,7 @@ namespace EFT_Collections
             {
                 inserted += db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
             }
+            db.UpdateBankFileInfo(bankFileId, EftFileType.EftOutput.ToString(), transactionCount, total);
 
             return inserted;
         }

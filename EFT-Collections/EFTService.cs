@@ -334,7 +334,14 @@ public class EFTService
         int recordId = 0;
         if (!isTest)
         {
-            recordId = db.CreateBankFileRecord(Path.GetFileName(fileName), generationNumber, startSequenceNumber);
+            decimal total = transactionsToProcess.Sum(t => t.Amount);
+            recordId = db.CreateBankFileRecord(
+                Path.GetFileName(fileName),
+                generationNumber,
+                startSequenceNumber,
+                EftFileType.CollectionSubmission.ToString(),
+                transactionsToProcess.Count,
+                total);
         }
         writer.GenerateFile(
             transactionsToProcess,
