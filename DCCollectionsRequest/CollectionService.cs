@@ -214,7 +214,14 @@ namespace RMCollectionProcessor
             int fileRowId = -1;
             if (!isTest)
             {
-                fileRowId = dbService.CreateBankFileRecord(fileName, genNumber, firstSeq);
+                decimal total = collections.Sum(c => c.InstructedAmount);
+                fileRowId = dbService.CreateBankFileRecord(
+                    fileName,
+                    genNumber,
+                    firstSeq,
+                    DCFileType.CollectionRequest.ToString(),
+                    collections.Count,
+                    total);
             }
 
             records.Add(recordBuilder.BuildTransmissionHeader(staticData));

@@ -59,7 +59,6 @@ public class DatabaseService
             catch (Exception ex)
             {
 
-               // throw;
             }
         }
         return results;
@@ -178,19 +177,22 @@ END", conn);
         cmd.ExecuteNonQuery();
     }
 
-    public int CreateBankFileRecord(string fileName, int generationNumber, int dailyCounterStart)
+    public int CreateBankFileRecord(string fileName, int generationNumber, int dailyCounterStart, string fileType, int transactionCount, decimal total)
     {
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
 
         using var cmd = new SqlCommand(@"INSERT INTO dbo.EDI_BANKFILES
-                (DESCRIPTION, FILENAME, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
+                (DESCRIPTION, FILENAME, FILETYPE, TOTAL, TRANSACCTIONCOUNT, GENERATIONNUMBER, DAILYCOUNTERSTART, DAILYCOUNTEREND,
                  GENERATIONCOMPLETE, DELIVERED, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
-             VALUES (@desc, @file, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
+             VALUES (@desc, @file, @type, @total, @count, @gen, @start, @start, 0, 0, 99, GETDATE(), 99, GETDATE());
              SELECT SCOPE_IDENTITY();", conn);
 
         cmd.Parameters.Add(new SqlParameter("@desc", SqlDbType.VarChar, 100) { Value = CounterDescription });
         cmd.Parameters.Add(new SqlParameter("@file", SqlDbType.VarChar, 100) { Value = fileName });
+        cmd.Parameters.Add(new SqlParameter("@type", SqlDbType.VarChar, 50) { Value = fileType });
+        cmd.Parameters.Add(new SqlParameter("@total", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = total });
+        cmd.Parameters.Add(new SqlParameter("@count", SqlDbType.Int) { Value = transactionCount });
         cmd.Parameters.Add(new SqlParameter("@gen", SqlDbType.Int) { Value = generationNumber });
         cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.Int) { Value = dailyCounterStart });
 
@@ -244,6 +246,24 @@ END", conn);
        LASTCHANGEDATE = GETDATE()
  WHERE ROWID = @id;", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
+        conn.Open();
+        cmd.ExecuteNonQuery();
+    }
+
+    public void UpdateBankFileInfo(int rowId, string fileType, int transactionCount, decimal total)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"UPDATE dbo.EDI_BANKFILES
+   SET FILETYPE = @type,
+       TRANSACCTIONCOUNT = @count,
+       TOTAL = @total,
+       LASTCHANGEBY = 99,
+       LASTCHANGEDATE = GETDATE()
+ WHERE ROWID = @id;", conn);
+        cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
+        cmd.Parameters.Add(new SqlParameter("@type", SqlDbType.VarChar, 50) { Value = fileType });
+        cmd.Parameters.Add(new SqlParameter("@count", SqlDbType.Int) { Value = transactionCount });
+        cmd.Parameters.Add(new SqlParameter("@total", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = total });
         conn.Open();
         cmd.ExecuteNonQuery();
     }
@@ -311,6 +331,11 @@ END", conn);
         int inserted = 0;
         if (!recordList.Any()) return inserted;
 
+        int transactionCount = recordList.Count;
+        decimal total = recordList
+            .Select(r => decimal.TryParse(r.InstructedAmount, out var cents) ? cents / 100m : 0m)
+            .Sum();
+
         if (bankFileRowId <= 0)
         {
             var first = recordList.First();
@@ -321,10 +346,11 @@ END", conn);
             if (existing > 0)
             {
                 bankFileRowId = existing;
+                UpdateBankFileInfo(bankFileRowId, first.FileType, transactionCount, total);
             }
             else
             {
-                bankFileRowId = CreateBankFileRecord(first.Filename, gen, start);
+                bankFileRowId = CreateBankFileRecord(first.Filename, gen, start, first.FileType, transactionCount, total);
             }
         }
 
@@ -335,7 +361,14 @@ END", conn);
             using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
             existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
-            if (exists > 0) continue;
+            if (exists > 0) {
+
+                using var updateFileID = new SqlCommand($"update BILLING_COLLECTIONREQUESTS set EDIBANKFILEROWID = {bankFileRowId} where DEDUCTIONREFERENCE = @deductionReference", conn);
+                updateFileID.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+                //updateFileID.Parameters.Add(new SqlParameter("@bankFileRowId", SqlDbType.Int) { Value = bankFileRowId });
+                var update = Convert.ToInt32(updateFileID.ExecuteScalar());
+                continue; 
+            }
 
             using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
@@ -371,6 +404,7 @@ END", conn);
                 .Max();
 
             UpdateBankFileDailyCounterEnd(bankFileRowId, maxSeq);
+            UpdateBankFileInfo(bankFileRowId, recordList.First().FileType, transactionCount, total);
         }
         return inserted;
     }
@@ -386,11 +420,18 @@ END", conn);
         int inserted = 0;
         if (!recordList.Any()) return inserted;
 
+        int transactionCount = recordList.Count;
+        decimal total = 0m;
+
         string fileName = Path.GetFileName(filePath);
         int bankFileRowId = GetBankFileRowId(fileName);
         if (bankFileRowId <= 0)
         {
-            bankFileRowId = CreateBankFileRecord(fileName, 0, 0);
+            bankFileRowId = CreateBankFileRecord(fileName, 0, 0, DCFileType.StatusReport.ToString(), transactionCount, total);
+        }
+        else
+        {
+            UpdateBankFileInfo(bankFileRowId, DCFileType.StatusReport.ToString(), transactionCount, total);
         }
 
         using var conn = new SqlConnection(_connectionString);
@@ -483,6 +524,8 @@ END", conn);
             updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             updateCmd.ExecuteNonQuery();
         }
+
+        UpdateBankFileInfo(bankFileRowId, DCFileType.StatusReport.ToString(), transactionCount, total);
 
         return inserted;
     }
