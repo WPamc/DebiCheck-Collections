@@ -10,6 +10,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Console.WriteLine("Starting EFT Runner...");
         var db = new DatabaseService();
         db.EnsureDailyCounterForToday();
         DateTime deductionDate = DateTime.Now;
