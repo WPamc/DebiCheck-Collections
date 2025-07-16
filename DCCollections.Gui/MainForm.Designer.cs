@@ -96,6 +96,10 @@
             btnImportParse = new Button();
             btnImportRead = new Button();
             txtSearchFiles = new TextBox();
+            btnFindText = new Button();
+            txtFindText = new TextBox();
+            btnApplyFilter = new Button();
+            txtFileFilter = new TextBox();
             btnImportBrowse = new Button();
             txtImportFolder = new TextBox();
             chkHideTestFiles = new CheckBox();
@@ -444,13 +448,17 @@
             pnlImportTop.Controls.Add(btnImportRead);
             pnlImportTop.Controls.Add(btnSearchFiles);
             pnlImportTop.Controls.Add(txtSearchFiles);
+            pnlImportTop.Controls.Add(btnFindText);
+            pnlImportTop.Controls.Add(txtFindText);
+            pnlImportTop.Controls.Add(btnApplyFilter);
+            pnlImportTop.Controls.Add(txtFileFilter);
             pnlImportTop.Controls.Add(btnImportBrowse);
             pnlImportTop.Controls.Add(txtImportFolder);
             pnlImportTop.Controls.Add(chkHideTestFiles);
             pnlImportTop.Dock = DockStyle.Top;
             pnlImportTop.Location = new Point(3, 3);
             pnlImportTop.Name = "pnlImportTop";
-            pnlImportTop.Size = new Size(1175, 32);
+            pnlImportTop.Size = new Size(1175, 60);
             pnlImportTop.TabIndex = 0;
             // 
             // btnImportParse
@@ -481,6 +489,28 @@
             txtSearchFiles.Name = "txtSearchFiles";
             txtSearchFiles.Size = new Size(150, 23);
             txtSearchFiles.TabIndex = 5;
+            btnFindText.Location = new Point(821, 33);
+            btnFindText.Name = "btnFindText";
+            btnFindText.Size = new Size(100, 23);
+            btnFindText.TabIndex = 10;
+            btnFindText.Text = "Find Text";
+            btnFindText.UseVisualStyleBackColor = true;
+            btnFindText.Click += btnFindText_Click;
+            txtFindText.Location = new Point(615, 34);
+            txtFindText.Name = "txtFindText";
+            txtFindText.Size = new Size(200, 23);
+            txtFindText.TabIndex = 9;
+            btnApplyFilter.Location = new Point(509, 33);
+            btnApplyFilter.Name = "btnApplyFilter";
+            btnApplyFilter.Size = new Size(100, 23);
+            btnApplyFilter.TabIndex = 8;
+            btnApplyFilter.Text = "Apply";
+            btnApplyFilter.UseVisualStyleBackColor = true;
+            btnApplyFilter.Click += btnApplyFilter_Click;
+            txtFileFilter.Location = new Point(3, 34);
+            txtFileFilter.Name = "txtFileFilter";
+            txtFileFilter.Size = new Size(500, 23);
+            txtFileFilter.TabIndex = 7;
             // 
             // btnImportBrowse
             // 
@@ -579,6 +609,10 @@
         private CheckBox chkHideTestFiles;
         private TextBox txtSearchFiles;
         private Button btnSearchFiles;
+        private TextBox txtFindText;
+        private Button btnFindText;
+        private TextBox txtFileFilter;
+        private Button btnApplyFilter;
         private GroupBox grpCounters;
         private Label lblDcGenerationNumber;
         private Label lblDcDailyCounter;

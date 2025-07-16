@@ -340,6 +340,7 @@ namespace DCCollections.Gui
                 lvImportFiles.Items.Clear();
 
                 bool hideTests = chkHideTestFiles.Checked;
+                string nameFilter = txtFileFilter.Text.Trim();
 
                 var processor = new FileProcessor();
                 var eftIdentifier = new EftFileIdentifier();
@@ -347,6 +348,9 @@ namespace DCCollections.Gui
                 foreach (var file in Directory.GetFiles(path))
                 {
                     var info = new FileInfo(file);
+                    if (!string.IsNullOrEmpty(nameFilter) &&
+                        !info.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase))
+                        continue;
                     var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
                     DCFileType dcType = DCFileType.Unknown;
                     EftFileType eftType = EftFileType.Unknown;
@@ -660,6 +664,48 @@ namespace DCCollections.Gui
                 bool match = !string.IsNullOrEmpty(term) &&
                              item.SubItems.Cast<ListViewItem.ListViewSubItem>()
                                  .Any(sub => sub.Text.Contains(term, StringComparison.OrdinalIgnoreCase));
+                item.BackColor = match ? Color.Yellow : lvImportFiles.BackColor;
+            }
+        }
+
+        private void btnApplyFilter_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtImportFolder.Text))
+            {
+                LoadImportFiles(txtImportFolder.Text);
+            }
+        }
+
+        private void btnFindText_Click(object sender, EventArgs e)
+        {
+            string term = txtFindText.Text.Trim();
+
+            foreach (ListViewItem item in lvImportFiles.Items)
+            {
+                bool match = false;
+                if (!string.IsNullOrEmpty(term))
+                {
+                    var tagObj = item.Tag;
+                    string? path = null;
+                    if (tagObj is ImportFileTag tag)
+                        path = tag.Path;
+                    else
+                        path = tagObj as string;
+
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        try
+                        {
+                            var text = File.ReadAllText(path);
+                            match = text.Contains(term, StringComparison.OrdinalIgnoreCase);
+                        }
+                        catch
+                        {
+                            match = false;
+                        }
+                    }
+                }
+
                 item.BackColor = match ? Color.Yellow : lvImportFiles.BackColor;
             }
         }
