@@ -18,5 +18,6 @@ namespace RMCollectionProcessor.Models
         public string? EffectiveDate { get; set; }
         public string? RejectReasonCode { get; set; }
         public string? RejectReasonDescription { get; set; }
+        public string? InstructedAmount { get; set; }
     }
 }

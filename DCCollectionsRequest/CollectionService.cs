@@ -101,13 +101,24 @@ namespace RMCollectionProcessor
                         GenerationNumber = generationNumber,
                         TransactionStatus = line1.TransactionStatus.Trim(),
                         ContractReference = line1.ContractReferenceNumber.Trim(),
+
                     };
+                    currentTransaction.InstructedAmount = line1.InstructedAmount;
                 }
                 else if (currentTransaction != null)
                 {
+
+
+
+
+
                     if (record is StatusUserSetTransactionLine02 line2)
                     {
                         currentTransaction.ActionDate = line2.ActionDate.Trim();
+                        if (Convert.ToDateTime(currentTransaction.ActionDate) < DateTime.Today.AddDays(-100))
+                        {
+
+                        }
                         var trimmedEffectiveDate = line2.EffectiveDate.Trim();
                         currentTransaction.EffectiveDate = string.IsNullOrEmpty(trimmedEffectiveDate) ? null : trimmedEffectiveDate;
                     }
@@ -150,11 +161,12 @@ namespace RMCollectionProcessor
 
             var now = DateTime.Now;
             var cutOffTime = new TimeSpan(01, 30, 0);
-            int testDate =  DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            if (deductionDay > testDate) {
+            int testDate = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            if (deductionDay > testDate)
+            {
                 deductionDay = testDate;
             }
-            if ((now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)||
+            if ((now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date) ||
                 now.Date > new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
             {
                 foreach (var collection in collections)
