@@ -479,10 +479,10 @@ END", conn);
             using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
                 (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
                  REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
-                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
+                 INSTRUCTEDAMOUNT, ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
                VALUES
                 (@reqId, @fileId, @status, @reasonCode, @reasonDesc, @actionDate,
-                 @effectiveDate, @origContractRef, @origPmtInfo, 99, GETDATE());", conn);
+                 @effectiveDate, @instructedAmount, @origContractRef, @origPmtInfo, 99, GETDATE());", conn);
 
             DateTime.TryParse(r.ActionDate, out var actionDate);
 
@@ -492,10 +492,8 @@ END", conn);
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var effectiveDate);
-            if (!isEffectiveDateValid)
-            {
-
-            }
+            decimal.TryParse(r.InstructedAmount, out var amountInCents);
+            var instructedAmount = amountInCents / 100m;
             insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
             insertCmd.Parameters.Add(new SqlParameter("@status", SqlDbType.VarChar, 4) { Value = r.TransactionStatus });
@@ -503,6 +501,7 @@ END", conn);
             insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)r.RejectReasonDescription ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = (object?)actionDate ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@effectiveDate", SqlDbType.DateTime) { Value = isEffectiveDateValid ? effectiveDate : DBNull.Value });
+            insertCmd.Parameters.Add(new SqlParameter("@instructedAmount", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = instructedAmount });
             insertCmd.Parameters.Add(new SqlParameter("@origContractRef", SqlDbType.VarChar, 14) { Value = r.ContractReference });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.OriginalPaymentInformation });
             try
