@@ -115,7 +115,7 @@ namespace RMCollectionProcessor
                     if (record is StatusUserSetTransactionLine02 line2)
                     {
                         currentTransaction.ActionDate = line2.ActionDate.Trim();
-                        if (Convert.ToDateTime(currentTransaction.ActionDate) < DateTime.Today.AddDays(-100))
+                        if (Convert.ToDateTime(currentTransaction.ActionDate) < DateTime.Today.AddDays(-150))
                         {
 
                         }

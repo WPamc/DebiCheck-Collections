@@ -421,7 +421,21 @@ END", conn);
         if (!recordList.Any()) return inserted;
 
         int transactionCount = recordList.Count;
+
+
         decimal total = 0m;
+        try
+        {
+            foreach (var statusRecord in statusRecords)
+            {
+                total += Convert.ToDecimal(statusRecord.InstructedAmount) / 100;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
 
         string fileName = Path.GetFileName(filePath);
         int bankFileRowId = GetBankFileRowId(fileName);
@@ -459,6 +473,7 @@ END", conn);
             using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @ref", conn))
             {
                 findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 50) { Value = r.OriginalPaymentInformation });
+               // findCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
                 var result = findCmd.ExecuteScalar();
                 if (result != null && result != DBNull.Value)
                 {
@@ -466,10 +481,10 @@ END", conn);
                 }
             }
 
-            if (originalRequestRowId == 0)
-            {
-                continue;
-            }
+            //if (originalRequestRowId == 0)
+            //{
+            //    continue;
+            //}
 
             if (existingResponses.Contains(r.OriginalPaymentInformation))
             {
@@ -521,7 +536,7 @@ END", conn);
                 WHERE ROWID = @reqId;", conn);
             updateCmd.Parameters.Add(new SqlParameter("@result", SqlDbType.Bit) { Value = success });
             updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
-            updateCmd.ExecuteNonQuery();
+            var updated = updateCmd.ExecuteNonQuery();
         }
 
         UpdateBankFileInfo(bankFileRowId, DCFileType.StatusReport.ToString(), transactionCount, total);
