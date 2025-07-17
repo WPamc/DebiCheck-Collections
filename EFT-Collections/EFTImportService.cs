@@ -39,7 +39,7 @@ namespace EFT_Collections
                 typeof(OutputFileTrailer019)
             )
             {
-                RecordSelector = new RecordTypeSelector(EftFileIdentifier.CustomSelectorForAllEftTypes )
+                RecordSelector = new RecordTypeSelector(EftFileIdentifier.CustomSelectorForAllEftTypes)
             };
         }
 
@@ -61,7 +61,7 @@ namespace EFT_Collections
             switch (fileType)
             {
                 case EftFileType.CollectionSubmission:
-                    inserted = ProcessCollectionSubmission(records, db);
+                    inserted = ProcessCollectionSubmission(records, db, Path.GetFileName(filePath));
                     break;
 
                 case EftFileType.EftOutput:
@@ -81,12 +81,20 @@ namespace EFT_Collections
         /// </summary>
         /// <param name="records">The parsed records from the file.</param>
         /// <param name="db">The database service instance.</param>
-        private int ProcessCollectionSubmission(object[] records, DatabaseService db)
+        private int ProcessCollectionSubmission(object[] records, DatabaseService db, string fileName)
         {
+            var generationNumber = records.OfType<EftUserHeader001>().Select(r =>
+                {
+                    return r.UserGenerationNumber;
+                }).FirstOrDefault();
+
             var data = records
+
                 .OfType<EftStandardTransaction001>()
                 .Select(r => new DebtorCollectionData
                 {
+
+
                     PaymentInformation = r.UserReference.Trim(),
                     RequestedCollectionDate = ParseDate(r.ActionDate, "yyMMdd"),
                     TrackingPeriod = 0,
@@ -99,13 +107,34 @@ namespace EFT_Collections
                     DebtorAccountNumber = r.HomingAccountNumber.Trim(),
                     AccountType = r.TypeOfAccount.Trim(),
                     ContractReference = string.Empty,
-                    RelatedCycleDate = ParseDate(r.ActionDate, "yyMMdd")
+                    RelatedCycleDate = ParseDate(r.ActionDate, "yyMMdd"),
+                    UserSequenceNumber = r.UserSequenceNumber
                 })
                 .ToList();
 
+            var eftRecords = records
+    .OfType<EftStandardTransaction001>()
+    .ToList();
+
+            // then pull out the sequence numbers
+            var userSequences = eftRecords
+                .Select(r => Convert.ToInt32( r.UserSequenceNumber));
+
+            // compute min and max
+            int minSequence = userSequences.Min();
+            int maxSequence = userSequences.Max();
+
+
             if (data.Any())
             {
-                return db.InsertCollectionRequests(data, 0);
+                int bankFileRowID = db.GetBankFileRowId(fileName);
+                if (bankFileRowID == 0)
+                {
+                    bankFileRowID = db.CreateBankFileRecord(fileName, Convert.ToInt32(generationNumber), minSequence, EftFileType.CollectionSubmission.ToString()
+                       , 0, 0);
+
+                }
+                return db.InsertCollectionRequests(data, bankFileRowID);
             }
 
             return 0;
@@ -136,6 +165,12 @@ namespace EFT_Collections
                 Type t = record.GetType();
                 switch (record)
                 {
+                    case EFT_Collections.OutputFileHeader010 fileHeader:
+                        if (fileHeader.DataSetStatus =="")
+                        {
+
+                        }
+                        break;
                     case UnpaidSetHeader011 header:
                         if (detailBuffer.Any())
                         {
@@ -199,6 +234,6 @@ namespace EFT_Collections
                 : DateTime.MinValue;
         }
 
-      
+
     }
 }

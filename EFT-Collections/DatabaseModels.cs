@@ -15,15 +15,15 @@ public class DebtorCollectionData
     public string AccountType { get; set; } = string.Empty;
     public string ContractReference { get; set; } = string.Empty;
     public DateTime RelatedCycleDate { get; set; }
+    public string UserSequenceNumber { get; set; }
 }
-
-public class CreditorDefaults
-{
-    public string ClientCode { get; set; } = string.Empty;
-    public string ClientName { get; set; } = string.Empty;
-    public string BankservUserCode { get; set; } = string.Empty;
-    public string CreditorBranch { get; set; } = string.Empty;
-    public string CreditorAccount { get; set; } = string.Empty;
-    public string CreditorAbbreviation { get; set; } = string.Empty;
-    public string TypeOfService { get; set; } = string.Empty;
-}
+    public class CreditorDefaults
+    {
+        public string ClientCode { get; set; } = string.Empty;
+        public string ClientName { get; set; } = string.Empty;
+        public string BankservUserCode { get; set; } = string.Empty;
+        public string CreditorBranch { get; set; } = string.Empty;
+        public string CreditorAccount { get; set; } = string.Empty;
+        public string CreditorAbbreviation { get; set; } = string.Empty;
+        public string TypeOfService { get; set; } = string.Empty;
+    }

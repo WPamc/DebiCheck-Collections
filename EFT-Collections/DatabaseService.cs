@@ -61,7 +61,7 @@ public class DatabaseService
 
             if (originalRequestRowId == 0)
             {
-                continue;
+                //continue;
             }
 
             var paymentInfo = r.UserReference.Trim();
@@ -76,11 +76,11 @@ public class DatabaseService
             using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
                 (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
                  REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
-                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE)
+                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE, INSTRUCTEDAMOUNT)
                VALUES
                 (@reqId, @fileId, 'RJCT', @reasonCode, @reasonDesc, @actionDate, NULL,
-                 NULL, @origPmtInfo, 99, GETDATE());", conn);
-
+                 NULL, @origPmtInfo, 99, GETDATE(), @amount);", conn);
+            int amount = Convert.ToInt32(r.AmountInCents) / 100;
             insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
             insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
             var rejectCode = r.RejectionReason?.Trim();
@@ -89,6 +89,7 @@ public class DatabaseService
             insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)desc ?? DBNull.Value });
             insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
             insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = paymentInfo });
+            insertCmd.Parameters.Add(new SqlParameter("@amount", SqlDbType.Int) { Value = amount });
             try
             {
                 int rows = insertCmd.ExecuteNonQuery();
@@ -345,25 +346,44 @@ END", conn);
         conn.Open();
         foreach (var r in recordList)
         {
-            using var existsCmd = new SqlCommand(@"SELECT COUNT(*) FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference", conn);
+            using var existsCmd = new SqlCommand(@"SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @deductionReference
+                                                     ", conn);
             existsCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
             var exists = Convert.ToInt32(existsCmd.ExecuteScalar());
-            if (exists > 0) continue;
+            if (exists > 0)
+            {
+                using var updateCmd = new SqlCommand($"UPDATE dbo.BILLING_COLLECTIONREQUESTS SET EDIBANKFILEROWID = {bankFileRowId} WHERE rowid = {exists}",
+                    conn);
+               // updateCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+                try
+                {
+                    var updated = Convert.ToInt32(updateCmd.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
 
-            using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
+                    //throw;
+                }
+            }
+            else
+            {
+
+
+                using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
                  RESULT, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, EDIBANKFILEROWID, METHOD)
              VALUES (@dateRequested, @subssn, @reference, @deductionReference, @amountRequested,
                  0, 99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = r.RequestedCollectionDate });
-            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.ContractReference });
-            cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
-            cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
-            cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });
-            cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
-            cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
-            inserted += cmd.ExecuteNonQuery();
+                cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = r.RequestedCollectionDate });
+                cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.ContractReference });
+                cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
+                cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+                cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });
+                cmd.Parameters.Add(new SqlParameter("@fileRowId", SqlDbType.Int) { Value = bankFileRowId });
+                cmd.Parameters.Add(new SqlParameter("@method", SqlDbType.Int) { Value = 1 });
+                inserted += cmd.ExecuteNonQuery();
+            }
         }
         if (bankFileRowId > 0)
         {
@@ -402,4 +422,6 @@ END", conn);
         conn.Open();
         cmd.ExecuteNonQuery();
     }
+
+
 }
