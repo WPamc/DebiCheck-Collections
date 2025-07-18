@@ -335,6 +335,10 @@ namespace DCCollections.Gui
             }
         }
 
+        /// <summary>
+        /// Loads files from the specified path into the Import Files list view.
+        /// </summary>
+        /// <param name="path">The folder to scan for files.</param>
         private void LoadImportFiles(string path)
         {
             try
@@ -402,20 +406,18 @@ namespace DCCollections.Gui
                     var desc = dcType != DCFileType.Unknown ? dcType.ToString() : eftType.ToString();
                     if (!isLive && recordStatus.Length > 0)
                         desc += " (Test)";
-                    item.SubItems.Add(desc);
-
                     try
                     {
                         var parsed = processor.ProcessFile(info.FullName);
                         var ft = DCFileTypeIdentifier.Identify(parsed);
-                        item.SubItems.Add(ft.ToString());
+                        if (ft != DCFileType.Unknown)
+                            desc = ft.ToString();
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message, "Error");
-                        var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : DCFileType.Unknown.ToString();
-                        item.SubItems.Add(eftTypeStr);
                     }
+                    item.SubItems.Add(desc);
 
                     item.SubItems.Add(isLive ? "No" : "Yes");
                     bool imported = db.GetBankFileRowId(info.Name) > 0;
