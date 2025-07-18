@@ -51,6 +51,8 @@
         private System.Windows.Forms.ColumnHeader chSize;
         private System.Windows.Forms.ColumnHeader chModified;
         private System.Windows.Forms.ColumnHeader chType;
+        private System.Windows.Forms.ColumnHeader chTest;
+        private System.Windows.Forms.ColumnHeader chImported;
 
         private System.Windows.Forms.ContextMenuStrip cmsImportFiles;
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
@@ -92,6 +94,8 @@
             chSize = new ColumnHeader();
             chModified = new ColumnHeader();
             chType = new ColumnHeader();
+            chTest = new ColumnHeader();
+            chImported = new ColumnHeader();
             pnlImportTop = new Panel();
             btnImportParse = new Button();
             btnImportRead = new Button();
@@ -399,7 +403,7 @@
             // 
             // lvImportFiles
             // 
-            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType });
+            lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType, chTest, chImported });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
             lvImportFiles.Location = new Point(3, 35);
@@ -441,9 +445,19 @@
             // 
             chType.Text = "Type";
             chType.Width = 120;
-            // 
+            //
+            // chTest
+            //
+            chTest.Text = "Test";
+            chTest.Width = 60;
+            //
+            // chImported
+            //
+            chImported.Text = "Imported";
+            chImported.Width = 80;
+            //
             // pnlImportTop
-            // 
+            //
             pnlImportTop.Controls.Add(btnImportParse);
             pnlImportTop.Controls.Add(btnImportRead);
             pnlImportTop.Controls.Add(btnSearchFiles);

@@ -292,6 +292,8 @@ namespace DCCollections.Gui
 
             _importSortColumn = _settings.ImportSortColumn;
             _importSortDescending = _settings.ImportSortDescending;
+            if (_importSortColumn >= lvImportFiles.Columns.Count)
+                _importSortColumn = 0;
 
             if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
             {
@@ -344,6 +346,7 @@ namespace DCCollections.Gui
 
                 var processor = new FileProcessor();
                 var eftIdentifier = new EftFileIdentifier();
+                var db = new DCService();
 
                 foreach (var file in Directory.GetFiles(path))
                 {
@@ -413,6 +416,10 @@ namespace DCCollections.Gui
                         var eftTypeStr = eftType != EftFileType.Unknown ? eftType.ToString() : DCFileType.Unknown.ToString();
                         item.SubItems.Add(eftTypeStr);
                     }
+
+                    item.SubItems.Add(isLive ? "No" : "Yes");
+                    bool imported = db.GetBankFileRowId(info.Name) > 0;
+                    item.SubItems.Add(imported ? "Yes" : "No");
 
                     lvImportFiles.Items.Add(item);
                 }
@@ -581,6 +588,8 @@ namespace DCCollections.Gui
                             totalInserted += result.StatusRecordsInserted;
                         }
                     }
+
+                    item.SubItems[item.SubItems.Count - 1].Text = "Yes";
                 }
 
                 var msg = "Import complete.";
