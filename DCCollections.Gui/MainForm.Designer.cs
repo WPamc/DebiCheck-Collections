@@ -86,6 +86,8 @@
             rdoEft = new RadioButton();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
+            cmbBillingDate = new ComboBox();
+            label4 = new Label();
             tpImportFiles = new TabPage();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
@@ -173,6 +175,8 @@
             tabOperations.Controls.Add(dgvPossibleDuplicates);
             tabOperations.Controls.Add(btnCheckDuplicates);
             tabOperations.Controls.Add(chkTest);
+            tabOperations.Controls.Add(cmbBillingDate);
+            tabOperations.Controls.Add(label4);
             tabOperations.Controls.Add(rdoDebiCheck);
             tabOperations.Controls.Add(rdoEft);
             tabOperations.Controls.Add(btnGenerate);
@@ -242,6 +246,12 @@
             label3.Size = new Size(85, 15);
             label3.TabIndex = 15;
             label3.Text = "Deduction Day";
+            label4.AutoSize = true;
+            label4.Location = new Point(77, 82);
+            label4.Name = "label4";
+            label4.Size = new Size(73, 15);
+            label4.TabIndex = 21;
+            label4.Text = "Billing Date";
             // 
             // grpConfig
             // 
@@ -388,9 +398,13 @@
             nudDay.Size = new Size(38, 23);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
+            cmbBillingDate.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbBillingDate.FormattingEnabled = true;
+            cmbBillingDate.Location = new Point(251, 79);
+            cmbBillingDate.Name = "cmbBillingDate";
+            cmbBillingDate.Size = new Size(121, 23);
+            cmbBillingDate.TabIndex = 5;
             // tpImportFiles
-            // 
             tpImportFiles.Controls.Add(lvImportFiles);
             tpImportFiles.Controls.Add(pnlImportTop);
             tpImportFiles.Location = new Point(4, 24);
@@ -632,5 +646,7 @@
         private Label lblDcDailyCounter;
         private Label lblEftGenerationNumber;
         private Label lblEftDailyCounter;
+        private ComboBox cmbBillingDate;
+        private Label label4;
     }
 }
