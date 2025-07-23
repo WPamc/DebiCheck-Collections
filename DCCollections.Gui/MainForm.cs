@@ -75,6 +75,7 @@ namespace DCCollections.Gui
             _pbOperations = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
             tabOperations.Controls.Add(_pbOperations);
             lvImportFiles.MultiSelect = true;
+            PopulateBillingDates();
             LoadInitialPaths();
             LoadCounters();
         }
@@ -159,10 +160,16 @@ namespace DCCollections.Gui
                 int day = (int)nudDay.Value;
                 bool test = chkTest.Checked;
                 string? outFolder = test ? _settings.TestOutputFolderPath : _settings.LiveOutputFolderPath;
+                var dateText = cmbBillingDate.SelectedItem?.ToString();
+                DateTime effDate = DateTime.Today;
+                if (!string.IsNullOrWhiteSpace(dateText))
+                {
+                    effDate = DateTime.ParseExact(dateText, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                }
                 DcGenResult result;
                 if (rdoDebiCheck.Checked)
                 {
-                    result = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, test, outFolder));
+                    result = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, effDate, test, outFolder));
                 }
                 else
                 {
@@ -262,7 +269,13 @@ namespace DCCollections.Gui
             try
             {
                 int day = (int)nudDay.Value;
-                var table = _dcCollectionservice.GetDuplicateCollections(day);
+                var text = cmbBillingDate.SelectedItem?.ToString();
+                DateTime effDate = DateTime.Today;
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    effDate = DateTime.ParseExact(text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                }
+                var table = _dcCollectionservice.GetDuplicateCollections(day, effDate);
                 dgvPossibleDuplicates.DataSource = table;
                 MessageBox.Show($"Found {table.Rows.Count} possible duplicates.", "Check Duplicates");
             }
@@ -752,6 +765,26 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void PopulateBillingDates()
+        {
+            cmbBillingDate.Items.Clear();
+            var today = DateTime.Today;
+            var first = new DateTime(today.Year, today.Month, 1);
+            if (first < today.Date)
+            {
+                first = first.AddMonths(1);
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                var date = first.AddMonths(i);
+                cmbBillingDate.Items.Add(date.ToString("yyyy-MM-dd"));
+            }
+            if (cmbBillingDate.Items.Count > 0)
+            {
+                cmbBillingDate.SelectedIndex = 0;
             }
         }
     }

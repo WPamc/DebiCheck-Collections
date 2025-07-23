@@ -25,12 +25,13 @@ public class DatabaseService
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));
     }
 
-    public List<DebtorCollectionData> GetCollections(int deductionDay)
+    public List<DebtorCollectionData> GetCollections(int deductionDay, DateTime effectiveBillingsDate)
     {
         var results = new List<DebtorCollectionData>();
         using var conn = new SqlConnection(_connectionString);
         using var cmd = new SqlCommand(_collectionsSql, conn);
-        cmd.Parameters.Add(new SqlParameter("@DEDUCTIONDAY", SqlDbType.Int) { Value = deductionDay });
+        cmd.Parameters.Add(new SqlParameter("@DeductionDay", SqlDbType.Int) { Value = deductionDay });
+        cmd.Parameters.Add(new SqlParameter("@EffectiveBillingsDate", SqlDbType.Date) { Value = effectiveBillingsDate.Date });
         conn.Open();
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
@@ -64,9 +65,9 @@ public class DatabaseService
         return results;
     }
 
-    public DataTable GetDuplicateCollections(int deductionDay)
+    public DataTable GetDuplicateCollections(int deductionDay, DateTime effectiveBillingsDate)
     {
-        var collections = GetCollections(deductionDay);
+        var collections = GetCollections(deductionDay, effectiveBillingsDate);
         var table = new DataTable();
         table.Columns.Add("ContractReference", typeof(string));
         table.Columns.Add("RequestedCollectionDate", typeof(DateTime));
