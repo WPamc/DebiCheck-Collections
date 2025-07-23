@@ -1,3 +1,4 @@
+
 SELECT CONVERT(datetime, DATEFROMPARTS(YEAR(mmb.base_month), MONTH(mmb.base_month), 
 CASE WHEN mmb.DEDUCTIONDAY > DAY(EOMONTH(base_month)) THEN DAY(EOMONTH(base_month)) ELSE mmb.DEDUCTIONDAY END), 23) AS RequestedCollectionDate, mmb.DEDUCTIONDAY, 
              mmb.MANDATEUSERREF + '/' + CONVERT(varchar(10), CONVERT(datetime, 
@@ -12,3 +13,4 @@ FROM   (SELECT MEMBID, BANK, BRANCHCODE, ACCNR, ACCTYPE, ACCHOLDNAME, DEDUCTIOND
 
 			LEFT OUTER JOIN SUBSSN_LAST_BILLING_AMOUNT SM ON MM.SUBSSN = SM.SUBSSN 
 WHERE (mmb.DEDUCTIONDAY =@DeductionDay) and isnull(mmb.AUTHORISATIONREF,'') <> ''
+and @EffectiveBillingsDate   between opfromdt and isnull(opthrudt,@EffectiveBillingsDate)
