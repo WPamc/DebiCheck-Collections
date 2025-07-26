@@ -156,7 +156,7 @@ namespace EFT_Collections
 
             int transactionCount = 0;
             decimal total = 0m;
-
+            Boolean isLive = false;
             string currentActionDate = string.Empty;
             var detailBuffer = new List<UnpaidTransactionDetail013>();
             int inserted = 0;
@@ -166,13 +166,13 @@ namespace EFT_Collections
                 switch (record)
                 {
                     case EFT_Collections.OutputFileHeader010 fileHeader:
-                        if (fileHeader.DataSetStatus =="")
+                        if (fileHeader.DataSetStatus =="L")
                         {
-
+                            isLive = true;
                         }
                         break;
                     case UnpaidSetHeader011 header:
-                        if (detailBuffer.Any())
+                        if (detailBuffer.Any() & isLive)
                         {
                             inserted += db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
                             detailBuffer.Clear();
@@ -186,7 +186,7 @@ namespace EFT_Collections
                         break;
                 }
             }
-            if (detailBuffer.Any())
+            if (detailBuffer.Any()& isLive)
             {
                 inserted += db.InsertUnpaidTransactions(detailBuffer, bankFileId, currentActionDate);
             }

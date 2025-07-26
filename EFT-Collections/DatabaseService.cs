@@ -67,7 +67,7 @@ public class DatabaseService
             var paymentInfo = r.UserReference.Trim();
             if (existingResponses.Contains(paymentInfo))
             {
-                continue;
+                //continue;
             }
 
             if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var actionDate))
