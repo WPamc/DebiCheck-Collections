@@ -423,5 +423,53 @@ END", conn);
         cmd.ExecuteNonQuery();
     }
 
+    public int InsertAcceptedResponses(IEnumerable<DebtorCollectionData> records, int bankFileRowId)
+    {
+        int inserted = 0;
+        if (!records.Any()) return inserted;
 
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        foreach (var r in records)
+        {
+            int originalRequestRowId = 0;
+            using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @ref", conn))
+            {
+                findCmd.Parameters.Add(new SqlParameter("@ref", SqlDbType.VarChar, 50) { Value = r.PaymentInformation.Trim() });
+                var result = findCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    originalRequestRowId = Convert.ToInt32(result);
+                }
+            }
+
+            if (originalRequestRowId == 0)
+            {
+                continue;
+            }
+
+            using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
+                (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
+                 ACTIONDATE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE, INSTRUCTEDAMOUNT)
+               VALUES
+                (@reqId, @fileId, 'ACCP', @actionDate, @origPmtInfo, 99, GETDATE(), @amount);", conn);
+
+            insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+            insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = r.RequestedCollectionDate });
+            insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.PaymentInformation });
+            insertCmd.Parameters.Add(new SqlParameter("@amount", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });
+
+            inserted += insertCmd.ExecuteNonQuery();
+
+            using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
+                SET RESULT = 1, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
+                WHERE ROWID = @reqId;", conn);
+            updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+            updateCmd.ExecuteNonQuery();
+        }
+
+        return inserted;
+    }
 }

@@ -356,6 +356,7 @@ public class EFTService
         if (!isTest)
         {
             inserted = db.InsertCollectionRequests(collections, recordId);
+            db.InsertAcceptedResponses(collections, recordId);
             db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);
             db.SetDailyCounter(deductionDate, (int)lastSequenceNumber);
             db.MarkBankFileGenerationComplete(recordId);

@@ -134,7 +134,9 @@ namespace EFT_Collections
                        , 0, 0);
 
                 }
-                return db.InsertCollectionRequests(data, bankFileRowID);
+                var inserted = db.InsertCollectionRequests(data, bankFileRowID);
+                db.InsertAcceptedResponses(data, bankFileRowID);
+                return inserted;
             }
 
             return 0;
