@@ -161,25 +161,24 @@ namespace RMCollectionProcessor
 
             var now = DateTime.Now;
             var cutOffTime = new TimeSpan(01, 30, 0);
-            int testDate = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            int testDate = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month
+                );
             if (deductionDay > testDate)
             {
                 deductionDay = testDate;
             }
-            if ((now.TimeOfDay > cutOffTime && now.Date == new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date) ||
-                now.Date > new DateTime(DateTime.Now.Year, DateTime.Now.Month, deductionDay).Date)
-            {
-                foreach (var collection in collections)
-                {
-                    if (collection.RequestedCollectionDate.Date.Day <= now.Date.Day)
-                    {
-                        collection.RequestedCollectionDate = now.Date.AddDays(1);
 
-                        string debitSeq = collection.DebitSequence.Trim().ToUpper();
-                        if (debitSeq == "FRST" || debitSeq == "OOFF" || debitSeq == "RCUR")
-                        {
-                            collection.RelatedCycleDate = collection.RequestedCollectionDate;
-                        }
+            foreach (var collection in collections)
+            {
+                if (collection.RequestedCollectionDate.Date.Day <= now.Date.Day &&
+                    (DateTime.Now.Hour >= 14     ))
+                {
+                    collection.RequestedCollectionDate = now.Date.AddDays(2);
+
+                    string debitSeq = collection.DebitSequence.Trim().ToUpper();
+                    if (debitSeq == "FRST" || debitSeq == "OOFF" || debitSeq == "RCUR")
+                    {
+                        collection.RelatedCycleDate = collection.RequestedCollectionDate;
                     }
                 }
             }

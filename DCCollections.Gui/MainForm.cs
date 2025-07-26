@@ -363,6 +363,7 @@ namespace DCCollections.Gui
 
                 var processor = new FileProcessor();
                 var eftIdentifier = new EftFileIdentifier();
+               
                 var db = new DCService();
 
                 foreach (var file in Directory.GetFiles(path))
@@ -378,7 +379,7 @@ namespace DCCollections.Gui
 
                     try
                     {
-
+                       
                         eftType = eftIdentifier.IdentifyFileType(file);
                     }
                     catch (Exception ex)
