@@ -317,10 +317,10 @@ namespace RMCollectionProcessor
             return dbService.GetCollections(deductionDay, effectiveBillingsDate);
         }
 
-        public List<BillingCollectionRequest> GetCollectionRequests(string subssn, DateTime startDate, DateTime endDate)
+        public List<BillingCollectionRequest> GetCollectionRequests(DateTime startDate, DateTime endDate)
         {
             var dbService = new DatabaseService();
-            return dbService.GetCollectionRequests(subssn, startDate, endDate);
+            return dbService.GetCollectionRequests(startDate, endDate);
         }
 
         private IEnumerable<TransactionRecord> ExtractTransactionRecords(string filePath, object[] parsed)
