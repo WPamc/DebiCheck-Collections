@@ -179,7 +179,7 @@ TrackingPeriod Object: '{trackingPeriodObj}'
                 string? subSsn = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN"));
                 string? reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE"));
                 string? deductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE"));
-                string? amountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : reader.GetString(reader.GetOrdinal("AMOUNTREQUESTED"));
+                object? amountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : (reader.GetOrdinal("AMOUNTREQUESTED"));
                 var req = new BillingCollectionRequest
                 {
                     RowId = rowId,
@@ -187,7 +187,7 @@ TrackingPeriod Object: '{trackingPeriodObj}'
                     SubSSN = subSsn,
                     Reference = reference,
                     DeductionReference = deductionReference,
-                    AmountRequested = amountRequested
+                    AmountRequested = amountRequested.ToString()
                 };
                 list.Add(req);
             }
