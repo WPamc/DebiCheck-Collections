@@ -13,6 +13,10 @@ namespace DCCollections.Gui
         public int ImportSortColumn { get; set; }
         public bool ImportSortDescending { get; set; }
 
+        public int ArchiveOlderThanDays { get; set; } = 30;
+        public bool ArchiveForceUnimported { get; set; } = false;
+        public string ArchiveLastFileType { get; set; } = "All File Types";
+
 
         private static string SettingsFile => Path.Combine(AppContext.BaseDirectory, "usersettings.json");
 

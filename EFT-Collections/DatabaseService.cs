@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DbConnection;
 
 namespace EFT_Collections;
@@ -45,9 +46,18 @@ public class DatabaseService
             }
         }
 
-        var codeLookup = AppConfig.EftRejectionCodes;
+        IReadOnlyDictionary<string, string> codeLookup = AppConfig.EftRejectionCodes;
+        if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var actionDate))
+            throw new Exception($"Cannot parse dateRequested : {actionDateForDataSet}");
+
         foreach (var r in records)
         {
+            var paymentInfo = r.UserReference.Trim();
+            if (existingResponses.Contains(paymentInfo))
+            {
+                continue;
+            }
+
             int originalRequestRowId = 0;
             using (var findCmd = new SqlCommand("SELECT ROWID FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DEDUCTIONREFERENCE = @ref", conn))
             {
@@ -61,55 +71,82 @@ public class DatabaseService
 
             if (originalRequestRowId == 0)
             {
-                //continue;
+                continue;
             }
 
-            var paymentInfo = r.UserReference.Trim();
-            if (existingResponses.Contains(paymentInfo))
-            {
-                //continue;
-            }
-
-            if (!DateTime.TryParseExact(actionDateForDataSet, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var actionDate))
-                throw new Exception($"Cannot parse dateRequested : {actionDateForDataSet}");
-
-            using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
-                (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
-                 REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
-                 ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE, INSTRUCTEDAMOUNT)
-               VALUES
-                (@reqId, @fileId, 'RJCT', @reasonCode, @reasonDesc, @actionDate, NULL,
-                 NULL, @origPmtInfo, 99, GETDATE(), @amount);", conn);
-            int amount = Convert.ToInt32(r.AmountInCents) / 100;
-            insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
-            insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
             var rejectCode = r.RejectionReason?.Trim();
-            codeLookup.TryGetValue(rejectCode ?? string.Empty, out var desc);
-            insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)rejectCode ?? DBNull.Value });
-            insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)desc ?? DBNull.Value });
-            insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
-            insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = paymentInfo });
-            insertCmd.Parameters.Add(new SqlParameter("@amount", SqlDbType.Int) { Value = amount });
-            try
+            if (rejectCode == "000")
             {
-                int rows = insertCmd.ExecuteNonQuery();
-
-                inserted=inserted+rows;
+                inserted += ProcessAcceptedUnpaid(r, bankFileRowId, originalRequestRowId, actionDate, conn);
             }
-            catch
+            else
             {
+                inserted += ProcessRejectedUnpaid(r, bankFileRowId, originalRequestRowId, actionDate, codeLookup, conn);
             }
-
-            using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
-                SET RESULT = 0, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
-                WHERE ROWID = @reqId;", conn);
-            updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
-            updateCmd.ExecuteNonQuery();
 
             existingResponses.Add(paymentInfo);
         }
 
         return inserted;
+    }
+
+    private int ProcessAcceptedUnpaid(UnpaidTransactionDetail013 r, int bankFileRowId, int originalRequestRowId, DateTime actionDate, SqlConnection conn)
+    {
+        using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
+            (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS, REJECTREASONCODE, REJECTREASONDESCRIPTION,
+             ACTIONDATE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE, INSTRUCTEDAMOUNT)
+           VALUES
+            (@reqId, @fileId, 'ACCP', '000', 'SUCCESSFUL', @actionDate, @origPmtInfo, 99, GETDATE(), @amount);", conn);
+
+        int amount = Convert.ToInt32(r.AmountInCents) / 100;
+        insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+        insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+        insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
+        insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.UserReference.Trim() });
+        insertCmd.Parameters.Add(new SqlParameter("@amount", SqlDbType.Int) { Value = amount });
+
+        int rows = insertCmd.ExecuteNonQuery();
+
+        using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
+            SET RESULT = 1, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
+            WHERE ROWID = @reqId;", conn);
+        updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+        updateCmd.ExecuteNonQuery();
+
+        return rows;
+    }
+
+    private int ProcessRejectedUnpaid(UnpaidTransactionDetail013 r, int bankFileRowId, int originalRequestRowId, 
+        DateTime actionDate, IReadOnlyDictionary<string, string> codeLookup, SqlConnection conn)
+    {
+        using var insertCmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONRESPONSES
+            (COLLECTIONREQUESTSROWID, EDIBANKFILEROWID, TRANSACTIONSTATUS,
+             REJECTREASONCODE, REJECTREASONDESCRIPTION, ACTIONDATE, EFFECTIVEDATE,
+             ORIGINALCONTRACTREFERENCE, ORIGINALPAYMENTINFORMATION, CREATEBY, CREATEDATE, INSTRUCTEDAMOUNT)
+           VALUES
+            (@reqId, @fileId, 'RJCT', @reasonCode, @reasonDesc, @actionDate, NULL,
+             NULL, @origPmtInfo, 99, GETDATE(), @amount);", conn);
+
+        int amount = Convert.ToInt32(r.AmountInCents) / 100;
+        insertCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+        insertCmd.Parameters.Add(new SqlParameter("@fileId", SqlDbType.Int) { Value = bankFileRowId });
+        var rejectCode = r.RejectionReason?.Trim();
+        codeLookup.TryGetValue(rejectCode ?? string.Empty, out var desc);
+        insertCmd.Parameters.Add(new SqlParameter("@reasonCode", SqlDbType.VarChar, 6) { Value = (object?)rejectCode ?? DBNull.Value });
+        insertCmd.Parameters.Add(new SqlParameter("@reasonDesc", SqlDbType.VarChar, 135) { Value = (object?)desc ?? "Unknown reason code. Please consult bank documentation." });
+        insertCmd.Parameters.Add(new SqlParameter("@actionDate", SqlDbType.DateTime) { Value = actionDate });
+        insertCmd.Parameters.Add(new SqlParameter("@origPmtInfo", SqlDbType.VarChar, 35) { Value = r.UserReference.Trim() });
+        insertCmd.Parameters.Add(new SqlParameter("@amount", SqlDbType.Int) { Value = amount });
+
+        int rows = insertCmd.ExecuteNonQuery();
+
+        using var updateCmd = new SqlCommand(@"UPDATE dbo.BILLING_COLLECTIONREQUESTS
+            SET RESULT = 0, LASTCHANGEBY = 99, LASTCHANGEDATE = GETDATE()
+            WHERE ROWID = @reqId;", conn);
+        updateCmd.Parameters.Add(new SqlParameter("@reqId", SqlDbType.Int) { Value = originalRequestRowId });
+        updateCmd.ExecuteNonQuery();
+
+        return rows;
     }
 
     public int GetBankFileRowId(string fileName)
@@ -354,7 +391,7 @@ END", conn);
             {
                 using var updateCmd = new SqlCommand($"UPDATE dbo.BILLING_COLLECTIONREQUESTS SET EDIBANKFILEROWID = {bankFileRowId} WHERE rowid = {exists}",
                     conn);
-               // updateCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
+                // updateCmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
                 try
                 {
                     var updated = Convert.ToInt32(updateCmd.ExecuteScalar());
@@ -367,7 +404,19 @@ END", conn);
             }
             else
             {
+                string subSSN = "";
+                var match = Regex.Match(r.PaymentInformation, @"AUL\s+(\d+)_");
 
+                if (match.Success)
+                {
+                    subSSN = match.Groups[1].Value;
+                   
+                }
+                else
+                {
+                    Console.WriteLine("Pattern not found.");
+                }
+               
 
                 using var cmd = new SqlCommand(@"INSERT INTO dbo.BILLING_COLLECTIONREQUESTS
                 (DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED,
@@ -376,7 +425,7 @@ END", conn);
                  0, 99, GETDATE(), 99, GETDATE(), @fileRowId, @method);", conn);
 
                 cmd.Parameters.Add(new SqlParameter("@dateRequested", SqlDbType.DateTime) { Value = r.RequestedCollectionDate });
-                cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + r.ContractReference });
+                cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = "MGS" + subSSN });
                 cmd.Parameters.Add(new SqlParameter("@reference", SqlDbType.VarChar, 23) { Value = r.ContractReference });
                 cmd.Parameters.Add(new SqlParameter("@deductionReference", SqlDbType.VarChar, 50) { Value = r.PaymentInformation });
                 cmd.Parameters.Add(new SqlParameter("@amountRequested", SqlDbType.Decimal) { Precision = 24, Scale = 2, Value = r.InstructedAmount });

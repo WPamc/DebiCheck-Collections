@@ -71,7 +71,7 @@ namespace DCCollections.Gui
             chkTest.Checked = true;
             chkHideTestFiles.Checked = true;
             _pbImport = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
-            tpImportFiles.Controls.Add(_pbImport);
+            tabImportFiles.Controls.Add(_pbImport);
             _pbOperations = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
             tabOperations.Controls.Add(_pbOperations);
             lvImportFiles.MultiSelect = true;
@@ -221,6 +221,7 @@ namespace DCCollections.Gui
             {
                 txtLiveOutputFolder.Text = fbd.SelectedPath;
                 _settings.LiveOutputFolderPath = fbd.SelectedPath;
+                _settings.Save();
             }
         }
 
@@ -231,6 +232,7 @@ namespace DCCollections.Gui
             {
                 txtTestOutputFolder.Text = fbd.SelectedPath;
                 _settings.TestOutputFolderPath = fbd.SelectedPath;
+                _settings.Save();
             }
         }
 
@@ -336,6 +338,7 @@ namespace DCCollections.Gui
             {
                 txtImportFolder.Text = fbd.SelectedPath;
                 _settings.ImportFolderPath = fbd.SelectedPath;
+                _settings.Save();
                 LoadImportFiles(fbd.SelectedPath);
             }
         }
@@ -459,12 +462,18 @@ namespace DCCollections.Gui
         private void lvImportFiles_ColumnClick(object? sender, ColumnClickEventArgs e)
         {
             if (e.Column == _importSortColumn)
+            {
                 _importSortDescending = !_importSortDescending;
+            }
             else
             {
                 _importSortColumn = e.Column;
                 _importSortDescending = false;
             }
+
+            _settings.ImportSortColumn = _importSortColumn;
+            _settings.ImportSortDescending = _importSortDescending;
+            _settings.Save();
 
             lvImportFiles.ListViewItemSorter = new ListViewItemComparer(_importSortColumn, _importSortDescending);
             lvImportFiles.Sort();
@@ -735,12 +744,94 @@ namespace DCCollections.Gui
             }
         }
 
+        private void btnArchive_Click(object sender, EventArgs e)
+        {
+            if (lvImportFiles.Items.Count == 0)
+            {
+                MessageBox.Show("There are no files to archive.", "Archive Files", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var uniqueTypes = lvImportFiles.Items
+                .Cast<ListViewItem>()
+                .Select(item => item.SubItems[5].Text) // Assuming 'Type' is at index 5
+                .Distinct()
+                .ToList();
+
+            using var dialog = new ArchiveDialog(_settings, uniqueTypes);
+
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // Save the chosen settings for next time
+                _settings.ArchiveOlderThanDays = dialog.DaysOlder;
+                _settings.ArchiveForceUnimported = dialog.ForceArchive;
+                _settings.ArchiveLastFileType = dialog.FileType;
+                _settings.Save();
+
+                int movedFiles = 0;
+                var importPath = txtImportFolder.Text;
+                var archiveDate = DateTime.Now.AddDays(-dialog.DaysOlder);
+
+                SetImportUiState(false);
+                _pbImport.Visible = true;
+
+                try
+                {
+                    foreach (ListViewItem item in lvImportFiles.Items)
+                    {
+                        var fileInfo = new FileInfo(((ImportFileTag)item.Tag).Path);
+                        var imported = item.SubItems[7].Text.Equals("Yes", StringComparison.OrdinalIgnoreCase); // 'Imported' is at index 7
+                        var fileType = item.SubItems[5].Text; // 'Type' is at index 5
+
+                        // Criterion 1: Age (if DaysOlder > 0)
+                        if (dialog.DaysOlder > 0 && fileInfo.LastWriteTime >= archiveDate)
+                        {
+                            continue;
+                        }
+
+                        // Criterion 2: Import Status
+                        if (!dialog.ForceArchive && !imported)
+                        {
+                            continue;
+                        }
+
+                        // Criterion 3: File Type (only if forcing)
+                        if (dialog.ForceArchive && dialog.FileType != "All File Types" && dialog.FileType != fileType)
+                        {
+                            continue;
+                        }
+
+                        // All criteria met, move the file
+                        var targetFolder = Path.Combine(importPath, fileType);
+                        Directory.CreateDirectory(targetFolder);
+                        var targetFile = Path.Combine(targetFolder, fileInfo.Name);
+
+                        try
+                        {
+                            File.Move(fileInfo.FullName, targetFile, true);
+                            movedFiles++;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}", "Archive Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break; // Stop on first error
+                        }
+                    }
+
+                    MessageBox.Show($"Successfully archived {movedFiles} file(s).", "Archive Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                finally
+                {
+                    _pbImport.Visible = false;
+                    SetImportUiState(true);
+                    LoadImportFiles(importPath);
+                }
+            }
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            _settings.ImportSortColumn = _importSortColumn;
-            _settings.ImportSortDescending = _importSortDescending;
-            _settings.Save();
         }
 
         /// <summary>

@@ -82,13 +82,13 @@
             dgvPossibleDuplicates = new DataGridView();
             btnCheckDuplicates = new Button();
             chkTest = new CheckBox();
+            cmbBillingDate = new ComboBox();
+            label4 = new Label();
             rdoDebiCheck = new RadioButton();
             rdoEft = new RadioButton();
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
-            cmbBillingDate = new ComboBox();
-            label4 = new Label();
-            tpImportFiles = new TabPage();
+            tabImportFiles = new TabPage();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
             chGenDate = new ColumnHeader();
@@ -109,6 +109,7 @@
             btnImportBrowse = new Button();
             txtImportFolder = new TextBox();
             chkHideTestFiles = new CheckBox();
+            btnArchive = new Button();
             lblLiveOutput = new Label();
             lblTestOutput = new Label();
             cmsImportFiles = new ContextMenuStrip(components);
@@ -119,7 +120,7 @@
             grpConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
-            tpImportFiles.SuspendLayout();
+            tabImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
             cmsImportFiles.SuspendLayout();
             SuspendLayout();
@@ -130,7 +131,7 @@
             btnSearchFiles.Name = "btnSearchFiles";
             btnSearchFiles.Size = new Size(75, 23);
             btnSearchFiles.TabIndex = 6;
-            btnSearchFiles.Text = "Search";
+            btnSearchFiles.Text = "Filter List";
             btnSearchFiles.UseVisualStyleBackColor = true;
             btnSearchFiles.Click += btnSearchFiles_Click;
             // 
@@ -159,7 +160,7 @@
             // tabMain
             // 
             tabMain.Controls.Add(tabOperations);
-            tabMain.Controls.Add(tpImportFiles);
+            tabMain.Controls.Add(tabImportFiles);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
             tabMain.Name = "tabMain";
@@ -246,12 +247,6 @@
             label3.Size = new Size(85, 15);
             label3.TabIndex = 15;
             label3.Text = "Deduction Day";
-            label4.AutoSize = true;
-            label4.Location = new Point(77, 82);
-            label4.Name = "label4";
-            label4.Size = new Size(73, 15);
-            label4.TabIndex = 21;
-            label4.Text = "Billing Date";
             // 
             // grpConfig
             // 
@@ -355,6 +350,24 @@
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
             // 
+            // cmbBillingDate
+            // 
+            cmbBillingDate.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbBillingDate.FormattingEnabled = true;
+            cmbBillingDate.Location = new Point(251, 79);
+            cmbBillingDate.Name = "cmbBillingDate";
+            cmbBillingDate.Size = new Size(121, 23);
+            cmbBillingDate.TabIndex = 5;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(77, 82);
+            label4.Name = "label4";
+            label4.Size = new Size(67, 15);
+            label4.TabIndex = 21;
+            label4.Text = "Billing Date";
+            // 
             // rdoDebiCheck
             // 
             rdoDebiCheck.AutoSize = true;
@@ -398,31 +411,27 @@
             nudDay.Size = new Size(38, 23);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            cmbBillingDate.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbBillingDate.FormattingEnabled = true;
-            cmbBillingDate.Location = new Point(251, 79);
-            cmbBillingDate.Name = "cmbBillingDate";
-            cmbBillingDate.Size = new Size(121, 23);
-            cmbBillingDate.TabIndex = 5;
-            // tpImportFiles
-            tpImportFiles.Controls.Add(lvImportFiles);
-            tpImportFiles.Controls.Add(pnlImportTop);
-            tpImportFiles.Location = new Point(4, 24);
-            tpImportFiles.Name = "tpImportFiles";
-            tpImportFiles.Padding = new Padding(3);
-            tpImportFiles.Size = new Size(1181, 609);
-            tpImportFiles.TabIndex = 2;
-            tpImportFiles.Text = "Import Files";
-            tpImportFiles.UseVisualStyleBackColor = true;
+            // 
+            // tabImportFiles
+            // 
+            tabImportFiles.Controls.Add(lvImportFiles);
+            tabImportFiles.Controls.Add(pnlImportTop);
+            tabImportFiles.Location = new Point(4, 24);
+            tabImportFiles.Name = "tabImportFiles";
+            tabImportFiles.Padding = new Padding(3);
+            tabImportFiles.Size = new Size(1181, 609);
+            tabImportFiles.TabIndex = 2;
+            tabImportFiles.Text = "Import Files";
+            tabImportFiles.UseVisualStyleBackColor = true;
             // 
             // lvImportFiles
             // 
             lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType, chTest, chImported });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
-            lvImportFiles.Location = new Point(3, 35);
+            lvImportFiles.Location = new Point(3, 63);
             lvImportFiles.Name = "lvImportFiles";
-            lvImportFiles.Size = new Size(1175, 571);
+            lvImportFiles.Size = new Size(1175, 543);
             lvImportFiles.TabIndex = 1;
             lvImportFiles.UseCompatibleStateImageBehavior = false;
             lvImportFiles.View = View.Details;
@@ -459,19 +468,18 @@
             // 
             chType.Text = "Type";
             chType.Width = 120;
-            //
+            // 
             // chTest
-            //
+            // 
             chTest.Text = "Test";
-            chTest.Width = 60;
-            //
+            // 
             // chImported
-            //
+            // 
             chImported.Text = "Imported";
             chImported.Width = 80;
-            //
+            // 
             // pnlImportTop
-            //
+            // 
             pnlImportTop.Controls.Add(btnImportParse);
             pnlImportTop.Controls.Add(btnImportRead);
             pnlImportTop.Controls.Add(btnSearchFiles);
@@ -483,6 +491,7 @@
             pnlImportTop.Controls.Add(btnImportBrowse);
             pnlImportTop.Controls.Add(txtImportFolder);
             pnlImportTop.Controls.Add(chkHideTestFiles);
+            pnlImportTop.Controls.Add(btnArchive);
             pnlImportTop.Dock = DockStyle.Top;
             pnlImportTop.Location = new Point(3, 3);
             pnlImportTop.Name = "pnlImportTop";
@@ -517,17 +526,26 @@
             txtSearchFiles.Name = "txtSearchFiles";
             txtSearchFiles.Size = new Size(150, 23);
             txtSearchFiles.TabIndex = 5;
-            btnFindText.Location = new Point(821, 33);
+            // 
+            // btnFindText
+            // 
+            btnFindText.Location = new Point(821, 34);
             btnFindText.Name = "btnFindText";
             btnFindText.Size = new Size(100, 23);
             btnFindText.TabIndex = 10;
-            btnFindText.Text = "Find Text";
+            btnFindText.Text = "Search Content";
             btnFindText.UseVisualStyleBackColor = true;
             btnFindText.Click += btnFindText_Click;
+            // 
+            // txtFindText
+            // 
             txtFindText.Location = new Point(615, 34);
             txtFindText.Name = "txtFindText";
             txtFindText.Size = new Size(200, 23);
             txtFindText.TabIndex = 9;
+            // 
+            // btnApplyFilter
+            // 
             btnApplyFilter.Location = new Point(509, 33);
             btnApplyFilter.Name = "btnApplyFilter";
             btnApplyFilter.Size = new Size(100, 23);
@@ -535,6 +553,9 @@
             btnApplyFilter.Text = "Apply";
             btnApplyFilter.UseVisualStyleBackColor = true;
             btnApplyFilter.Click += btnApplyFilter_Click;
+            // 
+            // txtFileFilter
+            // 
             txtFileFilter.Location = new Point(3, 34);
             txtFileFilter.Name = "txtFileFilter";
             txtFileFilter.Size = new Size(500, 23);
@@ -567,6 +588,16 @@
             chkHideTestFiles.Text = "Hide Test Files";
             chkHideTestFiles.UseVisualStyleBackColor = true;
             chkHideTestFiles.CheckedChanged += chkHideTestFiles_CheckedChanged;
+            // 
+            // btnArchive
+            // 
+            btnArchive.Location = new Point(1069, 31);
+            btnArchive.Name = "btnArchive";
+            btnArchive.Size = new Size(100, 23);
+            btnArchive.TabIndex = 11;
+            btnArchive.Text = "Archive Files";
+            btnArchive.UseVisualStyleBackColor = true;
+            btnArchive.Click += btnArchive_Click;
             // 
             // lblLiveOutput
             // 
@@ -616,7 +647,7 @@
             grpConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
-            tpImportFiles.ResumeLayout(false);
+            tabImportFiles.ResumeLayout(false);
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
             cmsImportFiles.ResumeLayout(false);
@@ -625,7 +656,7 @@
 
         #endregion
 
-        private TabPage tpImportFiles;
+        private TabPage tabImportFiles;
         private Label label3;
         private GroupBox grpConfig;
         private Label label2;
@@ -648,5 +679,6 @@
         private Label lblEftDailyCounter;
         private ComboBox cmbBillingDate;
         private Label label4;
+        private Button btnArchive;
     }
 }

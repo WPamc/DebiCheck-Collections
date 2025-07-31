@@ -358,7 +358,7 @@ public class EFTService
             inserted = db.InsertCollectionRequests(collections, recordId);
             db.InsertAcceptedResponses(collections, recordId);
             db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);
-            db.SetDailyCounter(deductionDate, (int)lastSequenceNumber);
+            db.SetDailyCounter(DateTime.Today, (int)lastSequenceNumber);
             db.MarkBankFileGenerationComplete(recordId);
         }
         Console.WriteLine($"EFT file written to {Path.Combine(outputPath, fileName)}");

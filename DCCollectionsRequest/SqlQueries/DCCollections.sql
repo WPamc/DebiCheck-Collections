@@ -14,3 +14,4 @@ FROM   (SELECT MEMBID, BANK, BRANCHCODE, ACCNR, ACCTYPE, ACCHOLDNAME, DEDUCTIOND
 			LEFT OUTER JOIN SUBSSN_LAST_BILLING_AMOUNT SM ON MM.SUBSSN = SM.SUBSSN 
 WHERE (mmb.DEDUCTIONDAY =@DeductionDay) and isnull(mmb.AUTHORISATIONREF,'') <> ''
 and @EffectiveBillingsDate   between opfromdt and isnull(opthrudt,@EffectiveBillingsDate)
+--and sm.TOTAL  is not null

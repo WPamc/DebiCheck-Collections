@@ -36,30 +36,95 @@ public class DatabaseService
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
+            string paymentInformation = "[not read]";
+            string debitSequence = "[not read]";
+            string entryClass = "[not read]";
+            string mandateReference = "[not read]";
+            string debtorBankBranch = "[not read]";
+            string debtorName = "[not read]";
+            string debtorAccountNumber = "[not read]";
+            string accountType = "[not read]";
+            string contractReference = "[not read]";
+            object instructedAmountObj = null; // Read as object first for safer conversion
+            object requestedCollectionDateObj = null;
+            object relatedCycleDateObj = null;
+            object trackingPeriodObj = null;
+
             try
             {
+                // --- 1. Extract Data into Local Variables ---
+                // This isolates failures to a single line.
+
+                paymentInformation = reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty;
+                debitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty;
+                entryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty;
+                mandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty;
+                debtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty;
+                debtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty;
+                debtorAccountNumber = reader[nameof(DebtorCollectionData.DebtorAccountNumber)].ToString() ?? string.Empty;
+                accountType = reader[nameof(DebtorCollectionData.AccountType)].ToString() ?? string.Empty;
+                contractReference = reader[nameof(DebtorCollectionData.ContractReference)].ToString() ?? string.Empty;
+
+                // For types prone to conversion errors (dates, numbers), read them as objects first.
+                // This prevents an immediate crash if the data is DBNull or the wrong type.
+                instructedAmountObj = reader["InstructedAmount"];
+                requestedCollectionDateObj = reader[reader.GetOrdinal(nameof(DebtorCollectionData.RequestedCollectionDate))];
+                relatedCycleDateObj = reader[reader.GetOrdinal(nameof(DebtorCollectionData.RelatedCycleDate))];
+                trackingPeriodObj = reader[reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))];
+
+                // --- 2. Convert and Validate Data ---
+                // Now, convert the potentially problematic types with clear error potential.
+
+                var instructedAmount = Convert.ToDecimal(instructedAmountObj);
+                var requestedCollectionDate = Convert.ToDateTime(requestedCollectionDateObj);
+                var relatedCycleDate = Convert.ToDateTime(relatedCycleDateObj);
+                var trackingPeriod = Convert.ToInt32(trackingPeriodObj);
+
+                // --- 3. Hydrate the Final Object ---
+                // If all extractions and conversions succeeded, this part is safe.
 
                 var data = new DebtorCollectionData
                 {
-                    PaymentInformation = reader[nameof(DebtorCollectionData.PaymentInformation)].ToString() ?? string.Empty,
-                    RequestedCollectionDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RequestedCollectionDate))),
-                    TrackingPeriod = reader.GetInt32(reader.GetOrdinal(nameof(DebtorCollectionData.TrackingPeriod))),
-                    DebitSequence = reader[nameof(DebtorCollectionData.DebitSequence)].ToString() ?? string.Empty,
-                    EntryClass = reader[nameof(DebtorCollectionData.EntryClass)].ToString() ?? string.Empty,
-                    InstructedAmount = Convert.ToDecimal(reader["InstructedAmount"]),
-                    MandateReference = reader[nameof(DebtorCollectionData.MandateReference)].ToString() ?? string.Empty,
-                    DebtorBankBranch = reader[nameof(DebtorCollectionData.DebtorBankBranch)].ToString() ?? string.Empty,
-                    DebtorName = reader[nameof(DebtorCollectionData.DebtorName)].ToString() ?? string.Empty,
-                    DebtorAccountNumber = reader[nameof(DebtorCollectionData.DebtorAccountNumber)].ToString() ?? string.Empty,
-                    AccountType = reader[nameof(DebtorCollectionData.AccountType)].ToString() ?? string.Empty,
-                    ContractReference = reader[nameof(DebtorCollectionData.ContractReference)].ToString() ?? string.Empty,
-                    RelatedCycleDate = reader.GetDateTime(reader.GetOrdinal(nameof(DebtorCollectionData.RelatedCycleDate)))
+                    PaymentInformation = paymentInformation,
+                    RequestedCollectionDate = requestedCollectionDate,
+                    TrackingPeriod = trackingPeriod,
+                    DebitSequence = debitSequence,
+                    EntryClass = entryClass,
+                    InstructedAmount = instructedAmount,
+                    MandateReference = mandateReference,
+                    DebtorBankBranch = debtorBankBranch,
+                    DebtorName = debtorName,
+                    DebtorAccountNumber = debtorAccountNumber,
+                    AccountType = accountType,
+                    ContractReference = contractReference,
+                    RelatedCycleDate = relatedCycleDate
                 };
+
                 results.Add(data);
             }
             catch (Exception ex)
             {
+                // --- 4. Catch and Enrich the Exception ---
+                // The empty catch block is gone. Now we provide rich, contextual information.
 
+                // You can use a logging framework here (e.g., Serilog, NLog)
+                // For this example, we'll create a new, more informative exception and re-throw it.
+
+                // Build a detailed error message with the data we managed to read.
+                string errorContext = $@"Failed to process a debtor record.
+--- Data Read Before Crash ---
+Debtor Name: '{debtorName}'
+Debtor Account: '{debtorAccountNumber}'
+Mandate Reference: '{mandateReference}'
+--- Raw Values Causing Issues (if read) ---
+InstructedAmount Object: '{instructedAmountObj}'
+RequestedCollectionDate Object: '{requestedCollectionDateObj}'
+RelatedCycleDate Object: '{relatedCycleDateObj}'
+TrackingPeriod Object: '{trackingPeriodObj}'
+--------------------------------";
+
+                // Wrap the original exception to preserve the original stack trace and details.
+                throw new InvalidOperationException(errorContext, ex);
             }
         }
         return results;
