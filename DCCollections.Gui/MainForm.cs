@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using DbConnection;
 using EFT_Collections;
 using RMCollectionProcessor;
@@ -169,7 +170,25 @@ namespace DCCollections.Gui
                 DcGenResult result;
                 if (rdoDebiCheck.Checked)
                 {
-                    result = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, effDate, test, outFolder));
+                    var start = dtStartCollectionDate.Value.Date;
+                    var end = dtEndCollectionDate.Value.Date;
+                    var collections = _dcCollectionservice.GetCollections(day, effDate);
+                    var existing = new Dictionary<string, List<BillingCollectionRequest>>();
+                    foreach (var c in collections)
+                    {
+                        string sub = "MGS" + c.ContractReference;
+                        var list = _dcCollectionservice.GetCollectionRequests(sub, start, end);
+                        if (list.Any())
+                            existing[sub] = list;
+                    }
+                    if (existing.Any())
+                    {
+                        using var confirm = new ConfirmCollectionsForm(collections, existing);
+                        if (confirm.ShowDialog(this) != DialogResult.OK)
+                            return;
+                        collections = confirm.SelectedCollections;
+                    }
+                    result = await Task.Run(() => _dcCollectionservice.GenerateDCFile(day, effDate, test, outFolder, collections));
                 }
                 else
                 {
@@ -877,7 +896,25 @@ namespace DCCollections.Gui
             if (cmbBillingDate.Items.Count > 0)
             {
                 cmbBillingDate.SelectedIndex = 0;
+                UpdateBillingWindowDates();
             }
+        }
+
+        private void cmbBillingDate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateBillingWindowDates();
+        }
+
+        private void UpdateBillingWindowDates()
+        {
+            var text = cmbBillingDate.SelectedItem?.ToString();
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+            var bill = DateTime.ParseExact(text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var start = new DateTime(bill.AddMonths(-1).Year, bill.AddMonths(-1).Month, 6);
+            var end = new DateTime(bill.Year, bill.Month, 5);
+            dtStartCollectionDate.Value = start;
+            dtEndCollectionDate.Value = end;
         }
     }
 }

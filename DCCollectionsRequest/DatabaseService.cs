@@ -159,6 +159,32 @@ TrackingPeriod Object: '{trackingPeriodObj}'
         return table;
     }
 
+    public List<BillingCollectionRequest> GetCollectionRequests(string subssn, DateTime startDate, DateTime endDate)
+    {
+        var list = new List<BillingCollectionRequest>();
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED FROM dbo.BILLING_COLLECTIONREQUESTS WHERE SUBSSN = @subssn AND DATEREQUESTED BETWEEN @start AND @end ORDER BY DATEREQUESTED", conn);
+        cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = subssn });
+        cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.DateTime) { Value = startDate });
+        cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.DateTime) { Value = endDate });
+        conn.Open();
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            var req = new BillingCollectionRequest
+            {
+                RowId = reader.GetInt32(reader.GetOrdinal("ROWID")),
+                DateRequested = reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")),
+                SubSSN = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN")),
+                Reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE")),
+                DeductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE")),
+                AmountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : reader.GetString(reader.GetOrdinal("AMOUNTREQUESTED"))
+            };
+            list.Add(req);
+        }
+        return list;
+    }
+
     public CreditorDefaults GetCreditorDefaults(int creditorId)
     {
         return new CreditorDefaults();
