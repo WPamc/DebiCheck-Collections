@@ -83,6 +83,10 @@
             btnCheckDuplicates = new Button();
             chkTest = new CheckBox();
             cmbBillingDate = new ComboBox();
+            dtStartCollectionDate = new DateTimePicker();
+            dtEndCollectionDate = new DateTimePicker();
+            lblStartCollectionDate = new Label();
+            lblEndCollectionDate = new Label();
             label4 = new Label();
             rdoDebiCheck = new RadioButton();
             rdoEft = new RadioButton();
@@ -384,6 +388,43 @@
             cmbBillingDate.Name = "cmbBillingDate";
             cmbBillingDate.Size = new Size(171, 33);
             cmbBillingDate.TabIndex = 5;
+            cmbBillingDate.SelectedIndexChanged += cmbBillingDate_SelectedIndexChanged;
+            //
+            // dtStartCollectionDate
+            //
+            dtStartCollectionDate.Format = DateTimePickerFormat.Short;
+            dtStartCollectionDate.Location = new Point(160, 80);
+            dtStartCollectionDate.Margin = new Padding(4, 5, 4, 5);
+            dtStartCollectionDate.Name = "dtStartCollectionDate";
+            dtStartCollectionDate.Size = new Size(171, 31);
+            dtStartCollectionDate.TabIndex = 22;
+            //
+            // dtEndCollectionDate
+            //
+            dtEndCollectionDate.Format = DateTimePickerFormat.Short;
+            dtEndCollectionDate.Location = new Point(160, 124);
+            dtEndCollectionDate.Margin = new Padding(4, 5, 4, 5);
+            dtEndCollectionDate.Name = "dtEndCollectionDate";
+            dtEndCollectionDate.Size = new Size(171, 31);
+            dtEndCollectionDate.TabIndex = 23;
+            //
+            // lblStartCollectionDate
+            //
+            lblStartCollectionDate.AutoSize = true;
+            lblStartCollectionDate.Location = new Point(20, 84);
+            lblStartCollectionDate.Name = "lblStartCollectionDate";
+            lblStartCollectionDate.Size = new Size(132, 25);
+            lblStartCollectionDate.TabIndex = 24;
+            lblStartCollectionDate.Text = "Start Collection";
+            //
+            // lblEndCollectionDate
+            //
+            lblEndCollectionDate.AutoSize = true;
+            lblEndCollectionDate.Location = new Point(20, 128);
+            lblEndCollectionDate.Name = "lblEndCollectionDate";
+            lblEndCollectionDate.Size = new Size(126, 25);
+            lblEndCollectionDate.TabIndex = 25;
+            lblEndCollectionDate.Text = "End Collection";
             // 
             // label4
             // 
@@ -678,11 +719,15 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(dtEndCollectionDate);
+            groupBox1.Controls.Add(dtStartCollectionDate);
+            groupBox1.Controls.Add(lblEndCollectionDate);
+            groupBox1.Controls.Add(lblStartCollectionDate);
             groupBox1.Controls.Add(cmbBillingDate);
             groupBox1.Controls.Add(label4);
             groupBox1.Location = new Point(331, 40);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(452, 238);
+            groupBox1.Size = new Size(452, 200);
             groupBox1.TabIndex = 22;
             groupBox1.TabStop = false;
             groupBox1.Text = "Billing Window";
@@ -738,6 +783,10 @@
         private Label lblEftGenerationNumber;
         private Label lblEftDailyCounter;
         private ComboBox cmbBillingDate;
+        private DateTimePicker dtStartCollectionDate;
+        private DateTimePicker dtEndCollectionDate;
+        private Label lblStartCollectionDate;
+        private Label lblEndCollectionDate;
         private Label label4;
         private Button btnArchive;
         private GroupBox groupBox1;

@@ -147,14 +147,14 @@ namespace RMCollectionProcessor
         }
 
 
-        public FileGenerationResult GenerateDCFile(int deductionDay, DateTime effectiveBillingsDate, bool isTest = false, string? outputFolder = null)
+        public FileGenerationResult GenerateDCFile(int deductionDay, DateTime effectiveBillingsDate, bool isTest = false, string? outputFolder = null, List<DebtorCollectionData>? collectionsOverride = null)
         {
             if (deductionDay < 1 || deductionDay > 31)
                 throw new ArgumentOutOfRangeException(nameof(deductionDay), "Deduction day must be between 1 and 31.");
 
             var dbService = new DatabaseService();
 
-            var collections = dbService.GetCollections(deductionDay, effectiveBillingsDate);
+            var collections = collectionsOverride ?? dbService.GetCollections(deductionDay, effectiveBillingsDate);
             if (!collections.Any())
                 throw new InvalidOperationException("No collections to process.");
 
@@ -309,6 +309,18 @@ namespace RMCollectionProcessor
         {
             var dbService = new DatabaseService();
             return dbService.GetDuplicateCollections(deductionDay, effectiveBillingsDate);
+        }
+
+        public List<DebtorCollectionData> GetCollections(int deductionDay, DateTime effectiveBillingsDate)
+        {
+            var dbService = new DatabaseService();
+            return dbService.GetCollections(deductionDay, effectiveBillingsDate);
+        }
+
+        public List<BillingCollectionRequest> GetCollectionRequests(string subssn, DateTime startDate, DateTime endDate)
+        {
+            var dbService = new DatabaseService();
+            return dbService.GetCollectionRequests(subssn, startDate, endDate);
         }
 
         private IEnumerable<TransactionRecord> ExtractTransactionRecords(string filePath, object[] parsed)
