@@ -173,11 +173,12 @@ namespace DCCollections.Gui
                     var start = dtStartCollectionDate.Value.Date;
                     var end = dtEndCollectionDate.Value.Date;
                     var collections = _dcCollectionservice.GetCollections(day, effDate);
+                    var requests = _dcCollectionservice.GetCollectionRequests(start, end);
                     var existing = new Dictionary<string, List<BillingCollectionRequest>>();
                     foreach (var c in collections)
                     {
                         string sub = "MGS" + c.ContractReference;
-                        var list = _dcCollectionservice.GetCollectionRequests(sub, start, end);
+                        var list = requests.Where(r => r.SubSSN == sub).ToList();
                         if (list.Any())
                             existing[sub] = list;
                     }
