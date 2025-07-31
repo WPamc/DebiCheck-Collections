@@ -114,6 +114,7 @@
             lblTestOutput = new Label();
             cmsImportFiles = new ContextMenuStrip(components);
             previewToolStripMenuItem = new ToolStripMenuItem();
+            groupBox1 = new GroupBox();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             grpCounters.SuspendLayout();
@@ -123,13 +124,15 @@
             tabImportFiles.SuspendLayout();
             pnlImportTop.SuspendLayout();
             cmsImportFiles.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // btnSearchFiles
             // 
-            btnSearchFiles.Location = new Point(1094, 4);
+            btnSearchFiles.Location = new Point(1563, 7);
+            btnSearchFiles.Margin = new Padding(4, 5, 4, 5);
             btnSearchFiles.Name = "btnSearchFiles";
-            btnSearchFiles.Size = new Size(75, 23);
+            btnSearchFiles.Size = new Size(107, 38);
             btnSearchFiles.TabIndex = 6;
             btnSearchFiles.Text = "Filter List";
             btnSearchFiles.UseVisualStyleBackColor = true;
@@ -138,9 +141,10 @@
             // btnTestOutputOpen
             // 
             btnTestOutputOpen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnTestOutputOpen.Location = new Point(489, 50);
+            btnTestOutputOpen.Location = new Point(699, 83);
+            btnTestOutputOpen.Margin = new Padding(4, 5, 4, 5);
             btnTestOutputOpen.Name = "btnTestOutputOpen";
-            btnTestOutputOpen.Size = new Size(51, 23);
+            btnTestOutputOpen.Size = new Size(73, 38);
             btnTestOutputOpen.TabIndex = 19;
             btnTestOutputOpen.Text = "Open";
             btnTestOutputOpen.UseVisualStyleBackColor = true;
@@ -149,9 +153,10 @@
             // btnLiveOutputOpen
             // 
             btnLiveOutputOpen.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLiveOutputOpen.Location = new Point(489, 21);
+            btnLiveOutputOpen.Location = new Point(699, 35);
+            btnLiveOutputOpen.Margin = new Padding(4, 5, 4, 5);
             btnLiveOutputOpen.Name = "btnLiveOutputOpen";
-            btnLiveOutputOpen.Size = new Size(51, 23);
+            btnLiveOutputOpen.Size = new Size(73, 38);
             btnLiveOutputOpen.TabIndex = 18;
             btnLiveOutputOpen.Text = "Open";
             btnLiveOutputOpen.UseVisualStyleBackColor = true;
@@ -163,29 +168,30 @@
             tabMain.Controls.Add(tabImportFiles);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
+            tabMain.Margin = new Padding(4, 5, 4, 5);
             tabMain.Name = "tabMain";
             tabMain.SelectedIndex = 0;
-            tabMain.Size = new Size(1189, 637);
+            tabMain.Size = new Size(1699, 1062);
             tabMain.TabIndex = 0;
             // 
             // tabOperations
             // 
+            tabOperations.Controls.Add(groupBox1);
             tabOperations.Controls.Add(grpCounters);
             tabOperations.Controls.Add(label3);
             tabOperations.Controls.Add(grpConfig);
             tabOperations.Controls.Add(dgvPossibleDuplicates);
             tabOperations.Controls.Add(btnCheckDuplicates);
             tabOperations.Controls.Add(chkTest);
-            tabOperations.Controls.Add(cmbBillingDate);
-            tabOperations.Controls.Add(label4);
             tabOperations.Controls.Add(rdoDebiCheck);
             tabOperations.Controls.Add(rdoEft);
             tabOperations.Controls.Add(btnGenerate);
             tabOperations.Controls.Add(nudDay);
-            tabOperations.Location = new Point(4, 24);
+            tabOperations.Location = new Point(4, 34);
+            tabOperations.Margin = new Padding(4, 5, 4, 5);
             tabOperations.Name = "tabOperations";
-            tabOperations.Padding = new Padding(3);
-            tabOperations.Size = new Size(1181, 609);
+            tabOperations.Padding = new Padding(4, 5, 4, 5);
+            tabOperations.Size = new Size(1691, 1024);
             tabOperations.TabIndex = 0;
             tabOperations.Text = "Operations";
             tabOperations.UseVisualStyleBackColor = true;
@@ -196,9 +202,11 @@
             grpCounters.Controls.Add(lblEftGenerationNumber);
             grpCounters.Controls.Add(lblDcDailyCounter);
             grpCounters.Controls.Add(lblDcGenerationNumber);
-            grpCounters.Location = new Point(8, 262);
+            grpCounters.Location = new Point(11, 437);
+            grpCounters.Margin = new Padding(4, 5, 4, 5);
             grpCounters.Name = "grpCounters";
-            grpCounters.Size = new Size(544, 337);
+            grpCounters.Padding = new Padding(4, 5, 4, 5);
+            grpCounters.Size = new Size(777, 562);
             grpCounters.TabIndex = 20;
             grpCounters.TabStop = false;
             grpCounters.Text = "Counters";
@@ -206,45 +214,50 @@
             // lblEftDailyCounter
             // 
             lblEftDailyCounter.AutoSize = true;
-            lblEftDailyCounter.Location = new Point(16, 97);
+            lblEftDailyCounter.Location = new Point(23, 162);
+            lblEftDailyCounter.Margin = new Padding(4, 0, 4, 0);
             lblEftDailyCounter.Name = "lblEftDailyCounter";
-            lblEftDailyCounter.Size = new Size(110, 15);
+            lblEftDailyCounter.Size = new Size(165, 25);
             lblEftDailyCounter.TabIndex = 3;
             lblEftDailyCounter.Text = "EFT DailyCounter: 0";
             // 
             // lblEftGenerationNumber
             // 
             lblEftGenerationNumber.AutoSize = true;
-            lblEftGenerationNumber.Location = new Point(16, 72);
+            lblEftGenerationNumber.Location = new Point(23, 120);
+            lblEftGenerationNumber.Margin = new Padding(4, 0, 4, 0);
             lblEftGenerationNumber.Name = "lblEftGenerationNumber";
-            lblEftGenerationNumber.Size = new Size(143, 15);
+            lblEftGenerationNumber.Size = new Size(214, 25);
             lblEftGenerationNumber.TabIndex = 2;
             lblEftGenerationNumber.Text = "EFT GenerationNumber: 0";
             // 
             // lblDcDailyCounter
             // 
             lblDcDailyCounter.AutoSize = true;
-            lblDcDailyCounter.Location = new Point(16, 47);
+            lblDcDailyCounter.Location = new Point(23, 78);
+            lblDcDailyCounter.Margin = new Padding(4, 0, 4, 0);
             lblDcDailyCounter.Name = "lblDcDailyCounter";
-            lblDcDailyCounter.Size = new Size(107, 15);
+            lblDcDailyCounter.Size = new Size(162, 25);
             lblDcDailyCounter.TabIndex = 1;
             lblDcDailyCounter.Text = "DC DailyCounter: 0";
             // 
             // lblDcGenerationNumber
             // 
             lblDcGenerationNumber.AutoSize = true;
-            lblDcGenerationNumber.Location = new Point(16, 22);
+            lblDcGenerationNumber.Location = new Point(23, 37);
+            lblDcGenerationNumber.Margin = new Padding(4, 0, 4, 0);
             lblDcGenerationNumber.Name = "lblDcGenerationNumber";
-            lblDcGenerationNumber.Size = new Size(140, 15);
+            lblDcGenerationNumber.Size = new Size(211, 25);
             lblDcGenerationNumber.TabIndex = 0;
             lblDcGenerationNumber.Text = "DC GenerationNumber: 0";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(77, 55);
+            label3.Location = new Point(110, 92);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(85, 15);
+            label3.Size = new Size(130, 25);
             label3.TabIndex = 15;
             label3.Text = "Deduction Day";
             // 
@@ -258,9 +271,11 @@
             grpConfig.Controls.Add(label1);
             grpConfig.Controls.Add(btnTestOutputBrowse);
             grpConfig.Controls.Add(btnTestOutputOpen);
-            grpConfig.Location = new Point(8, 166);
+            grpConfig.Location = new Point(11, 277);
+            grpConfig.Margin = new Padding(4, 5, 4, 5);
             grpConfig.Name = "grpConfig";
-            grpConfig.Size = new Size(544, 90);
+            grpConfig.Padding = new Padding(4, 5, 4, 5);
+            grpConfig.Size = new Size(777, 150);
             grpConfig.TabIndex = 15;
             grpConfig.TabStop = false;
             grpConfig.Text = "Config";
@@ -268,26 +283,29 @@
             // txtLiveOutputFolder
             // 
             txtLiveOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtLiveOutputFolder.Location = new Point(112, 21);
+            txtLiveOutputFolder.Location = new Point(160, 35);
+            txtLiveOutputFolder.Margin = new Padding(4, 5, 4, 5);
             txtLiveOutputFolder.Name = "txtLiveOutputFolder";
-            txtLiveOutputFolder.Size = new Size(314, 23);
+            txtLiveOutputFolder.Size = new Size(447, 31);
             txtLiveOutputFolder.TabIndex = 8;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(1, 24);
+            label2.Location = new Point(1, 40);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(105, 15);
+            label2.Size = new Size(159, 25);
             label2.TabIndex = 14;
             label2.Text = "Live Output Folder";
             // 
             // btnLiveOutputBrowse
             // 
             btnLiveOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLiveOutputBrowse.Location = new Point(432, 21);
+            btnLiveOutputBrowse.Location = new Point(617, 35);
+            btnLiveOutputBrowse.Margin = new Padding(4, 5, 4, 5);
             btnLiveOutputBrowse.Name = "btnLiveOutputBrowse";
-            btnLiveOutputBrowse.Size = new Size(51, 23);
+            btnLiveOutputBrowse.Size = new Size(73, 38);
             btnLiveOutputBrowse.TabIndex = 9;
             btnLiveOutputBrowse.Text = "Browse";
             btnLiveOutputBrowse.UseVisualStyleBackColor = true;
@@ -296,26 +314,29 @@
             // txtTestOutputFolder
             // 
             txtTestOutputFolder.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtTestOutputFolder.Location = new Point(112, 50);
+            txtTestOutputFolder.Location = new Point(160, 83);
+            txtTestOutputFolder.Margin = new Padding(4, 5, 4, 5);
             txtTestOutputFolder.Name = "txtTestOutputFolder";
-            txtTestOutputFolder.Size = new Size(314, 23);
+            txtTestOutputFolder.Size = new Size(447, 31);
             txtTestOutputFolder.TabIndex = 11;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(1, 54);
+            label1.Location = new Point(1, 90);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(105, 15);
+            label1.Size = new Size(159, 25);
             label1.TabIndex = 13;
             label1.Text = "Test Output Folder";
             // 
             // btnTestOutputBrowse
             // 
             btnTestOutputBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnTestOutputBrowse.Location = new Point(432, 50);
+            btnTestOutputBrowse.Location = new Point(617, 83);
+            btnTestOutputBrowse.Margin = new Padding(4, 5, 4, 5);
             btnTestOutputBrowse.Name = "btnTestOutputBrowse";
-            btnTestOutputBrowse.Size = new Size(51, 23);
+            btnTestOutputBrowse.Size = new Size(73, 38);
             btnTestOutputBrowse.TabIndex = 12;
             btnTestOutputBrowse.Text = "Browse";
             btnTestOutputBrowse.UseVisualStyleBackColor = true;
@@ -325,16 +346,19 @@
             // 
             dgvPossibleDuplicates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvPossibleDuplicates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPossibleDuplicates.Location = new Point(558, 6);
+            dgvPossibleDuplicates.Location = new Point(797, 10);
+            dgvPossibleDuplicates.Margin = new Padding(4, 5, 4, 5);
             dgvPossibleDuplicates.Name = "dgvPossibleDuplicates";
-            dgvPossibleDuplicates.Size = new Size(617, 593);
+            dgvPossibleDuplicates.RowHeadersWidth = 62;
+            dgvPossibleDuplicates.Size = new Size(881, 988);
             dgvPossibleDuplicates.TabIndex = 17;
             // 
             // btnCheckDuplicates
             // 
-            btnCheckDuplicates.Location = new Point(95, 136);
+            btnCheckDuplicates.Location = new Point(136, 227);
+            btnCheckDuplicates.Margin = new Padding(4, 5, 4, 5);
             btnCheckDuplicates.Name = "btnCheckDuplicates";
-            btnCheckDuplicates.Size = new Size(120, 23);
+            btnCheckDuplicates.Size = new Size(171, 38);
             btnCheckDuplicates.TabIndex = 16;
             btnCheckDuplicates.Text = "Check Duplicates";
             btnCheckDuplicates.UseVisualStyleBackColor = true;
@@ -343,9 +367,10 @@
             // chkTest
             // 
             chkTest.AutoSize = true;
-            chkTest.Location = new Point(147, 82);
+            chkTest.Location = new Point(110, 122);
+            chkTest.Margin = new Padding(4, 5, 4, 5);
             chkTest.Name = "chkTest";
-            chkTest.Size = new Size(68, 19);
+            chkTest.Size = new Size(99, 29);
             chkTest.TabIndex = 6;
             chkTest.Text = "Test File";
             chkTest.UseVisualStyleBackColor = true;
@@ -354,17 +379,19 @@
             // 
             cmbBillingDate.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbBillingDate.FormattingEnabled = true;
-            cmbBillingDate.Location = new Point(251, 79);
+            cmbBillingDate.Location = new Point(160, 32);
+            cmbBillingDate.Margin = new Padding(4, 5, 4, 5);
             cmbBillingDate.Name = "cmbBillingDate";
-            cmbBillingDate.Size = new Size(121, 23);
+            cmbBillingDate.Size = new Size(171, 33);
             cmbBillingDate.TabIndex = 5;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(77, 82);
+            label4.Location = new Point(40, 35);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(67, 15);
+            label4.Size = new Size(101, 25);
             label4.TabIndex = 21;
             label4.Text = "Billing Date";
             // 
@@ -372,9 +399,10 @@
             // 
             rdoDebiCheck.AutoSize = true;
             rdoDebiCheck.Checked = true;
-            rdoDebiCheck.Location = new Point(95, 24);
+            rdoDebiCheck.Location = new Point(136, 40);
+            rdoDebiCheck.Margin = new Padding(4, 5, 4, 5);
             rdoDebiCheck.Name = "rdoDebiCheck";
-            rdoDebiCheck.Size = new Size(82, 19);
+            rdoDebiCheck.Size = new Size(121, 29);
             rdoDebiCheck.TabIndex = 18;
             rdoDebiCheck.TabStop = true;
             rdoDebiCheck.Text = "DebiCheck";
@@ -384,9 +412,10 @@
             // rdoEft
             // 
             rdoEft.AutoSize = true;
-            rdoEft.Location = new Point(180, 24);
+            rdoEft.Location = new Point(257, 40);
+            rdoEft.Margin = new Padding(4, 5, 4, 5);
             rdoEft.Name = "rdoEft";
-            rdoEft.Size = new Size(44, 19);
+            rdoEft.Size = new Size(64, 29);
             rdoEft.TabIndex = 19;
             rdoEft.Text = "EFT";
             rdoEft.UseVisualStyleBackColor = true;
@@ -394,9 +423,10 @@
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(95, 107);
+            btnGenerate.Location = new Point(136, 178);
+            btnGenerate.Margin = new Padding(4, 5, 4, 5);
             btnGenerate.Name = "btnGenerate";
-            btnGenerate.Size = new Size(120, 23);
+            btnGenerate.Size = new Size(171, 38);
             btnGenerate.TabIndex = 2;
             btnGenerate.Text = "Generate File";
             btnGenerate.UseVisualStyleBackColor = true;
@@ -404,11 +434,12 @@
             // 
             // nudDay
             // 
-            nudDay.Location = new Point(177, 53);
+            nudDay.Location = new Point(253, 88);
+            nudDay.Margin = new Padding(4, 5, 4, 5);
             nudDay.Maximum = new decimal(new int[] { 31, 0, 0, 0 });
             nudDay.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudDay.Name = "nudDay";
-            nudDay.Size = new Size(38, 23);
+            nudDay.Size = new Size(54, 31);
             nudDay.TabIndex = 1;
             nudDay.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -416,10 +447,11 @@
             // 
             tabImportFiles.Controls.Add(lvImportFiles);
             tabImportFiles.Controls.Add(pnlImportTop);
-            tabImportFiles.Location = new Point(4, 24);
+            tabImportFiles.Location = new Point(4, 34);
+            tabImportFiles.Margin = new Padding(4, 5, 4, 5);
             tabImportFiles.Name = "tabImportFiles";
-            tabImportFiles.Padding = new Padding(3);
-            tabImportFiles.Size = new Size(1181, 609);
+            tabImportFiles.Padding = new Padding(4, 5, 4, 5);
+            tabImportFiles.Size = new Size(1691, 1024);
             tabImportFiles.TabIndex = 2;
             tabImportFiles.Text = "Import Files";
             tabImportFiles.UseVisualStyleBackColor = true;
@@ -429,9 +461,10 @@
             lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType, chTest, chImported });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
-            lvImportFiles.Location = new Point(3, 63);
+            lvImportFiles.Location = new Point(4, 105);
+            lvImportFiles.Margin = new Padding(4, 5, 4, 5);
             lvImportFiles.Name = "lvImportFiles";
-            lvImportFiles.Size = new Size(1175, 543);
+            lvImportFiles.Size = new Size(1683, 914);
             lvImportFiles.TabIndex = 1;
             lvImportFiles.UseCompatibleStateImageBehavior = false;
             lvImportFiles.View = View.Details;
@@ -493,17 +526,19 @@
             pnlImportTop.Controls.Add(chkHideTestFiles);
             pnlImportTop.Controls.Add(btnArchive);
             pnlImportTop.Dock = DockStyle.Top;
-            pnlImportTop.Location = new Point(3, 3);
+            pnlImportTop.Location = new Point(4, 5);
+            pnlImportTop.Margin = new Padding(4, 5, 4, 5);
             pnlImportTop.Name = "pnlImportTop";
-            pnlImportTop.Size = new Size(1175, 60);
+            pnlImportTop.Size = new Size(1683, 100);
             pnlImportTop.TabIndex = 0;
             // 
             // btnImportParse
             // 
             btnImportParse.Enabled = false;
-            btnImportParse.Location = new Point(721, 4);
+            btnImportParse.Location = new Point(1030, 7);
+            btnImportParse.Margin = new Padding(4, 5, 4, 5);
             btnImportParse.Name = "btnImportParse";
-            btnImportParse.Size = new Size(100, 23);
+            btnImportParse.Size = new Size(143, 38);
             btnImportParse.TabIndex = 3;
             btnImportParse.Text = "Import";
             btnImportParse.UseVisualStyleBackColor = true;
@@ -512,9 +547,10 @@
             // btnImportRead
             // 
             btnImportRead.Enabled = false;
-            btnImportRead.Location = new Point(615, 4);
+            btnImportRead.Location = new Point(879, 7);
+            btnImportRead.Margin = new Padding(4, 5, 4, 5);
             btnImportRead.Name = "btnImportRead";
-            btnImportRead.Size = new Size(100, 23);
+            btnImportRead.Size = new Size(143, 38);
             btnImportRead.TabIndex = 2;
             btnImportRead.Text = "Read File";
             btnImportRead.UseVisualStyleBackColor = true;
@@ -522,16 +558,18 @@
             // 
             // txtSearchFiles
             // 
-            txtSearchFiles.Location = new Point(938, 5);
+            txtSearchFiles.Location = new Point(1340, 8);
+            txtSearchFiles.Margin = new Padding(4, 5, 4, 5);
             txtSearchFiles.Name = "txtSearchFiles";
-            txtSearchFiles.Size = new Size(150, 23);
+            txtSearchFiles.Size = new Size(213, 31);
             txtSearchFiles.TabIndex = 5;
             // 
             // btnFindText
             // 
-            btnFindText.Location = new Point(821, 34);
+            btnFindText.Location = new Point(1173, 57);
+            btnFindText.Margin = new Padding(4, 5, 4, 5);
             btnFindText.Name = "btnFindText";
-            btnFindText.Size = new Size(100, 23);
+            btnFindText.Size = new Size(143, 38);
             btnFindText.TabIndex = 10;
             btnFindText.Text = "Search Content";
             btnFindText.UseVisualStyleBackColor = true;
@@ -539,16 +577,18 @@
             // 
             // txtFindText
             // 
-            txtFindText.Location = new Point(615, 34);
+            txtFindText.Location = new Point(879, 57);
+            txtFindText.Margin = new Padding(4, 5, 4, 5);
             txtFindText.Name = "txtFindText";
-            txtFindText.Size = new Size(200, 23);
+            txtFindText.Size = new Size(284, 31);
             txtFindText.TabIndex = 9;
             // 
             // btnApplyFilter
             // 
-            btnApplyFilter.Location = new Point(509, 33);
+            btnApplyFilter.Location = new Point(727, 55);
+            btnApplyFilter.Margin = new Padding(4, 5, 4, 5);
             btnApplyFilter.Name = "btnApplyFilter";
-            btnApplyFilter.Size = new Size(100, 23);
+            btnApplyFilter.Size = new Size(143, 38);
             btnApplyFilter.TabIndex = 8;
             btnApplyFilter.Text = "Apply";
             btnApplyFilter.UseVisualStyleBackColor = true;
@@ -556,16 +596,18 @@
             // 
             // txtFileFilter
             // 
-            txtFileFilter.Location = new Point(3, 34);
+            txtFileFilter.Location = new Point(4, 57);
+            txtFileFilter.Margin = new Padding(4, 5, 4, 5);
             txtFileFilter.Name = "txtFileFilter";
-            txtFileFilter.Size = new Size(500, 23);
+            txtFileFilter.Size = new Size(713, 31);
             txtFileFilter.TabIndex = 7;
             // 
             // btnImportBrowse
             // 
-            btnImportBrowse.Location = new Point(509, 4);
+            btnImportBrowse.Location = new Point(727, 7);
+            btnImportBrowse.Margin = new Padding(4, 5, 4, 5);
             btnImportBrowse.Name = "btnImportBrowse";
-            btnImportBrowse.Size = new Size(100, 23);
+            btnImportBrowse.Size = new Size(143, 38);
             btnImportBrowse.TabIndex = 1;
             btnImportBrowse.Text = "Browse";
             btnImportBrowse.UseVisualStyleBackColor = true;
@@ -573,17 +615,19 @@
             // 
             // txtImportFolder
             // 
-            txtImportFolder.Location = new Point(3, 5);
+            txtImportFolder.Location = new Point(4, 8);
+            txtImportFolder.Margin = new Padding(4, 5, 4, 5);
             txtImportFolder.Name = "txtImportFolder";
-            txtImportFolder.Size = new Size(500, 23);
+            txtImportFolder.Size = new Size(713, 31);
             txtImportFolder.TabIndex = 0;
             // 
             // chkHideTestFiles
             // 
             chkHideTestFiles.AutoSize = true;
-            chkHideTestFiles.Location = new Point(827, 7);
+            chkHideTestFiles.Location = new Point(1181, 12);
+            chkHideTestFiles.Margin = new Padding(4, 5, 4, 5);
             chkHideTestFiles.Name = "chkHideTestFiles";
-            chkHideTestFiles.Size = new Size(101, 19);
+            chkHideTestFiles.Size = new Size(149, 29);
             chkHideTestFiles.TabIndex = 4;
             chkHideTestFiles.Text = "Hide Test Files";
             chkHideTestFiles.UseVisualStyleBackColor = true;
@@ -591,9 +635,10 @@
             // 
             // btnArchive
             // 
-            btnArchive.Location = new Point(1069, 31);
+            btnArchive.Location = new Point(1527, 52);
+            btnArchive.Margin = new Padding(4, 5, 4, 5);
             btnArchive.Name = "btnArchive";
-            btnArchive.Size = new Size(100, 23);
+            btnArchive.Size = new Size(143, 38);
             btnArchive.TabIndex = 11;
             btnArchive.Text = "Archive Files";
             btnArchive.UseVisualStyleBackColor = true;
@@ -619,23 +664,36 @@
             // 
             // cmsImportFiles
             // 
+            cmsImportFiles.ImageScalingSize = new Size(24, 24);
             cmsImportFiles.Items.AddRange(new ToolStripItem[] { previewToolStripMenuItem });
             cmsImportFiles.Name = "cmsImportFiles";
-            cmsImportFiles.Size = new Size(116, 26);
+            cmsImportFiles.Size = new Size(145, 36);
             // 
             // previewToolStripMenuItem
             // 
             previewToolStripMenuItem.Name = "previewToolStripMenuItem";
-            previewToolStripMenuItem.Size = new Size(115, 22);
+            previewToolStripMenuItem.Size = new Size(144, 32);
             previewToolStripMenuItem.Text = "Preview";
             previewToolStripMenuItem.Click += previewToolStripMenuItem_Click;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(cmbBillingDate);
+            groupBox1.Controls.Add(label4);
+            groupBox1.Location = new Point(331, 40);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(452, 238);
+            groupBox1.TabIndex = 22;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Billing Window";
+            // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1189, 637);
+            ClientSize = new Size(1699, 1062);
             Controls.Add(tabMain);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "MainForm";
             Text = "Collections";
             tabMain.ResumeLayout(false);
@@ -651,6 +709,8 @@
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
             cmsImportFiles.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -680,5 +740,6 @@
         private ComboBox cmbBillingDate;
         private Label label4;
         private Button btnArchive;
+        private GroupBox groupBox1;
     }
 }
