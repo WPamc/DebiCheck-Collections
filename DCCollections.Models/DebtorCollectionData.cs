@@ -7,6 +7,7 @@ namespace RMCollectionProcessor.Models
     /// </summary>
     public class DebtorCollectionData
     {
+        public string SubSsn { get; set; } = string.Empty;
         public string PaymentInformation { get; set; } = string.Empty;
         public DateTime RequestedCollectionDate { get; set; }
         public int TrackingPeriod { get; set; }
@@ -20,5 +21,6 @@ namespace RMCollectionProcessor.Models
         public string AccountType { get; set; } = string.Empty;
         public string ContractReference { get; set; } = string.Empty;
         public DateTime RelatedCycleDate { get; set; }
+
     }
 }

@@ -4,7 +4,7 @@ CASE WHEN mmb.DEDUCTIONDAY > DAY(EOMONTH(base_month)) THEN DAY(EOMONTH(base_mont
              mmb.MANDATEUSERREF + '/' + CONVERT(varchar(10), CONVERT(datetime, 
              DATEFROMPARTS(YEAR(mmb.base_month), MONTH(mmb.base_month), CASE WHEN mmb.DEDUCTIONDAY > DAY(EOMONTH(base_month)) THEN DAY(EOMONTH(base_month)) ELSE mmb.DEDUCTIONDAY END), 23), 
              23) AS PaymentInformation, 3 AS TrackingPeriod, 'RCUR' AS DebitSequence, '0021' AS EntryClass, mmb.AUTHORISATIONREF AS MandateReference, mmb.BRANCHCODE AS DebtorBankBranch, mm.FIRSTNM, mm.LASTNM AS DebtorName, mmb.ACCNR AS DebtorAccountNumber, 
-             mmb.ACCTYPE AS AccountType, mmb.MANDATEUSERREF AS ContractReference, GETDATE() AS RelatedCycleDate, TOTAL AS InstructedAmount
+             mmb.ACCTYPE AS AccountType, mmb.MANDATEUSERREF AS ContractReference, GETDATE() AS RelatedCycleDate, TOTAL AS InstructedAmount, mm.SUBSSN
 FROM   (SELECT MEMBID, BANK, BRANCHCODE, ACCNR, ACCTYPE, ACCHOLDNAME, DEDUCTIONDAY, MANDATEUSERREF, AUTHORISATIONREF, CURRHIST, FROMDATE, TODATE, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE, SEQUENCE, ROWID, 
                            DATEADD(month, CASE WHEN DAY(GETDATE()) <= DEDUCTIONDAY THEN 0 ELSE 1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS base_month
              FROM    MEMB_MANDATEHIST) AS mmb INNER JOIN

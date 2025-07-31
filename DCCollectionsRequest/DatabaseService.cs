@@ -36,6 +36,7 @@ public class DatabaseService
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
+            string subssn = "";
             string paymentInformation = "[not read]";
             string debitSequence = "[not read]";
             string entryClass = "[not read]";
@@ -64,7 +65,7 @@ public class DatabaseService
                 debtorAccountNumber = reader[nameof(DebtorCollectionData.DebtorAccountNumber)].ToString() ?? string.Empty;
                 accountType = reader[nameof(DebtorCollectionData.AccountType)].ToString() ?? string.Empty;
                 contractReference = reader[nameof(DebtorCollectionData.ContractReference)].ToString() ?? string.Empty;
-
+                subssn = reader[nameof(DebtorCollectionData.SubSsn)].ToString() ?? string.Empty;
                 // For types prone to conversion errors (dates, numbers), read them as objects first.
                 // This prevents an immediate crash if the data is DBNull or the wrong type.
                 instructedAmountObj = reader["InstructedAmount"];
@@ -97,7 +98,8 @@ public class DatabaseService
                     DebtorAccountNumber = debtorAccountNumber,
                     AccountType = accountType,
                     ContractReference = contractReference,
-                    RelatedCycleDate = relatedCycleDate
+                    RelatedCycleDate = relatedCycleDate,
+                    SubSsn = subssn
                 };
 
                 results.Add(data);
@@ -162,25 +164,33 @@ TrackingPeriod Object: '{trackingPeriodObj}'
     public List<BillingCollectionRequest> GetCollectionRequests(string subssn, DateTime startDate, DateTime endDate)
     {
         var list = new List<BillingCollectionRequest>();
-        using var conn = new SqlConnection(_connectionString);
-        using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED FROM dbo.BILLING_COLLECTIONREQUESTS WHERE SUBSSN = @subssn AND DATEREQUESTED BETWEEN @start AND @end ORDER BY DATEREQUESTED", conn);
-        cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = subssn });
-        cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.DateTime) { Value = startDate });
-        cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.DateTime) { Value = endDate });
-        conn.Open();
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
+        try
         {
-            var req = new BillingCollectionRequest
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED FROM dbo.BILLING_COLLECTIONREQUESTS WHERE SUBSSN = @subssn AND DATEREQUESTED BETWEEN @start AND @end ORDER BY DATEREQUESTED", conn);
+            cmd.Parameters.Add(new SqlParameter("@subssn", SqlDbType.VarChar, 23) { Value = subssn });
+            cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.DateTime) { Value = startDate });
+            cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.DateTime) { Value = endDate });
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                RowId = reader.GetInt32(reader.GetOrdinal("ROWID")),
-                DateRequested = reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")),
-                SubSSN = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN")),
-                Reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE")),
-                DeductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE")),
-                AmountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : reader.GetString(reader.GetOrdinal("AMOUNTREQUESTED"))
-            };
-            list.Add(req);
+                var req = new BillingCollectionRequest
+                {
+                    RowId = reader.GetInt32(reader.GetOrdinal("ROWID")),
+                    DateRequested = reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED")),
+                    SubSSN = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN")),
+                    Reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE")),
+                    DeductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE")),
+                    AmountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : reader.GetString(reader.GetOrdinal("AMOUNTREQUESTED"))
+                };
+                list.Add(req);
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw;
         }
         return list;
     }
