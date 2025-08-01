@@ -8,12 +8,23 @@ namespace DCCollections.Gui
         [STAThread]
         static void Main()
         {
-            var dcDb = new DatabaseService();
-            dcDb.EnsureDailyCounterForToday();
-            var eftDb = new EFT_Collections.DatabaseService();
-            eftDb.EnsureDailyCounterForToday();
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            PAMC.LoginGui.LoginForm f = new PAMC.LoginGui.LoginForm();
+            f.ShowDialog();
+            if (f.Continue)
+            {
+                var dcDb = new DatabaseService();
+                dcDb.EnsureDailyCounterForToday();
+                var eftDb = new EFT_Collections.DatabaseService();
+                eftDb.EnsureDailyCounterForToday();
+
+                Application.Run(new MainForm());
+
+
+
+
+            }
+
         }
     }
 }

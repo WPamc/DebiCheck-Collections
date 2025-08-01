@@ -20,6 +20,7 @@
     <ProjectReference Include="..\tmp\PAMC.DatabaseConnection\PAMC.DatabaseConnection.csproj" />
     <ProjectReference Include="..\EFT-Collections\EFTCollections.csproj" />
     <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
+    <ProjectReference Include="..\tmp\PAMC.LoginGui\PAMC.LoginGui.csproj" />
   </ItemGroup>
 
 </Project>

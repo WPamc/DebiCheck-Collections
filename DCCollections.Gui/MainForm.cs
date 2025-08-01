@@ -56,12 +56,13 @@ namespace DCCollections.Gui
             InitializeComponent();
             lvImportFiles.HideSelection = false;
             lvImportFiles.FullRowSelect= true;
-            var connStr = AppConfig.ConnectionString;
+            string connStr = AppConfig.ConnectionString();
             if (!string.IsNullOrWhiteSpace(connStr))
             {
                 var safeConn = RemovePassword(connStr);
-                MessageBox.Show(safeConn, "Database Connection");
+               // MessageBox.Show(safeConn, "Database Connection");
                 Text = $"Collections - {safeConn}";
+                
             }
 
             _dcCollectionservice = new RMCollectionProcessor.CollectionService();

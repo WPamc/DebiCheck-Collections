@@ -19,7 +19,7 @@ public class DatabaseService
     public DatabaseService()
     {
         var configuration = AppConfig.Configuration;
-        _connectionString = AppConfig.ConnectionString;
+        _connectionString = AppConfig.ConnectionString();
         var queriesPath = configuration["SqlQueriesPath"] ?? "SqlQueries";
         _collectionsSql = File.ReadAllText(Path.Combine(queriesPath, "DCCollections.sql"));
         _creditorDefaultsSql = File.ReadAllText(Path.Combine(queriesPath, "CreditorDefaults.sql"));

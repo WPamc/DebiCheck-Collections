@@ -65,6 +65,9 @@ namespace PAMC.LoginGui
                 builder.DataSource = txtServer.Text;
                 builder.UserID = txtUsername.Text;
                 builder.Password = txtPassword.Text;
+
+                builder.Encrypt = true;
+                builder.TrustServerCertificate = true;
                 _cn = new SqlConnection(builder.ConnectionString);
                 _cn.Open();
 

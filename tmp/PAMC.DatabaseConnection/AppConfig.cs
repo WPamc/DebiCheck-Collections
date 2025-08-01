@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace PAMC.DatabaseConnection
 {
@@ -24,9 +25,14 @@ namespace PAMC.DatabaseConnection
             }
         }
 
-        public static string ConnectionString =>
-            Configuration.GetConnectionString("DefaultConnection") ??
-            throw new InvalidOperationException("DefaultConnection missing");
+        public static string ConnectionString()
+        {
+            SqlConnection conn = new SqlConnection();
+            string defaultConnectionString = "";
+            FileLogin.GetApplicationConnection(ref conn, ref defaultConnectionString); 
+            return defaultConnectionString + ";Encrypt=True;TrustServerCertificate=True;";
+        }
+        
 
         public static IReadOnlyDictionary<string, string> EftRejectionCodes =>
             Configuration.GetSection("EftRejectionCodes").GetChildren()

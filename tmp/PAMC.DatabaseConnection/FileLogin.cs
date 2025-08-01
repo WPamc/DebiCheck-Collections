@@ -23,6 +23,23 @@ namespace PAMC.DatabaseConnection
         }
 
         // Overloaded method without baseFolder parameter, it gets the executable path and calls the main method.
+        public static void GetApplicationConnection(ref SqlConnection _cn, ref string _cnString)
+        {
+            SqlConnection _cnRep = new SqlConnection();
+            SqlConnection _cnPort = new SqlConnection(); ;
+            SqlConnection _cnCpsRep = new SqlConnection();
+            string _cnRepString = "";
+            string _cnPortString = "";
+            string _cnCpsRepString = "";
+
+            // Get the directory of the currently executing assembly.
+            String executablePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            // Call the main method with the executable path.
+            GetApplicationConnections(executablePath, ref _cn, ref _cnRep, ref _cnPort,
+                ref _cnCpsRep, ref _cnString, ref _cnRepString, ref _cnPortString, ref _cnCpsRepString);
+        }
+
+        // Overloaded method without baseFolder parameter, it gets the executable path and calls the main method.
         public static void GetApplicationConnections(
             ref SqlConnection _cn, ref SqlConnection _cnRep, ref SqlConnection _cnPort,
             ref SqlConnection _cnCpsRep, ref string _cnString, ref string _cnRepString,
@@ -102,7 +119,7 @@ namespace PAMC.DatabaseConnection
                 // Iterate over each connection in the dictionary.
                 foreach (var item in ld.Keys)
                 {
-                    
+
                     SqlConnection cn = null;
                     // Retrieve the connection details array for the current key.
                     string[] details = (string[])ld[item];
@@ -180,10 +197,10 @@ namespace PAMC.DatabaseConnection
         /// and Connection Strin (value) into the DatabaseConnections
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static void DecryptFilePopulateConnections( )
+        public static void DecryptFilePopulateConnections()
         {
             String executablePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            
+
             ListDictionary ld = ReadLoginFile(executablePath);
             // Check if the dictionary has any connection details.
             if (ld.Count > 0)
@@ -205,10 +222,10 @@ namespace PAMC.DatabaseConnection
                         string conName = details[0];
                         server = Sugoi.Security.Rijndael.Decrypt(details[4]);
                         username = Sugoi.Security.Rijndael.Decrypt(details[1]);
-                        
+
                         database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-                     
+
                         //Add the pw-less connection string to the static Property for later use
                         FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username};";
                         // Create and open a new SQL connection.
