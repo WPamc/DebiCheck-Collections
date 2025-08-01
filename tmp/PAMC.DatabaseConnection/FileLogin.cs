@@ -103,25 +103,18 @@ namespace PAMC.DatabaseConnection
             return ld;
         }
 
-        // Method to decrypt connection details and establish SQL connections.
         private static void DecryptListAndLogin(
             ref SqlConnection _cn, ref SqlConnection _cnRep, ref SqlConnection _cnPort,
             ref SqlConnection _cnCpsRep, ref string _cnString, ref string _cnRepString,
             ref string _cnPortString, ref string _cnCpsRepString, ListDictionary ld)
 
         {
-            // Check if the dictionary has any connection details.
             if (ld.Count > 0)
             {
-                // Initialize a message string to record connection success messages.
                 string connectionMsg = "";
-
-                // Iterate over each connection in the dictionary.
                 foreach (var item in ld.Keys)
                 {
-
                     SqlConnection cn = null;
-                    // Retrieve the connection details array for the current key.
                     string[] details = (string[])ld[item];
                     string server = "";
                     string username = "";
@@ -129,26 +122,19 @@ namespace PAMC.DatabaseConnection
 
                     try
                     {
-                        // Extract and decrypt connection details.
                         string conName = details[0];
                         server = Sugoi.Security.Rijndael.Decrypt(details[4]);
                         username = Sugoi.Security.Rijndael.Decrypt(details[1]);
                         string password = Sugoi.Security.Rijndael.Decrypt(details[2]);
                         database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-                        // Build the connection string with pw.
-                        string cnString = $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; ";
-                        //Add the pw-less connection string to the static Property for later use
-                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username};";
-                        // Create and open a new SQL connection.
+                        string cnString = $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; Encrypt=True;TrustServerCertificate=True;";
+                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
 
                         cn = new SqlConnection(cnString);
                         cn.Open();
 
-                        // Append a success message for this connection.
                         connectionMsg += $"CONNECTION SUCCESS : {server} - User : {username} - Database : {database}. ";
-
-                        // Assign the connection and connection string based on the connection name.
                         if (item.ToString().ToUpper() == "DEFAULT")
                         {
                             _cn = cn;
@@ -172,26 +158,22 @@ namespace PAMC.DatabaseConnection
                     }
                     catch (Exception ex)
                     {
-                        // Output an error message and exit if the connection fails.
                         Console.WriteLine($"Connection Failed :{server} - User : {username} - Database : {database}\r\n {ex.Message}");
                         System.Threading.Thread.Sleep(6000);
                         Environment.Exit(0);
                     }
                     finally
                     {
-                        // Optional cleanup can be done here if needed.
                     }
                 }
             }
             else
             {
-                // Inform the user if the login file is empty and throw an exception.
                 Console.WriteLine($"Login File is Empty!");
                 throw new Exception("Login.txt file is empty!");
             }
         }
 
-        //Call this method --- interactive Gui Apps
         /// <summary>
         /// This method does not log in. I merely populated a Dictionary with Connection Names (key)
         /// and Connection Strin (value) into the DatabaseConnections
@@ -202,15 +184,11 @@ namespace PAMC.DatabaseConnection
             String executablePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             ListDictionary ld = ReadLoginFile(executablePath);
-            // Check if the dictionary has any connection details.
             if (ld.Count > 0)
             {
-                // Iterate over each connection in the dictionary.
                 foreach (var item in ld.Keys)
                 {
-
                     SqlConnection cn = null;
-                    // Retrieve the connection details array for the current key.
                     string[] details = (string[])ld[item];
                     string server = "";
                     string username = "";
@@ -218,33 +196,26 @@ namespace PAMC.DatabaseConnection
 
                     try
                     {
-                        // Extract and decrypt connection details.
                         string conName = details[0];
                         server = Sugoi.Security.Rijndael.Decrypt(details[4]);
                         username = Sugoi.Security.Rijndael.Decrypt(details[1]);
 
                         database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-
-                        //Add the pw-less connection string to the static Property for later use
-                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username};";
-                        // Create and open a new SQL connection.
+                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
 
                     }
                     catch (Exception ex)
                     {
-                        //raise an error on exception for GUI purposes
                         throw new Exception($"Generating Passwordless Connectionstrings Failed:{server} - User : {username} - Database : {database}\r\n {ex.Message}");
                     }
                     finally
                     {
-                        // Optional cleanup can be done here if needed.
                     }
                 }
             }
             else
             {
-                // Inform the user if the login file is empty and throw an exception.
                 Console.WriteLine($"Login File is Empty!");
                 throw new Exception("Login.txt file is empty!");
             }
