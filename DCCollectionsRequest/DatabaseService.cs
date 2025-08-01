@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using DbConnection;
+using PAMC.DatabaseConnection;
 using System.IO;
 using System.Linq;
 using RMCollectionProcessor.Models;

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
+    <ProjectReference Include="..\tmp\PAMC.DatabaseConnection\PAMC.DatabaseConnection.csproj" />
     <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
   </ItemGroup>
 

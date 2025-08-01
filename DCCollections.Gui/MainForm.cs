@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using DbConnection;
+using PAMC.DatabaseConnection;
 using EFT_Collections;
 using RMCollectionProcessor;
 using RMCollectionProcessor.Models;
@@ -56,7 +56,7 @@ namespace DCCollections.Gui
             InitializeComponent();
             lvImportFiles.HideSelection = false;
             lvImportFiles.FullRowSelect= true;
-            var connStr = DbConnection.AppConfig.ConnectionString;
+            var connStr = AppConfig.ConnectionString;
             if (!string.IsNullOrWhiteSpace(connStr))
             {
                 var safeConn = RemovePassword(connStr);
