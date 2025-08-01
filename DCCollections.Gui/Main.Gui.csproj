@@ -17,7 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DCCollections.Models\DCModelsIdentifier.csproj" />
     <ProjectReference Include="..\DCCollectionsRequest\DCCollections.csproj" />
-    <ProjectReference Include="..\DbConnection\DbConnection.csproj" />
+    <ProjectReference Include="..\tmp\PAMC.DatabaseConnection\PAMC.DatabaseConnection.csproj" />
     <ProjectReference Include="..\EFT-Collections\EFTCollections.csproj" />
     <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
   </ItemGroup>

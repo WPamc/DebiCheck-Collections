@@ -412,4 +412,4 @@ appsettings*.json
 /DCCollectionsRequest/appsettings.json.old
 /ExampleFiles
 /.env
-/DbConnection/appsettings.json
+/tmp/PAMC.DatabaseConnection/appsettings.json

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DbConnection
+namespace PAMC.DatabaseConnection
 {
     public static class AppConfig
     {
