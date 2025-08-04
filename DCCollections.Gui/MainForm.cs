@@ -38,6 +38,7 @@ namespace DCCollections.Gui
         private ProgressBar _pbLibrary;
         private List<string> _libraryPaths = new();
         private Dictionary<string, string> _libraryFiles = new();
+        private readonly Dictionary<TabPage, Panel> _tabLocks = new();
         private const string ImportColumnName = "Import";
 
         private class ListViewItemComparer : System.Collections.IComparer
@@ -115,8 +116,6 @@ namespace DCCollections.Gui
         /// </summary>
         private async void LoadInitialDataAsync()
         {
-            this.Enabled = false;
-            UseWaitCursor = true;
             try
             {
                 await LoadCountersAsync();
@@ -127,11 +126,6 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred during initial data load: {ex.Message}", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                this.Enabled = true;
-                UseWaitCursor = false;
             }
         }
 
@@ -181,12 +175,48 @@ namespace DCCollections.Gui
             }
             return string.Empty;
         }
+
+        /// <summary>
+        /// Overlays the specified tab with a spinner to prevent interaction.
+        /// </summary>
+        private void LockTab(TabPage tab)
+        {
+            if (_tabLocks.ContainsKey(tab))
+                return;
+            var overlay = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(128, Color.Gray) };
+            var spinner = new ProgressBar { Style = ProgressBarStyle.Marquee, Width = 100, Height = 20 };
+            spinner.Anchor = AnchorStyles.None;
+            spinner.Location = new Point((overlay.Width - spinner.Width) / 2, (overlay.Height - spinner.Height) / 2);
+            overlay.Controls.Add(spinner);
+            overlay.Resize += (s, _) =>
+            {
+                var pb = (ProgressBar)((Panel)s).Controls[0];
+                pb.Location = new Point(((Panel)s).Width / 2 - pb.Width / 2, ((Panel)s).Height / 2 - pb.Height / 2);
+            };
+            tab.Controls.Add(overlay);
+            overlay.BringToFront();
+            _tabLocks[tab] = overlay;
+        }
+
+        /// <summary>
+        /// Removes the spinner overlay from the specified tab.
+        /// </summary>
+        private void UnlockTab(TabPage tab)
+        {
+            if (_tabLocks.TryGetValue(tab, out var overlay))
+            {
+                tab.Controls.Remove(overlay);
+                overlay.Dispose();
+                _tabLocks.Remove(tab);
+            }
+        }
         /// <summary>
         /// Asynchronously loads EDI bank file records from the database into the grid.
         /// It then attempts to match these records against files found in the Library.
         /// </summary>
         private async Task LoadBankFilesAsync()
         {
+            LockTab(tabBankFiles);
             try
             {
                 var db = new DCService();
@@ -216,6 +246,10 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+            finally
+            {
+                UnlockTab(tabBankFiles);
             }
         }
         /// <summary>
@@ -248,14 +282,22 @@ namespace DCCollections.Gui
         /// </summary>
         private async Task ScanLibraryFilesAsync()
         {
+            LockTab(tabLibrary);
             _pbLibrary.Visible = true;
-            var files = await Task.Run(() => _libraryPaths.Where(Directory.Exists)
-                .SelectMany(p => Directory.EnumerateFiles(p, "*", SearchOption.AllDirectories))
-                .GroupBy(Path.GetFileName)
-                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase));
-            _libraryFiles = files;
-            _pbLibrary.Visible = false;
-            MatchBankFilesToLibrary();
+            try
+            {
+                var files = await Task.Run(() => _libraryPaths.Where(Directory.Exists)
+                    .SelectMany(p => Directory.EnumerateFiles(p, "*", SearchOption.AllDirectories))
+                    .GroupBy(Path.GetFileName)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase));
+                _libraryFiles = files;
+                MatchBankFilesToLibrary();
+            }
+            finally
+            {
+                _pbLibrary.Visible = false;
+                UnlockTab(tabLibrary);
+            }
         }
 
         /// <summary>
@@ -322,6 +364,7 @@ namespace DCCollections.Gui
 
         private async void btnGenerate_Click(object sender, EventArgs e)
         {
+            LockTab(tabOperations);
             SetOperationsUiState(false);
             _pbOperations.Visible = true;
             try
@@ -384,6 +427,7 @@ namespace DCCollections.Gui
             {
                 _pbOperations.Visible = false;
                 SetOperationsUiState(true);
+                UnlockTab(tabOperations);
             }
         }
 
@@ -480,31 +524,40 @@ namespace DCCollections.Gui
         /// </summary>
         private async Task LoadInitialPathsAsync()
         {
-            if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
+            LockTab(tabOperations);
+            LockTab(tabImportFiles);
+            try
             {
-                LoadOperationsFiles(_settings.OperationFolderPath);
+                if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
+                {
+                    LoadOperationsFiles(_settings.OperationFolderPath);
+                }
+
+                if (!string.IsNullOrWhiteSpace(_settings.LiveOutputFolderPath) && Directory.Exists(_settings.LiveOutputFolderPath))
+                {
+                    txtLiveOutputFolder.Text = _settings.LiveOutputFolderPath;
+                }
+
+                if (!string.IsNullOrWhiteSpace(_settings.TestOutputFolderPath) && Directory.Exists(_settings.TestOutputFolderPath))
+                {
+                    txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
+                }
+
+                _importSortColumn = _settings.ImportSortColumn;
+                _importSortDescending = _settings.ImportSortDescending;
+                if (_importSortColumn >= lvImportFiles.Columns.Count)
+                    _importSortColumn = 0;
+
+                if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
+                {
+                    txtImportFolder.Text = _settings.ImportFolderPath;
+                    await LoadImportFilesAsync(_settings.ImportFolderPath);
+                }
             }
-
-            if (!string.IsNullOrWhiteSpace(_settings.LiveOutputFolderPath) && Directory.Exists(_settings.LiveOutputFolderPath))
+            finally
             {
-                txtLiveOutputFolder.Text = _settings.LiveOutputFolderPath;
-            }
-
-            if (!string.IsNullOrWhiteSpace(_settings.TestOutputFolderPath) && Directory.Exists(_settings.TestOutputFolderPath))
-            {
-                txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
-            }
-
-
-            _importSortColumn = _settings.ImportSortColumn;
-            _importSortDescending = _settings.ImportSortDescending;
-            if (_importSortColumn >= lvImportFiles.Columns.Count)
-                _importSortColumn = 0;
-
-            if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
-            {
-                txtImportFolder.Text = _settings.ImportFolderPath;
-                await LoadImportFilesAsync(_settings.ImportFolderPath);
+                UnlockTab(tabOperations);
+                UnlockTab(tabImportFiles);
             }
         }
 
@@ -548,6 +601,7 @@ namespace DCCollections.Gui
         /// <param name="path">The folder to scan for files.</param>
         private async Task LoadImportFilesAsync(string path)
         {
+            LockTab(tabImportFiles);
             SetImportUiState(false);
             _pbImport.Visible = true;
             try
@@ -629,6 +683,7 @@ namespace DCCollections.Gui
             {
                 _pbImport.Visible = false;
                 SetImportUiState(true);
+                UnlockTab(tabImportFiles);
             }
         }
 
@@ -731,6 +786,7 @@ namespace DCCollections.Gui
             if (lvImportFiles.SelectedItems.Count == 0)
                 return;
 
+            LockTab(tabImportFiles);
             SetImportUiState(false);
             _pbImport.Visible = true;
 
@@ -817,6 +873,7 @@ namespace DCCollections.Gui
             {
                 _pbImport.Visible = false;
                 SetImportUiState(true);
+                UnlockTab(tabImportFiles);
             }
         }
 
@@ -926,81 +983,89 @@ namespace DCCollections.Gui
 
         private async void btnArchive_Click(object sender, EventArgs e)
         {
-            if (lvImportFiles.Items.Count == 0)
+            LockTab(tabImportFiles);
+            try
             {
-                MessageBox.Show("There are no files to archive.", "Archive Files", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            var uniqueTypes = lvImportFiles.Items
-                .Cast<ListViewItem>()
-                .Select(item => item.SubItems[5].Text)
-                .Distinct()
-                .ToList();
-
-            using var dialog = new ArchiveDialog(_settings, uniqueTypes);
-
-            if (dialog.ShowDialog(this) == DialogResult.OK)
-            {
-                _settings.ArchiveOlderThanDays = dialog.DaysOlder;
-                _settings.ArchiveForceUnimported = dialog.ForceArchive;
-                _settings.ArchiveLastFileType = dialog.FileType;
-                _settings.Save();
-
-                int movedFiles = 0;
-                var importPath = txtImportFolder.Text;
-                var archiveDate = DateTime.Now.AddDays(-dialog.DaysOlder);
-
-                SetImportUiState(false);
-                _pbImport.Visible = true;
-
-                try
+                if (lvImportFiles.Items.Count == 0)
                 {
-                    foreach (ListViewItem item in lvImportFiles.Items)
+                    MessageBox.Show("There are no files to archive.", "Archive Files", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                var uniqueTypes = lvImportFiles.Items
+                    .Cast<ListViewItem>()
+                    .Select(item => item.SubItems[5].Text)
+                    .Distinct()
+                    .ToList();
+
+                using var dialog = new ArchiveDialog(_settings, uniqueTypes);
+
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    _settings.ArchiveOlderThanDays = dialog.DaysOlder;
+                    _settings.ArchiveForceUnimported = dialog.ForceArchive;
+                    _settings.ArchiveLastFileType = dialog.FileType;
+                    _settings.Save();
+
+                    int movedFiles = 0;
+                    var importPath = txtImportFolder.Text;
+                    var archiveDate = DateTime.Now.AddDays(-dialog.DaysOlder);
+
+                    SetImportUiState(false);
+                    _pbImport.Visible = true;
+
+                    try
                     {
-                        var fileInfo = new FileInfo(((ImportFileTag)item.Tag).Path);
-                        var imported = item.SubItems[7].Text.Equals("Yes", StringComparison.OrdinalIgnoreCase);
-                        var fileType = item.SubItems[5].Text;
-
-                        if (dialog.DaysOlder > 0 && fileInfo.LastWriteTime >= archiveDate)
+                        foreach (ListViewItem item in lvImportFiles.Items)
                         {
-                            continue;
+                            var fileInfo = new FileInfo(((ImportFileTag)item.Tag).Path);
+                            var imported = item.SubItems[7].Text.Equals("Yes", StringComparison.OrdinalIgnoreCase);
+                            var fileType = item.SubItems[5].Text;
+
+                            if (dialog.DaysOlder > 0 && fileInfo.LastWriteTime >= archiveDate)
+                            {
+                                continue;
+                            }
+
+                            if (!dialog.ForceArchive && !imported)
+                            {
+                                continue;
+                            }
+
+                            if (dialog.ForceArchive && dialog.FileType != "All File Types" && dialog.FileType != fileType)
+                            {
+                                continue;
+                            }
+
+                            var targetFolder = Path.Combine(importPath, fileType);
+                            Directory.CreateDirectory(targetFolder);
+                            var targetFile = Path.Combine(targetFolder, fileInfo.Name);
+
+                            try
+                            {
+                                File.Move(fileInfo.FullName, targetFile, true);
+                                movedFiles++;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}", "Archive Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                            }
                         }
 
-                        if (!dialog.ForceArchive && !imported)
-                        {
-                            continue;
-                        }
-
-                        if (dialog.ForceArchive && dialog.FileType != "All File Types" && dialog.FileType != fileType)
-                        {
-                            continue;
-                        }
-
-                        var targetFolder = Path.Combine(importPath, fileType);
-                        Directory.CreateDirectory(targetFolder);
-                        var targetFile = Path.Combine(targetFolder, fileInfo.Name);
-
-                        try
-                        {
-                            File.Move(fileInfo.FullName, targetFile, true);
-                            movedFiles++;
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}", "Archive Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            break;
-                        }
+                        MessageBox.Show($"Successfully archived {movedFiles} file(s).", "Archive Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
-                    MessageBox.Show($"Successfully archived {movedFiles} file(s).", "Archive Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    finally
+                    {
+                        _pbImport.Visible = false;
+                        SetImportUiState(true);
+                        await LoadImportFilesAsync(importPath);
+                    }
                 }
-                finally
-                {
-                    _pbImport.Visible = false;
-                    SetImportUiState(true);
-                    await LoadImportFilesAsync(importPath);
-                }
+            }
+            finally
+            {
+                UnlockTab(tabImportFiles);
             }
         }
 
@@ -1014,6 +1079,7 @@ namespace DCCollections.Gui
         /// </summary>
         private async Task LoadCountersAsync()
         {
+            LockTab(tabOperations);
             try
             {
                 var (dcGen, dcDaily, eftGen, eftDaily) = await Task.Run(() =>
@@ -1038,6 +1104,10 @@ namespace DCCollections.Gui
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+            finally
+            {
+                UnlockTab(tabOperations);
+            }
         }
 
         /// <summary>
@@ -1046,15 +1116,23 @@ namespace DCCollections.Gui
         /// </summary>
         private async Task LoadLibraryPathsAsync()
         {
-            var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<string>()).Where(Directory.Exists).ToList());
-            _libraryPaths = paths;
-            lbLibraryFolders.Items.Clear();
-            foreach (var path in paths)
-                lbLibraryFolders.Items.Add(path);
-            lbLibraryFolders.Enabled = true;
-            pnlLibraryButtons.Enabled = true;
-            _pbLibrary.Visible = false;
-            await ScanLibraryFilesAsync();
+            LockTab(tabLibrary);
+            try
+            {
+                var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<string>()).Where(Directory.Exists).ToList());
+                _libraryPaths = paths;
+                lbLibraryFolders.Items.Clear();
+                foreach (var path in paths)
+                    lbLibraryFolders.Items.Add(path);
+                lbLibraryFolders.Enabled = true;
+                pnlLibraryButtons.Enabled = true;
+                _pbLibrary.Visible = false;
+                await ScanLibraryFilesAsync();
+            }
+            finally
+            {
+                UnlockTab(tabLibrary);
+            }
         }
 
         /// <summary>
