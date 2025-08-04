@@ -37,6 +37,8 @@ namespace DCCollections.Gui
         private FlowLayoutPanel pnlLibraryButtons;
         private ProgressBar _pbLibrary;
         private List<string> _libraryPaths = new();
+        private Dictionary<string, string> _libraryFiles = new();
+        private const string ImportColumnName = "Import";
 
         private class ListViewItemComparer : System.Collections.IComparer
         {
@@ -87,6 +89,7 @@ namespace DCCollections.Gui
             lvImportFiles.MultiSelect = true;
             tabBankFiles = new TabPage("EDI Bank Files");
             dgvBankFiles = new DataGridView { Dock = DockStyle.Fill };
+            dgvBankFiles.CellContentClick += dgvBankFiles_CellContentClick;
             tabBankFiles.Controls.Add(dgvBankFiles);
             tabMain.Controls.Add(tabBankFiles);
             tabLibrary = new TabPage("Library");
@@ -177,6 +180,80 @@ namespace DCCollections.Gui
                     {
                         row.DefaultCellStyle.BackColor = Color.LightCoral;
                     }
+                }
+                if (!dgvBankFiles.Columns.Contains(ImportColumnName))
+                {
+                    var btn = new DataGridViewButtonColumn { Name = ImportColumnName, HeaderText = ImportColumnName };
+                    dgvBankFiles.Columns.Add(btn);
+                }
+                MatchBankFilesToLibrary();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        /// <summary>
+        /// Updates the bank files grid with information about library files.
+        /// </summary>
+        private void MatchBankFilesToLibrary()
+        {
+            if (!dgvBankFiles.Columns.Contains(ImportColumnName))
+                return;
+            foreach (DataGridViewRow row in dgvBankFiles.Rows)
+            {
+                string fileName = row.Cells["FileName"].Value?.ToString() ?? string.Empty;
+                bool hasFile = _libraryFiles.TryGetValue(fileName, out var path);
+                var cell = row.Cells[ImportColumnName];
+                if (hasFile && row.Cells["FileID"].Value == DBNull.Value)
+                {
+                    cell.Value = ImportColumnName;
+                    cell.Tag = path;
+                }
+                else
+                {
+                    cell.Value = string.Empty;
+                    cell.Tag = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Scans all library paths and records found files.
+        /// </summary>
+        private async Task ScanLibraryFilesAsync()
+        {
+            _pbLibrary.Visible = true;
+            var files = await Task.Run(() => _libraryPaths.Where(Directory.Exists)
+                .SelectMany(p => Directory.EnumerateFiles(p, "*", SearchOption.AllDirectories))
+                .GroupBy(Path.GetFileName)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase));
+            _libraryFiles = files;
+            _pbLibrary.Visible = false;
+            MatchBankFilesToLibrary();
+        }
+
+        /// <summary>
+        /// Handles import button clicks in the bank files grid.
+        /// </summary>
+        private void dgvBankFiles_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex != dgvBankFiles.Columns[ImportColumnName].Index)
+                return;
+            var cell = dgvBankFiles.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var path = cell.Tag as string;
+            if (string.IsNullOrEmpty(path))
+                return;
+            var fileName = dgvBankFiles.Rows[e.RowIndex].Cells["FileName"].Value?.ToString() ?? string.Empty;
+            try
+            {
+                var db = new DCService();
+                int rowId = db.GetBankFileRowId(fileName);
+                if (rowId > 0)
+                {
+                    db.LinkFileToBankFile(rowId, path);
+                    LoadBankFiles();
                 }
             }
             catch (Exception ex)
@@ -947,6 +1024,7 @@ namespace DCCollections.Gui
             lbLibraryFolders.Enabled = true;
             pnlLibraryButtons.Enabled = true;
             _pbLibrary.Visible = false;
+            await ScanLibraryFilesAsync();
         }
 
         private void btnLibraryAdd_Click(object? sender, EventArgs e)
@@ -960,6 +1038,7 @@ namespace DCCollections.Gui
                     lbLibraryFolders.Items.Add(fbd.SelectedPath);
                     _settings.LibraryPaths = _libraryPaths;
                     _settings.Save();
+                    var _ = ScanLibraryFilesAsync();
                 }
             }
         }
@@ -972,6 +1051,7 @@ namespace DCCollections.Gui
                 lbLibraryFolders.Items.Remove(path);
                 _settings.LibraryPaths = _libraryPaths;
                 _settings.Save();
+                var _ = ScanLibraryFilesAsync();
             }
         }
 
