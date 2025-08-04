@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace DCCollections.Gui
 {
@@ -9,7 +10,7 @@ namespace DCCollections.Gui
         public string? LiveOutputFolderPath { get; set; }
         public string? TestOutputFolderPath { get; set; }
         public string? ImportFolderPath { get; set; }
-
+        public List<string> LibraryPaths { get; set; } = new();
         public int ImportSortColumn { get; set; }
         public bool ImportSortDescending { get; set; }
 
