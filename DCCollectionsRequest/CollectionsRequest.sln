@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PAMC.LoginGui", "..\tmp\PAM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sugoi.Security.Encryption", "..\tmp\Sugoi.Security.Encryption\Sugoi.Security.Encryption.csproj", "{10564C7D-B160-4D57-8E55-D8198543D91F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CPS.FileStorage", "..\tmp\CPS.FileStorage\CPS.FileStorage.csproj", "{C057CC58-2F97-71D1-09B0-A77D245AD4A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{10564C7D-B160-4D57-8E55-D8198543D91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10564C7D-B160-4D57-8E55-D8198543D91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10564C7D-B160-4D57-8E55-D8198543D91F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C057CC58-2F97-71D1-09B0-A77D245AD4A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C057CC58-2F97-71D1-09B0-A77D245AD4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C057CC58-2F97-71D1-09B0-A77D245AD4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C057CC58-2F97-71D1-09B0-A77D245AD4A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
