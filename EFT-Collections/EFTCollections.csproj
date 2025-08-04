@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\tmp\PAMC.DatabaseConnection\PAMC.DatabaseConnection.csproj" />
     <ProjectReference Include="..\EFTModelsIndentidier\EFTModelsIndentidier.csproj" />
+    <ProjectReference Include="..\tmp\CPS.FileStorage\CPS.FileStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
