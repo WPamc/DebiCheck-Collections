@@ -63,13 +63,21 @@ namespace CPS.FileStorage
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                using (var cmd = new SqlCommand(@"INSERT INTO CPS_FILES (ID, FILENAME, DOCBINARY, CREATEBY, CREATEDATE, LASTCHANGEDBY, LASTCHANGEDATE)
+                using (var cmd = new SqlCommand(@"INSERT INTO CPS_FILES (ID, FILENAME, DOCBINARY, CREATEBY, CREATEDATE, LASTCHANGEBY, LASTCHANGEDATE)
                                              VALUES (@ID, @FILENAME, @DOCBINARY, 1, GETDATE(), 1, GETDATE())", conn))
                 {
                     cmd.Parameters.AddWithValue("@ID", fileId);
                     cmd.Parameters.AddWithValue("@FILENAME", Path.GetFileName(filePath));
                     cmd.Parameters.AddWithValue("@DOCBINARY", data);
-                    cmd.ExecuteNonQuery();
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
                 }
             }
             return fileId;

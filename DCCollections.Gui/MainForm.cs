@@ -66,7 +66,7 @@ namespace DCCollections.Gui
         {
             InitializeComponent();
             lvImportFiles.HideSelection = false;
-            lvImportFiles.FullRowSelect= true;
+            lvImportFiles.FullRowSelect = true;
             string connStr = AppConfig.ConnectionString();
             if (!string.IsNullOrWhiteSpace(connStr))
             {
@@ -107,10 +107,32 @@ namespace DCCollections.Gui
             tabLibrary.Controls.Add(_pbLibrary);
             tabMain.Controls.Add(tabLibrary);
             PopulateBillingDates();
-            LoadInitialPaths();
-            LoadCounters();
-            LoadBankFiles();
-            var _ = LoadLibraryPathsAsync();
+            LoadInitialDataAsync();
+        }
+
+        /// <summary>
+        /// Orchestrates the asynchronous loading of all initial data to prevent blocking the UI thread on startup.
+        /// </summary>
+        private async void LoadInitialDataAsync()
+        {
+            this.Enabled = false;
+            UseWaitCursor = true;
+            try
+            {
+                await LoadCountersAsync();
+                await LoadBankFilesAsync();
+                await LoadInitialPathsAsync();
+                await LoadLibraryPathsAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during initial data load: {ex.Message}", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Enabled = true;
+                UseWaitCursor = false;
+            }
         }
 
         private static string RemovePassword(string connection)
@@ -159,24 +181,27 @@ namespace DCCollections.Gui
             }
             return string.Empty;
         }
-
-        private void LoadBankFiles()
+        /// <summary>
+        /// Asynchronously loads EDI bank file records from the database into the grid.
+        /// It then attempts to match these records against files found in the Library.
+        /// </summary>
+        private async Task LoadBankFilesAsync()
         {
             try
             {
                 var db = new DCService();
-                var table = db.GetEdiBankFiles();
+                var table = await Task.Run(() => db.GetEdiBankFiles());
                 dgvBankFiles.DataSource = table;
                 var counts = table.AsEnumerable().GroupBy(r => r.Field<int>("GenerationNumber")).ToDictionary(g => g.Key, g => g.Count());
                 foreach (DataGridViewRow row in dgvBankFiles.Rows)
                 {
-                    int fileId = row.Cells["FileID"].Value == DBNull.Value ? 0 : Convert.ToInt32(row.Cells["FileID"].Value);
+                    bool isUnlinked = row.Cells["FileID"].Value == DBNull.Value;
                     int gen = Convert.ToInt32(row.Cells["GenerationNumber"].Value);
-                    if (fileId == 0)
+                    if (isUnlinked)
                     {
                         row.DefaultCellStyle.BackColor = Color.Orange;
                     }
-                    else if (counts[gen] > 1)
+                    else if (counts.ContainsKey(gen) && counts[gen] > 1)
                     {
                         row.DefaultCellStyle.BackColor = Color.LightCoral;
                     }
@@ -193,7 +218,6 @@ namespace DCCollections.Gui
                 MessageBox.Show(ex.Message, "Error");
             }
         }
-
         /// <summary>
         /// Updates the bank files grid with information about library files.
         /// </summary>
@@ -235,17 +259,27 @@ namespace DCCollections.Gui
         }
 
         /// <summary>
-        /// Handles import button clicks in the bank files grid.
+        /// Handles the click event for cells in the bank files grid.
+        /// If the 'Import' button is clicked, it retrieves the file path and calls the database service to link the physical file to the bank file record.
+        /// It first checks the cell's Tag property for the path, and if not present, attempts a real-time lookup in the library file cache as a fallback.
         /// </summary>
-        private void dgvBankFiles_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">A DataGridViewCellEventArgs that contains the event data.</param>
+        private async void dgvBankFiles_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex != dgvBankFiles.Columns[ImportColumnName].Index)
                 return;
-            var cell = dgvBankFiles.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var row = dgvBankFiles.Rows[e.RowIndex];
+            var cell = row.Cells[e.ColumnIndex];
             var path = cell.Tag as string;
+            var fileName = row.Cells["FileName"].Value?.ToString() ?? string.Empty;
             if (string.IsNullOrEmpty(path))
-                return;
-            var fileName = dgvBankFiles.Rows[e.RowIndex].Cells["FileName"].Value?.ToString() ?? string.Empty;
+            {
+                if (string.IsNullOrEmpty(fileName) || !_libraryFiles.TryGetValue(fileName, out path))
+                {
+                    return;
+                }
+            }
             try
             {
                 var db = new DCService();
@@ -253,7 +287,7 @@ namespace DCCollections.Gui
                 if (rowId > 0)
                 {
                     db.LinkFileToBankFile(rowId, path);
-                    LoadBankFiles();
+                    await LoadBankFilesAsync();
                 }
             }
             catch (Exception ex)
@@ -441,7 +475,10 @@ namespace DCCollections.Gui
             }
         }
 
-        private void LoadInitialPaths()
+        /// <summary>
+        /// Asynchronously loads initial paths from settings and populates the relevant UI controls.
+        /// </summary>
+        private async Task LoadInitialPathsAsync()
         {
             if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
             {
@@ -467,7 +504,7 @@ namespace DCCollections.Gui
             if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
             {
                 txtImportFolder.Text = _settings.ImportFolderPath;
-                LoadImportFiles(_settings.ImportFolderPath);
+                await LoadImportFilesAsync(_settings.ImportFolderPath);
             }
         }
 
@@ -485,7 +522,7 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnImportBrowse_Click(object sender, EventArgs e)
+        private async void btnImportBrowse_Click(object sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -493,116 +530,105 @@ namespace DCCollections.Gui
                 txtImportFolder.Text = fbd.SelectedPath;
                 _settings.ImportFolderPath = fbd.SelectedPath;
                 _settings.Save();
-                LoadImportFiles(fbd.SelectedPath);
+                await LoadImportFilesAsync(fbd.SelectedPath);
             }
         }
 
-        private void chkHideTestFiles_CheckedChanged(object sender, EventArgs e)
+        private async void chkHideTestFiles_CheckedChanged(object sender, EventArgs e)
         {
             if (Directory.Exists(txtImportFolder.Text))
             {
-                LoadImportFiles(txtImportFolder.Text);
+                await LoadImportFilesAsync(txtImportFolder.Text);
             }
         }
 
         /// <summary>
-        /// Loads files from the specified path into the Import Files list view.
+        /// Asynchronously loads files from the specified path into the Import Files list view without blocking the UI.
         /// </summary>
         /// <param name="path">The folder to scan for files.</param>
-        private void LoadImportFiles(string path)
+        private async Task LoadImportFilesAsync(string path)
         {
+            SetImportUiState(false);
+            _pbImport.Visible = true;
             try
             {
-                lvImportFiles.Items.Clear();
-
                 bool hideTests = chkHideTestFiles.Checked;
                 string nameFilter = txtFileFilter.Text.Trim();
 
-                var processor = new FileProcessor();
-                var eftIdentifier = new EftFileIdentifier();
-               
-                var db = new DCService();
-
-                foreach (var file in Directory.GetFiles(path))
+                var items = await Task.Run(() =>
                 {
-                    var info = new FileInfo(file);
-                    if (!string.IsNullOrEmpty(nameFilter) &&
-                        !info.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase))
-                        continue;
-                    var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
-                    DCFileType dcType = DCFileType.Unknown;
-                    EftFileType eftType = EftFileType.Unknown;
-                    string recordStatus = string.Empty;
+                    var newItems = new List<ListViewItem>();
+                    var processor = new FileProcessor();
+                    var eftIdentifier = new EftFileIdentifier();
+                    var db = new DCService();
 
-                    try
+                    foreach (var file in Directory.GetFiles(path))
                     {
-                       
-                        eftType = eftIdentifier.IdentifyFileType(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error");
-                    }
-                    if (eftType  == EftFileType.Unknown || eftType == EftFileType.EmptyTransmission)
-                        try
+                        var info = new FileInfo(file);
+                        if (!string.IsNullOrEmpty(nameFilter) &&
+                            !info.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        string recordStatus = string.Empty;
+                        EftFileType eftType = eftIdentifier.IdentifyFileType(file);
+                        if (eftType != EftFileType.Unknown)
+                        {
+                            recordStatus = GetEftRecordStatus(file);
+                        }
+                        else
                         {
                             var fileProcessor = new FileProcessor();
                             var records = fileProcessor.ProcessFile(file);
-                            dcType = DCFileTypeIdentifier.Identify(records);
                             if (records.Length > 0 && records[0] is RMCollectionProcessor.Models.TransmissionHeader000 th)
                                 recordStatus = th.RecordStatus?.Trim() ?? string.Empty;
                         }
-                        catch (Exception ex)
+
+                        bool isLive = recordStatus.Length == 0 || recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
+                        if (hideTests && !isLive)
+                            continue;
+
+                        var size = info.Length > 1024 ? $"{info.Length / 1024} KB" : $"{info.Length} bytes";
+                        var (genDate, genTime) = ExtractGenerationInfo(info.Name);
+                        var item = new ListViewItem(info.Name)
                         {
-                            MessageBox.Show(ex.Message, "Error");
-                            eftType = eftIdentifier.IdentifyFileType(file);
-                            if (eftType != EftFileType.Unknown)
-                                recordStatus = GetEftRecordStatus(file);
-                        }
+                            Tag = new ImportFileTag(info.FullName, recordStatus)
+                        };
+                        item.SubItems.Add(genDate);
+                        item.SubItems.Add(genTime);
+                        item.SubItems.Add(size);
+                        item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
 
-                    bool isLive = recordStatus.Length == 0 || recordStatus.Equals("L", StringComparison.OrdinalIgnoreCase);
-                    if (hideTests && !isLive)
-                        continue;
-
-                    var (genDate, genTime) = ExtractGenerationInfo(info.Name);
-                    var item = new ListViewItem(info.Name)
-                    {
-                        Tag = new ImportFileTag(info.FullName, recordStatus)
-                    };
-                    item.SubItems.Add(genDate);
-                    item.SubItems.Add(genTime);
-                    item.SubItems.Add(size);
-                    item.SubItems.Add(info.LastWriteTime.ToString("yyyy-MM-dd HH:mm"));
-
-                    var desc = dcType != DCFileType.Unknown ? dcType.ToString() : eftType.ToString();
-                    if (!isLive && recordStatus.Length > 0)
-                        desc += " (Test)";
-                    try
-                    {
                         var parsed = processor.ProcessFile(info.FullName);
                         var ft = DCFileTypeIdentifier.Identify(parsed);
-                        if (ft != DCFileType.Unknown)
-                            desc = ft.ToString();
+                        var desc = ft != DCFileType.Unknown ? ft.ToString() : eftType.ToString();
+                        if (!isLive && recordStatus.Length > 0)
+                            desc += " (Test)";
+                        item.SubItems.Add(desc);
+
+                        item.SubItems.Add(isLive ? "No" : "Yes");
+                        bool imported = db.GetBankFileRowId(info.Name) > 0;
+                        item.SubItems.Add(imported ? "Yes" : "No");
+
+                        newItems.Add(item);
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error");
-                    }
-                    item.SubItems.Add(desc);
+                    return newItems;
+                });
 
-                    item.SubItems.Add(isLive ? "No" : "Yes");
-                    bool imported = db.GetBankFileRowId(info.Name) > 0;
-                    item.SubItems.Add(imported ? "Yes" : "No");
-
-                    lvImportFiles.Items.Add(item);
-                }
-
+                lvImportFiles.BeginUpdate();
+                lvImportFiles.Items.Clear();
+                lvImportFiles.Items.AddRange(items.ToArray());
                 lvImportFiles.ListViewItemSorter = new ListViewItemComparer(_importSortColumn, _importSortDescending);
                 lvImportFiles.Sort();
+                lvImportFiles.EndUpdate();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+            finally
+            {
+                _pbImport.Visible = false;
+                SetImportUiState(true);
             }
         }
 
@@ -856,11 +882,11 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnApplyFilter_Click(object sender, EventArgs e)
+        private async void btnApplyFilter_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(txtImportFolder.Text))
             {
-                LoadImportFiles(txtImportFolder.Text);
+                await LoadImportFilesAsync(txtImportFolder.Text);
             }
         }
 
@@ -898,7 +924,7 @@ namespace DCCollections.Gui
             }
         }
 
-        private void btnArchive_Click(object sender, EventArgs e)
+        private async void btnArchive_Click(object sender, EventArgs e)
         {
             if (lvImportFiles.Items.Count == 0)
             {
@@ -908,7 +934,7 @@ namespace DCCollections.Gui
 
             var uniqueTypes = lvImportFiles.Items
                 .Cast<ListViewItem>()
-                .Select(item => item.SubItems[5].Text) // Assuming 'Type' is at index 5
+                .Select(item => item.SubItems[5].Text)
                 .Distinct()
                 .ToList();
 
@@ -916,7 +942,6 @@ namespace DCCollections.Gui
 
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
-                // Save the chosen settings for next time
                 _settings.ArchiveOlderThanDays = dialog.DaysOlder;
                 _settings.ArchiveForceUnimported = dialog.ForceArchive;
                 _settings.ArchiveLastFileType = dialog.FileType;
@@ -934,28 +959,24 @@ namespace DCCollections.Gui
                     foreach (ListViewItem item in lvImportFiles.Items)
                     {
                         var fileInfo = new FileInfo(((ImportFileTag)item.Tag).Path);
-                        var imported = item.SubItems[7].Text.Equals("Yes", StringComparison.OrdinalIgnoreCase); // 'Imported' is at index 7
-                        var fileType = item.SubItems[5].Text; // 'Type' is at index 5
+                        var imported = item.SubItems[7].Text.Equals("Yes", StringComparison.OrdinalIgnoreCase);
+                        var fileType = item.SubItems[5].Text;
 
-                        // Criterion 1: Age (if DaysOlder > 0)
                         if (dialog.DaysOlder > 0 && fileInfo.LastWriteTime >= archiveDate)
                         {
                             continue;
                         }
 
-                        // Criterion 2: Import Status
                         if (!dialog.ForceArchive && !imported)
                         {
                             continue;
                         }
 
-                        // Criterion 3: File Type (only if forcing)
                         if (dialog.ForceArchive && dialog.FileType != "All File Types" && dialog.FileType != fileType)
                         {
                             continue;
                         }
 
-                        // All criteria met, move the file
                         var targetFolder = Path.Combine(importPath, fileType);
                         Directory.CreateDirectory(targetFolder);
                         var targetFile = Path.Combine(targetFolder, fileInfo.Name);
@@ -968,7 +989,7 @@ namespace DCCollections.Gui
                         catch (Exception ex)
                         {
                             MessageBox.Show($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}", "Archive Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            break; // Stop on first error
+                            break;
                         }
                     }
 
@@ -978,7 +999,7 @@ namespace DCCollections.Gui
                 {
                     _pbImport.Visible = false;
                     SetImportUiState(true);
-                    LoadImportFiles(importPath);
+                    await LoadImportFilesAsync(importPath);
                 }
             }
         }
@@ -989,19 +1010,24 @@ namespace DCCollections.Gui
         }
 
         /// <summary>
-        /// Retrieves the latest counter values from the database and displays them.
+        /// Asynchronously retrieves the latest counter values from the database and displays them.
         /// </summary>
-        private void LoadCounters()
+        private async Task LoadCountersAsync()
         {
             try
             {
-                var dcDb = new DCService();
-                int dcGen = dcDb.GetCurrentGenerationNumber();
-                int dcDaily = dcDb.GetCurrentDailyCounter(DateTime.Today);
+                var (dcGen, dcDaily, eftGen, eftDaily) = await Task.Run(() =>
+                {
+                    var dcDb = new DCService();
+                    int dcG = dcDb.GetCurrentGenerationNumber();
+                    int dcD = dcDb.GetCurrentDailyCounter(DateTime.Today);
 
-                var eftDb = new EFT_Collections.DatabaseService();
-                int eftGen = eftDb.PeekGenerationNumber();
-                int eftDaily = eftDb.PeekDailyCounter(DateTime.Today);
+                    var eftDb = new EFT_Collections.DatabaseService();
+                    int eftG = eftDb.PeekGenerationNumber();
+                    int eftD = eftDb.PeekDailyCounter(DateTime.Today);
+
+                    return (dcG, dcD, eftG, eftD);
+                });
 
                 lblDcGenerationNumber.Text = $"DC GenerationNumber: {dcGen}";
                 lblDcDailyCounter.Text = $"DC DailyCounter: {dcDaily}";
@@ -1014,6 +1040,10 @@ namespace DCCollections.Gui
             }
         }
 
+        /// <summary>
+        /// Asynchronously loads the library folder paths from user settings,
+        /// populates the UI list box, and initiates the file scan.
+        /// </summary>
         private async Task LoadLibraryPathsAsync()
         {
             var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<string>()).Where(Directory.Exists).ToList());
@@ -1027,6 +1057,12 @@ namespace DCCollections.Gui
             await ScanLibraryFilesAsync();
         }
 
+        /// <summary>
+        /// Handles the event for adding a new folder to the Library.
+        /// It updates the settings and triggers a rescan of library files.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">An EventArgs that contains the event data.</param>
         private void btnLibraryAdd_Click(object? sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
@@ -1043,6 +1079,12 @@ namespace DCCollections.Gui
             }
         }
 
+        /// <summary>
+        /// Handles the event for removing a selected folder from the Library.
+        /// It updates the settings and triggers a rescan of library files.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">An EventArgs that contains the event data.</param>
         private void btnLibraryRemove_Click(object? sender, EventArgs e)
         {
             if (lbLibraryFolders.SelectedItem is string path)
