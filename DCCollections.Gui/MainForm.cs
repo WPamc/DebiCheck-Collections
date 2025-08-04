@@ -30,6 +30,13 @@ namespace DCCollections.Gui
         private ProgressBar _pbOperations;
         private TabPage tabBankFiles;
         private DataGridView dgvBankFiles;
+        private TabPage tabLibrary;
+        private ListBox lbLibraryFolders;
+        private Button btnLibraryAdd;
+        private Button btnLibraryRemove;
+        private FlowLayoutPanel pnlLibraryButtons;
+        private ProgressBar _pbLibrary;
+        private List<string> _libraryPaths = new();
 
         private class ListViewItemComparer : System.Collections.IComparer
         {
@@ -82,10 +89,25 @@ namespace DCCollections.Gui
             dgvBankFiles = new DataGridView { Dock = DockStyle.Fill };
             tabBankFiles.Controls.Add(dgvBankFiles);
             tabMain.Controls.Add(tabBankFiles);
+            tabLibrary = new TabPage("Library");
+            lbLibraryFolders = new ListBox { Dock = DockStyle.Fill, Enabled = false };
+            pnlLibraryButtons = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 40, Enabled = false };
+            btnLibraryAdd = new Button { Text = "Add" };
+            btnLibraryAdd.Click += btnLibraryAdd_Click;
+            btnLibraryRemove = new Button { Text = "Remove" };
+            btnLibraryRemove.Click += btnLibraryRemove_Click;
+            pnlLibraryButtons.Controls.Add(btnLibraryAdd);
+            pnlLibraryButtons.Controls.Add(btnLibraryRemove);
+            _pbLibrary = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = true };
+            tabLibrary.Controls.Add(lbLibraryFolders);
+            tabLibrary.Controls.Add(pnlLibraryButtons);
+            tabLibrary.Controls.Add(_pbLibrary);
+            tabMain.Controls.Add(tabLibrary);
             PopulateBillingDates();
             LoadInitialPaths();
             LoadCounters();
             LoadBankFiles();
+            var _ = LoadLibraryPathsAsync();
         }
 
         private static string RemovePassword(string connection)
@@ -912,6 +934,44 @@ namespace DCCollections.Gui
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private async Task LoadLibraryPathsAsync()
+        {
+            var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<string>()).Where(Directory.Exists).ToList());
+            _libraryPaths = paths;
+            lbLibraryFolders.Items.Clear();
+            foreach (var path in paths)
+                lbLibraryFolders.Items.Add(path);
+            lbLibraryFolders.Enabled = true;
+            pnlLibraryButtons.Enabled = true;
+            _pbLibrary.Visible = false;
+        }
+
+        private void btnLibraryAdd_Click(object? sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                if (!_libraryPaths.Contains(fbd.SelectedPath))
+                {
+                    _libraryPaths.Add(fbd.SelectedPath);
+                    lbLibraryFolders.Items.Add(fbd.SelectedPath);
+                    _settings.LibraryPaths = _libraryPaths;
+                    _settings.Save();
+                }
+            }
+        }
+
+        private void btnLibraryRemove_Click(object? sender, EventArgs e)
+        {
+            if (lbLibraryFolders.SelectedItem is string path)
+            {
+                _libraryPaths.Remove(path);
+                lbLibraryFolders.Items.Remove(path);
+                _settings.LibraryPaths = _libraryPaths;
+                _settings.Save();
             }
         }
 
