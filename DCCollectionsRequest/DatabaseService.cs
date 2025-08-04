@@ -694,4 +694,18 @@ END", conn);
 
         return inserted;
     }
+
+    /// <summary>
+    /// Retrieves EDI bank file records.
+    /// </summary>
+    /// <returns>A table of EDI bank files.</returns>
+    public DataTable GetEdiBankFiles()
+    {
+        using var conn = new SqlConnection(_connectionString);
+        using var cmd = new SqlCommand("SELECT FileID, GenerationNumber, FileName FROM dbo.EDI_BANKFILES", conn);
+        using var adapter = new SqlDataAdapter(cmd);
+        var table = new DataTable();
+        adapter.Fill(table);
+        return table;
+    }
 }

@@ -28,6 +28,8 @@ namespace DCCollections.Gui
         private bool _importSortDescending;
         private ProgressBar _pbImport;
         private ProgressBar _pbOperations;
+        private TabPage tabBankFiles;
+        private DataGridView dgvBankFiles;
 
         private class ListViewItemComparer : System.Collections.IComparer
         {
@@ -60,9 +62,8 @@ namespace DCCollections.Gui
             if (!string.IsNullOrWhiteSpace(connStr))
             {
                 var safeConn = RemovePassword(connStr);
-               // MessageBox.Show(safeConn, "Database Connection");
                 Text = $"Collections - {safeConn}";
-                
+
             }
 
             _dcCollectionservice = new RMCollectionProcessor.CollectionService();
@@ -77,9 +78,14 @@ namespace DCCollections.Gui
             _pbOperations = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = false };
             tabOperations.Controls.Add(_pbOperations);
             lvImportFiles.MultiSelect = true;
+            tabBankFiles = new TabPage("EDI Bank Files");
+            dgvBankFiles = new DataGridView { Dock = DockStyle.Fill };
+            tabBankFiles.Controls.Add(dgvBankFiles);
+            tabMain.Controls.Add(tabBankFiles);
             PopulateBillingDates();
             LoadInitialPaths();
             LoadCounters();
+            LoadBankFiles();
         }
 
         private static string RemovePassword(string connection)
@@ -127,6 +133,34 @@ namespace DCCollections.Gui
                 MessageBox.Show(ex.Message, "Error");
             }
             return string.Empty;
+        }
+
+        private void LoadBankFiles()
+        {
+            try
+            {
+                var db = new DCService();
+                var table = db.GetEdiBankFiles();
+                dgvBankFiles.DataSource = table;
+                var counts = table.AsEnumerable().GroupBy(r => r.Field<int>("GenerationNumber")).ToDictionary(g => g.Key, g => g.Count());
+                foreach (DataGridViewRow row in dgvBankFiles.Rows)
+                {
+                    int fileId = row.Cells["FileID"].Value == DBNull.Value ? 0 : Convert.ToInt32(row.Cells["FileID"].Value);
+                    int gen = Convert.ToInt32(row.Cells["GenerationNumber"].Value);
+                    if (fileId == 0)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Orange;
+                    }
+                    else if (counts[gen] > 1)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightCoral;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         private void btnParse_Click(object sender, EventArgs e)
