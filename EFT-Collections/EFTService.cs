@@ -355,6 +355,7 @@ public class EFTService
         int inserted = 0;
         if (!isTest)
         {
+            db.LinkFileToBankFile(recordId, Path.Combine(outputPath, fileName));
             inserted = db.InsertCollectionRequests(collections, recordId);
             db.InsertAcceptedResponses(collections, recordId);
             db.UpdateBankFileDailyCounterEnd(recordId, (int)lastSequenceNumber);

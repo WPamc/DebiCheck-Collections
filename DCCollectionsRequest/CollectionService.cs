@@ -290,6 +290,7 @@ namespace RMCollectionProcessor
             int inserted = 0;
             if (!isTest)
             {
+                dbService.LinkFileToBankFile(fileRowId, fullPath);
                 var txRecords = ExtractTransactionRecords(fullPath, records.ToArray());
                 inserted = dbService.InsertCollectionRequests(txRecords, fileRowId);
                 dbService.MarkBankFileGenerationComplete(fileRowId);

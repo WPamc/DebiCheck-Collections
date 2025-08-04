@@ -53,6 +53,28 @@ namespace CPS.FileStorage
             }
         }
 
+        /// <summary>
+        /// Saves the specified file to the CPS_FILES table and returns its identifier.
+        /// </summary>
+        public static Guid SaveFile(string filePath, string connectionString)
+        {
+            byte[] data = File.ReadAllBytes(filePath);
+            Guid fileId = Guid.NewGuid();
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(@"INSERT INTO CPS_FILES (ID, FILENAME, DOCBINARY, CREATEBY, CREATEDATE, LASTCHANGEDBY, LASTCHANGEDATE)
+                                             VALUES (@ID, @FILENAME, @DOCBINARY, 1, GETDATE(), 1, GETDATE())", conn))
+                {
+                    cmd.Parameters.AddWithValue("@ID", fileId);
+                    cmd.Parameters.AddWithValue("@FILENAME", Path.GetFileName(filePath));
+                    cmd.Parameters.AddWithValue("@DOCBINARY", data);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return fileId;
+        }
+
         public static List<DocumentFile> RetrieveDocumentsFromDb(string subssn, string connectionString)
         {
             var documents = new List<DocumentFile>();

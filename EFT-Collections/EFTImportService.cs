@@ -73,6 +73,12 @@ namespace EFT_Collections
                     break;
             }
 
+            var bankFileId = db.GetBankFileRowId(Path.GetFileName(filePath));
+            if (bankFileId > 0)
+            {
+                db.LinkFileToBankFile(bankFileId, filePath);
+            }
+
             return new EftParseResult(records, fileType, inserted);
         }
 

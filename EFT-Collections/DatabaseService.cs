@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CPS.FileStorage;
 using PAMC.DatabaseConnection;
 
 namespace EFT_Collections;
@@ -368,6 +369,49 @@ END", conn);
         cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = rowId });
         conn.Open();
         cmd.ExecuteNonQuery();
+    }
+
+    /// <summary>
+    /// Ensures the specified file is stored and linked to the bank file record.
+    /// </summary>
+    public void LinkFileToBankFile(int bankFileRowId, string filePath)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        Guid? existingId = null;
+        using (var cmd = new SqlCommand("SELECT FILEID, FILENAME FROM dbo.EDI_BANKFILES WHERE ROWID = @id", conn))
+        {
+            cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = bankFileRowId });
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                existingId = reader["FILEID"] as Guid?;
+                var fileName = reader["FILENAME"].ToString() ?? string.Empty;
+                reader.Close();
+                if (existingId.HasValue)
+                {
+                    using var checkCmd = new SqlCommand("SELECT 1 FROM CPS_FILES WHERE ID = @fid", conn);
+                    checkCmd.Parameters.Add(new SqlParameter("@fid", SqlDbType.UniqueIdentifier) { Value = existingId.Value });
+                    var exists = checkCmd.ExecuteScalar();
+                    if (exists != null) return;
+                }
+                Guid fileId;
+                using (var lookup = new SqlCommand("SELECT ID FROM CPS_FILES WHERE FILENAME = @name", conn))
+                {
+                    lookup.Parameters.Add(new SqlParameter("@name", SqlDbType.VarChar, 100) { Value = fileName });
+                    var res = lookup.ExecuteScalar();
+                    fileId = res != null ? (Guid)res : Guid.Empty;
+                }
+                if (fileId == Guid.Empty)
+                {
+                    fileId = Utils.SaveFile(filePath, _connectionString);
+                }
+                using var update = new SqlCommand("UPDATE dbo.EDI_BANKFILES SET FILEID = @fid WHERE ROWID = @id", conn);
+                update.Parameters.Add(new SqlParameter("@fid", SqlDbType.UniqueIdentifier) { Value = fileId });
+                update.Parameters.Add(new SqlParameter("@id", SqlDbType.Int) { Value = bankFileRowId });
+                update.ExecuteNonQuery();
+            }
+        }
     }
 
     public int InsertCollectionRequests(IEnumerable<DebtorCollectionData> records, int bankFileRowId)
