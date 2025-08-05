@@ -1169,7 +1169,7 @@ namespace DCCollections.Gui
         {
             cmbBillingDate.Items.Clear();
             var today = DateTime.Today;
-            var first = new DateTime(today.Year, today.Month, 1);
+            var first = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
             if (first < today.Date)
             {
                 first = first.AddMonths(1);
