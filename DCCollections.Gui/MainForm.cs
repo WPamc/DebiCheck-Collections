@@ -112,16 +112,18 @@ namespace DCCollections.Gui
         }
 
         /// <summary>
-        /// Orchestrates the asynchronous loading of all initial data to prevent blocking the UI thread on startup.
+        /// Orchestrates the asynchronous and parallel loading of all initial data to prevent blocking the UI thread on startup.
         /// </summary>
         private async void LoadInitialDataAsync()
         {
             try
             {
-                await LoadCountersAsync();
-                await LoadBankFilesAsync();
-                await LoadInitialPathsAsync();
-                await LoadLibraryPathsAsync();
+                var countersTask = LoadCountersAsync();
+                var bankFilesTask = LoadBankFilesAsync();
+                var initialPathsTask = LoadInitialPathsAsync();
+                var libraryPathsTask = LoadLibraryPathsAsync();
+
+                await Task.WhenAll(countersTask, bankFilesTask, initialPathsTask, libraryPathsTask);
             }
             catch (Exception ex)
             {
@@ -283,7 +285,7 @@ namespace DCCollections.Gui
         private async Task ScanLibraryFilesAsync()
         {
             LockTab(tabLibrary);
-            _pbLibrary.Visible = true;
+            LockTab(tabBankFiles);
             try
             {
                 var files = await Task.Run(() => _libraryPaths.Where(Directory.Exists)
@@ -295,8 +297,8 @@ namespace DCCollections.Gui
             }
             finally
             {
-                _pbLibrary.Visible = false;
                 UnlockTab(tabLibrary);
+                UnlockTab(tabBankFiles);
             }
         }
 
@@ -366,7 +368,6 @@ namespace DCCollections.Gui
         {
             LockTab(tabOperations);
             SetOperationsUiState(false);
-            _pbOperations.Visible = true;
             try
             {
                 int day = (int)nudDay.Value;
@@ -425,7 +426,6 @@ namespace DCCollections.Gui
             }
             finally
             {
-                _pbOperations.Visible = false;
                 SetOperationsUiState(true);
                 UnlockTab(tabOperations);
             }
@@ -524,40 +524,30 @@ namespace DCCollections.Gui
         /// </summary>
         private async Task LoadInitialPathsAsync()
         {
-            LockTab(tabOperations);
-            LockTab(tabImportFiles);
-            try
+            if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
             {
-                if (!string.IsNullOrWhiteSpace(_settings.OperationFolderPath) && Directory.Exists(_settings.OperationFolderPath))
-                {
-                    LoadOperationsFiles(_settings.OperationFolderPath);
-                }
-
-                if (!string.IsNullOrWhiteSpace(_settings.LiveOutputFolderPath) && Directory.Exists(_settings.LiveOutputFolderPath))
-                {
-                    txtLiveOutputFolder.Text = _settings.LiveOutputFolderPath;
-                }
-
-                if (!string.IsNullOrWhiteSpace(_settings.TestOutputFolderPath) && Directory.Exists(_settings.TestOutputFolderPath))
-                {
-                    txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
-                }
-
-                _importSortColumn = _settings.ImportSortColumn;
-                _importSortDescending = _settings.ImportSortDescending;
-                if (_importSortColumn >= lvImportFiles.Columns.Count)
-                    _importSortColumn = 0;
-
-                if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
-                {
-                    txtImportFolder.Text = _settings.ImportFolderPath;
-                    await LoadImportFilesAsync(_settings.ImportFolderPath);
-                }
+                LoadOperationsFiles(_settings.OperationFolderPath);
             }
-            finally
+
+            if (!string.IsNullOrWhiteSpace(_settings.LiveOutputFolderPath) && Directory.Exists(_settings.LiveOutputFolderPath))
             {
-                UnlockTab(tabOperations);
-                UnlockTab(tabImportFiles);
+                txtLiveOutputFolder.Text = _settings.LiveOutputFolderPath;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_settings.TestOutputFolderPath) && Directory.Exists(_settings.TestOutputFolderPath))
+            {
+                txtTestOutputFolder.Text = _settings.TestOutputFolderPath;
+            }
+
+            _importSortColumn = _settings.ImportSortColumn;
+            _importSortDescending = _settings.ImportSortDescending;
+            if (_importSortColumn >= lvImportFiles.Columns.Count)
+                _importSortColumn = 0;
+
+            if (!string.IsNullOrWhiteSpace(_settings.ImportFolderPath) && Directory.Exists(_settings.ImportFolderPath))
+            {
+                txtImportFolder.Text = _settings.ImportFolderPath;
+                await LoadImportFilesAsync(_settings.ImportFolderPath);
             }
         }
 
@@ -603,7 +593,6 @@ namespace DCCollections.Gui
         {
             LockTab(tabImportFiles);
             SetImportUiState(false);
-            _pbImport.Visible = true;
             try
             {
                 bool hideTests = chkHideTestFiles.Checked;
@@ -681,7 +670,6 @@ namespace DCCollections.Gui
             }
             finally
             {
-                _pbImport.Visible = false;
                 SetImportUiState(true);
                 UnlockTab(tabImportFiles);
             }
@@ -788,7 +776,6 @@ namespace DCCollections.Gui
 
             LockTab(tabImportFiles);
             SetImportUiState(false);
-            _pbImport.Visible = true;
 
             try
             {
@@ -871,7 +858,6 @@ namespace DCCollections.Gui
             }
             finally
             {
-                _pbImport.Visible = false;
                 SetImportUiState(true);
                 UnlockTab(tabImportFiles);
             }
@@ -907,7 +893,6 @@ namespace DCCollections.Gui
         {
             pnlImportTop.Enabled = enabled;
             lvImportFiles.Enabled = enabled;
-            UseWaitCursor = !enabled;
         }
 
         private void SetOperationsUiState(bool enabled)
@@ -918,7 +903,6 @@ namespace DCCollections.Gui
             chkTest.Enabled = enabled;
             nudDay.Enabled = enabled;
             dgvPossibleDuplicates.Enabled = enabled;
-            UseWaitCursor = !enabled;
         }
 
         private void rdoFileType_CheckedChanged(object sender, EventArgs e)
@@ -1012,7 +996,6 @@ namespace DCCollections.Gui
                     var archiveDate = DateTime.Now.AddDays(-dialog.DaysOlder);
 
                     SetImportUiState(false);
-                    _pbImport.Visible = true;
 
                     try
                     {
@@ -1057,7 +1040,6 @@ namespace DCCollections.Gui
                     }
                     finally
                     {
-                        _pbImport.Visible = false;
                         SetImportUiState(true);
                         await LoadImportFilesAsync(importPath);
                     }
@@ -1126,7 +1108,6 @@ namespace DCCollections.Gui
                     lbLibraryFolders.Items.Add(path);
                 lbLibraryFolders.Enabled = true;
                 pnlLibraryButtons.Enabled = true;
-                _pbLibrary.Visible = false;
                 await ScanLibraryFilesAsync();
             }
             finally
@@ -1141,7 +1122,7 @@ namespace DCCollections.Gui
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        private void btnLibraryAdd_Click(object? sender, EventArgs e)
+        private async void btnLibraryAdd_Click(object? sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -1152,7 +1133,7 @@ namespace DCCollections.Gui
                     lbLibraryFolders.Items.Add(fbd.SelectedPath);
                     _settings.LibraryPaths = _libraryPaths;
                     _settings.Save();
-                    var _ = ScanLibraryFilesAsync();
+                    await ScanLibraryFilesAsync();
                 }
             }
         }
@@ -1163,7 +1144,7 @@ namespace DCCollections.Gui
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        private void btnLibraryRemove_Click(object? sender, EventArgs e)
+        private async void btnLibraryRemove_Click(object? sender, EventArgs e)
         {
             if (lbLibraryFolders.SelectedItem is string path)
             {
@@ -1171,7 +1152,7 @@ namespace DCCollections.Gui
                 lbLibraryFolders.Items.Remove(path);
                 _settings.LibraryPaths = _libraryPaths;
                 _settings.Save();
-                var _ = ScanLibraryFilesAsync();
+                await ScanLibraryFilesAsync();
             }
         }
 
