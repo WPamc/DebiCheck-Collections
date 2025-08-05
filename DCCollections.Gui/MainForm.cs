@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text.Json;
 using PAMC.DatabaseConnection;
 using EFT_Collections;
 using RMCollectionProcessor;
@@ -79,6 +80,7 @@ namespace DCCollections.Gui
             _dcCollectionservice = new RMCollectionProcessor.CollectionService();
             _eftImportService = new EFTImportService();
             _settings = UserSettings.Load();
+            txtConfigView.Text = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
             WindowState = FormWindowState.Maximized;
             MaximizeBox = true;
             chkTest.Checked = true;

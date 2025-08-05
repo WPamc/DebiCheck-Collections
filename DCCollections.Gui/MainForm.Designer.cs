@@ -93,6 +93,7 @@
             btnGenerate = new Button();
             nudDay = new NumericUpDown();
             tabImportFiles = new TabPage();
+            tabConfiguration = new TabPage();
             lvImportFiles = new ListView();
             chName = new ColumnHeader();
             chGenDate = new ColumnHeader();
@@ -119,6 +120,7 @@
             cmsImportFiles = new ContextMenuStrip(components);
             previewToolStripMenuItem = new ToolStripMenuItem();
             groupBox1 = new GroupBox();
+            txtConfigView = new TextBox();
             tabMain.SuspendLayout();
             tabOperations.SuspendLayout();
             grpCounters.SuspendLayout();
@@ -126,6 +128,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).BeginInit();
             tabImportFiles.SuspendLayout();
+            tabConfiguration.SuspendLayout();
             pnlImportTop.SuspendLayout();
             cmsImportFiles.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -170,6 +173,7 @@
             // 
             tabMain.Controls.Add(tabOperations);
             tabMain.Controls.Add(tabImportFiles);
+            tabMain.Controls.Add(tabConfiguration);
             tabMain.Dock = DockStyle.Fill;
             tabMain.Location = new Point(0, 0);
             tabMain.Margin = new Padding(4, 5, 4, 5);
@@ -496,9 +500,26 @@
             tabImportFiles.TabIndex = 2;
             tabImportFiles.Text = "Import Files";
             tabImportFiles.UseVisualStyleBackColor = true;
-            // 
+            tabConfiguration.Controls.Add(txtConfigView);
+            tabConfiguration.Location = new Point(4, 34);
+            tabConfiguration.Margin = new Padding(4, 5, 4, 5);
+            tabConfiguration.Name = "tabConfiguration";
+            tabConfiguration.Padding = new Padding(4, 5, 4, 5);
+            tabConfiguration.Size = new Size(1691, 1024);
+            tabConfiguration.TabIndex = 3;
+            tabConfiguration.Text = "Configuration";
+            tabConfiguration.UseVisualStyleBackColor = true;
+            txtConfigView.Dock = DockStyle.Fill;
+            txtConfigView.Location = new Point(4, 5);
+            txtConfigView.Margin = new Padding(4, 5, 4, 5);
+            txtConfigView.Multiline = true;
+            txtConfigView.Name = "txtConfigView";
+            txtConfigView.ReadOnly = true;
+            txtConfigView.Size = new Size(1683, 1014);
+            txtConfigView.TabIndex = 0;
+            //
             // lvImportFiles
-            // 
+            //
             lvImportFiles.Columns.AddRange(new ColumnHeader[] { chName, chGenDate, chGenTime, chSize, chModified, chType, chTest, chImported });
             lvImportFiles.Dock = DockStyle.Fill;
             lvImportFiles.FullRowSelect = true;
@@ -751,6 +772,8 @@
             ((System.ComponentModel.ISupportInitialize)dgvPossibleDuplicates).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudDay).EndInit();
             tabImportFiles.ResumeLayout(false);
+            tabConfiguration.ResumeLayout(false);
+            tabConfiguration.PerformLayout();
             pnlImportTop.ResumeLayout(false);
             pnlImportTop.PerformLayout();
             cmsImportFiles.ResumeLayout(false);
@@ -790,5 +813,7 @@
         private Label label4;
         private Button btnArchive;
         private GroupBox groupBox1;
+        private TabPage tabConfiguration;
+        private TextBox txtConfigView;
     }
 }
