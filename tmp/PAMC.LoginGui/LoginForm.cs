@@ -27,24 +27,20 @@ namespace PAMC.LoginGui
             if (FileLogin.DatabaseConnections != null && FileLogin.DatabaseConnections["Default"].Length > 0)
             {
                 string defaultConnectionString = FileLogin.DatabaseConnections["Default"];
-
                 if (!string.IsNullOrEmpty(defaultConnectionString))
                 {
-                    // Create a SqlConnectionStringBuilder with the retrieved connection string
                     builder = new SqlConnectionStringBuilder(FileLogin.DatabaseConnections["Default"]);
                 }
                 else
                 {
-                    // Initialize builder to avoid NullReferenceException
                     builder = new SqlConnectionStringBuilder();
                 }
-
-
                 txtDatabase.Text = builder.InitialCatalog;
                 txtServer.Text = builder.DataSource;
                 txtUsername.Text = builder.UserID;
-
+                chkWindowsAuth.Checked = builder.IntegratedSecurity;
             }
+            ToggleAuthControls();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -60,17 +56,24 @@ namespace PAMC.LoginGui
             }
             try
             {
-
                 builder.InitialCatalog = txtDatabase.Text;
                 builder.DataSource = txtServer.Text;
-                builder.UserID = txtUsername.Text;
-                builder.Password = txtPassword.Text;
-
+                if (chkWindowsAuth.Checked)
+                {
+                    builder.IntegratedSecurity = true;
+                    builder.UserID = string.Empty;
+                    builder.Password = string.Empty;
+                }
+                else
+                {
+                    builder.UserID = txtUsername.Text;
+                    builder.Password = txtPassword.Text;
+                    builder.IntegratedSecurity = false;
+                }
                 builder.Encrypt = true;
                 builder.TrustServerCertificate = true;
                 _cn = new SqlConnection(builder.ConnectionString);
                 _cn.Open();
-
                 Continue = true;
                 _cn.Close();
                 this.Close();
@@ -80,12 +83,9 @@ namespace PAMC.LoginGui
                 }
                 catch (Exception ex)
                 {
-
                     MessageBox.Show(ex.Message);
                 }
-
             }
-            //obscure error detail for enhanced security
             catch (SqlException)
             {
                 MessageBox.Show("Unable to connect to the database. Please check your connection details.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -105,6 +105,18 @@ namespace PAMC.LoginGui
                     _cn.Dispose();
                 }
             }
+        }
+
+        private void chkWindowsAuth_CheckedChanged(object sender, EventArgs e)
+        {
+            ToggleAuthControls();
+        }
+
+        private void ToggleAuthControls()
+        {
+            bool useWindowsAuth = chkWindowsAuth.Checked;
+            txtUsername.Enabled = !useWindowsAuth;
+            txtPassword.Enabled = !useWindowsAuth;
         }
     }
 }
