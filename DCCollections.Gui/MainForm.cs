@@ -127,7 +127,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred during initial data load: {ex.Message}", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError($"An error occurred during initial data load: {ex.Message}");
             }
         }
 
@@ -140,6 +140,15 @@ namespace DCCollections.Gui
             builder.Remove("Password");
             builder.Remove("Pwd");
             return builder.ConnectionString;
+        }
+
+        /// <summary>
+        /// Displays an error message box with a standardized caption.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        private static void ShowError(string message)
+        {
+            MessageBox.Show(message, "Error");
         }
 
         private static (string date, string time) ExtractGenerationInfo(string filename)
@@ -156,7 +165,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             return (string.Empty, string.Empty);
         }
@@ -173,7 +182,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             return string.Empty;
         }
@@ -247,7 +256,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             finally
             {
@@ -336,7 +345,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -359,7 +368,7 @@ namespace DCCollections.Gui
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    ShowError(ex.Message);
                 }
             }
         }
@@ -422,7 +431,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             finally
             {
@@ -493,7 +502,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -515,7 +524,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -561,7 +570,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -666,7 +675,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             finally
             {
@@ -738,7 +747,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -819,7 +828,7 @@ namespace DCCollections.Gui
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error");
+                        ShowError(ex.Message);
                     }
 
                     if (eftType != EftFileType.Unknown && eftType != EftFileType.EmptyTransmission)
@@ -854,7 +863,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             finally
             {
@@ -885,7 +894,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
         }
 
@@ -1031,7 +1040,7 @@ namespace DCCollections.Gui
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}", "Archive Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                ShowError($"Could not move file {fileInfo.Name}.\n\nError: {ex.Message}");
                                 break;
                             }
                         }
@@ -1084,7 +1093,7 @@ namespace DCCollections.Gui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowError(ex.Message);
             }
             finally
             {
