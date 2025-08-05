@@ -59,43 +59,35 @@ namespace PAMC.DatabaseConnection
             ref string _cnRepString, ref string _cnPortString, ref string _cnCpsRepString)
         {
             ListDictionary ld = ReadLoginFile(baseFolder);
-            // Call the method to decrypt and establish connections.
             DecryptListAndLogin(ref _cn, ref _cnRep, ref _cnPort, ref _cnCpsRep,
                 ref _cnString, ref _cnRepString, ref _cnPortString, ref _cnCpsRepString, ld);
         }
 
         private static ListDictionary ReadLoginFile(string baseFolder)
         {
-            // Initialize a dictionary to store connection details.
             ListDictionary ld = new ListDictionary();
-
-            // Construct the full path to the login.txt file.
             string loginPath = Path.Combine(baseFolder, "login.txt");
             FileInfo logiFile = new FileInfo(loginPath);
-
-            // Check if the login.txt file exists.
             if (!logiFile.Exists)
             {
-                Console.WriteLine($"Login File Not Found!");
-                // Throw an exception if the file does not exist.
+                Console.WriteLine("Login File Not Found!");
                 throw new Exception("Login.txt file not found.");
             }
             else
             {
-                // Open the login.txt file for reading.
                 using (StreamReader rd = logiFile.OpenText())
                 {
-                    // Read the file line by line until the end.
                     while (!rd.EndOfStream)
                     {
-                        // Read a line containing connection details.
                         string connection = rd.ReadLine();
-                        // Split the line into parts using '|' as a separator.
                         string[] splitConnection = connection.Split(new char[] { '|' });
-                        // Add the connection name and details to the dictionary.
+                        if (splitConnection.Length == 5)
+                        {
+                            Array.Resize(ref splitConnection, 6);
+                            splitConnection[5] = "False";
+                        }
                         ld.Add(splitConnection[0], splitConnection);
                     }
-                    // Close the StreamReader.
                     rd.Close();
                 }
             }
@@ -124,12 +116,17 @@ namespace PAMC.DatabaseConnection
                     {
                         string conName = details[0];
                         server = Sugoi.Security.Rijndael.Decrypt(details[4]);
-                        username = Sugoi.Security.Rijndael.Decrypt(details[1]);
-                        string password = Sugoi.Security.Rijndael.Decrypt(details[2]);
+                        bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
+                        username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
+                        string password = string.IsNullOrEmpty(details[2]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[2]);
                         database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-                        string cnString = $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; Encrypt=True;TrustServerCertificate=True;";
-                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
+                        string cnString = integratedSecurity
+                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                            : $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; Encrypt=True;TrustServerCertificate=True;";
+                        FileLogin._databaseConnections[item.ToString()] = integratedSecurity
+                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                            : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
 
                         cn = new SqlConnection(cnString);
                         cn.Open();
@@ -169,7 +166,7 @@ namespace PAMC.DatabaseConnection
             }
             else
             {
-                Console.WriteLine($"Login File is Empty!");
+                Console.WriteLine("Login File is Empty!");
                 throw new Exception("Login.txt file is empty!");
             }
         }
@@ -182,7 +179,6 @@ namespace PAMC.DatabaseConnection
         public static void DecryptFilePopulateConnections()
         {
             String executablePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
             ListDictionary ld = ReadLoginFile(executablePath);
             if (ld.Count > 0)
             {
@@ -198,11 +194,13 @@ namespace PAMC.DatabaseConnection
                     {
                         string conName = details[0];
                         server = Sugoi.Security.Rijndael.Decrypt(details[4]);
-                        username = Sugoi.Security.Rijndael.Decrypt(details[1]);
-
+                        bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
+                        username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
                         database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-                        FileLogin._databaseConnections[item.ToString()] = $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
+                        FileLogin._databaseConnections[item.ToString()] = integratedSecurity
+                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                            : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
 
                     }
                     catch (Exception ex)
@@ -216,79 +214,55 @@ namespace PAMC.DatabaseConnection
             }
             else
             {
-                Console.WriteLine($"Login File is Empty!");
+                Console.WriteLine("Login File is Empty!");
                 throw new Exception("Login.txt file is empty!");
             }
         }
 
         public static void UpdateLoginFile(string connectionName, string connectionString)
         {
-            // Validate input parameters
             if (string.IsNullOrEmpty(connectionName))
                 throw new ArgumentException("Connection name cannot be null or empty.", nameof(connectionName));
-
             if (string.IsNullOrEmpty(connectionString))
                 throw new ArgumentException("Connection string cannot be null or empty.", nameof(connectionString));
-
-            // Parse the connection string
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString);
-
             string server = builder.DataSource;
             string database = builder.InitialCatalog;
             string username = builder.UserID;
             string password = builder.Password;
-
-            // Encrypt the connection details
-            string encryptedUsername = Sugoi.Security.Rijndael.Encrypt(username);
-            string encryptedPassword = Sugoi.Security.Rijndael.Encrypt(password);
+            bool integratedSecurity = builder.IntegratedSecurity;
+            string encryptedUsername = integratedSecurity ? "" : Sugoi.Security.Rijndael.Encrypt(username);
+            string encryptedPassword = integratedSecurity ? "" : Sugoi.Security.Rijndael.Encrypt(password);
             string encryptedDatabase = Sugoi.Security.Rijndael.Encrypt(database);
             string encryptedServer = Sugoi.Security.Rijndael.Encrypt(server);
-
-            // Construct the new connection line
-            string newConnectionLine = $"{connectionName}|{encryptedUsername}|{encryptedPassword}|{encryptedDatabase}|{encryptedServer}";
-
-            // Get the directory of the executing assembly
+            string newConnectionLine = $"{connectionName}|{encryptedUsername}|{encryptedPassword}|{encryptedDatabase}|{encryptedServer}|{integratedSecurity}";
             string baseFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string loginPath = Path.Combine(baseFolder, "login.txt");
-
-            // Read all lines from the login.txt file
             List<string> allLines = new List<string>();
-
             if (File.Exists(loginPath))
             {
                 allLines = File.ReadAllLines(loginPath).ToList();
             }
-
             bool connectionFound = false;
-
-            // Iterate over each line to find and replace the connection if it exists
             for (int i = 0; i < allLines.Count; i++)
             {
                 string line = allLines[i];
-                // Split the line to get the connection name
                 string[] splitLine = line.Split('|');
-
                 if (splitLine.Length > 0)
                 {
                     string existingConnectionName = splitLine[0];
-
                     if (existingConnectionName.Equals(connectionName, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Replace the existing connection line with the new one
                         allLines[i] = newConnectionLine;
                         connectionFound = true;
                         break;
                     }
                 }
             }
-
-            // If the connection was not found, add it as a new line
             if (!connectionFound)
             {
                 allLines.Add(newConnectionLine);
             }
-
-            // Write all lines back to the login.txt file
             File.WriteAllLines(loginPath, allLines);
         }
 
