@@ -31,12 +31,12 @@ namespace DCCollections.Gui
         private TabPage tabBankFiles;
         private DataGridView dgvBankFiles;
         private TabPage tabLibrary;
-        private ListBox lbLibraryFolders;
+        private ListView lvLibraryFolders;
         private Button btnLibraryAdd;
         private Button btnLibraryRemove;
         private FlowLayoutPanel pnlLibraryButtons;
         private ProgressBar _pbLibrary;
-        private List<string> _libraryPaths = new();
+        private List<UserSettings.LibraryPathEntry> _libraryPaths = new();
         private Dictionary<string, string> _libraryFiles = new();
         private readonly Dictionary<TabPage, Panel> _tabLocks = new();
         private const string ImportColumnName = "Import";
@@ -94,7 +94,8 @@ namespace DCCollections.Gui
             tabBankFiles.Controls.Add(dgvBankFiles);
             tabMain.Controls.Add(tabBankFiles);
             tabLibrary = new TabPage("Library");
-            lbLibraryFolders = new ListBox { Dock = DockStyle.Fill, Enabled = false };
+            lvLibraryFolders = new ListView { Dock = DockStyle.Fill, Enabled = false, CheckBoxes = true, View = View.List };
+            lvLibraryFolders.ItemChecked += lvLibraryFolders_ItemChecked;
             pnlLibraryButtons = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 40, Enabled = false };
             btnLibraryAdd = new Button { Text = "Add" };
             btnLibraryAdd.Click += btnLibraryAdd_Click;
@@ -103,7 +104,7 @@ namespace DCCollections.Gui
             pnlLibraryButtons.Controls.Add(btnLibraryAdd);
             pnlLibraryButtons.Controls.Add(btnLibraryRemove);
             _pbLibrary = new ProgressBar { Dock = DockStyle.Bottom, Style = ProgressBarStyle.Marquee, Visible = true };
-            tabLibrary.Controls.Add(lbLibraryFolders);
+            tabLibrary.Controls.Add(lvLibraryFolders);
             tabLibrary.Controls.Add(pnlLibraryButtons);
             tabLibrary.Controls.Add(_pbLibrary);
             tabMain.Controls.Add(tabLibrary);
@@ -233,6 +234,13 @@ namespace DCCollections.Gui
                 var db = new DCService();
                 var table = await Task.Run(() => db.GetEdiBankFiles());
                 dgvBankFiles.DataSource = table;
+                if (dgvBankFiles.Columns.Contains("FileName"))
+                    dgvBankFiles.Columns["FileName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                if (!dgvBankFiles.Columns.Contains("Path"))
+                {
+                    var pathCol = new DataGridViewTextBoxColumn { Name = "Path", HeaderText = "Path", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill };
+                    dgvBankFiles.Columns.Add(pathCol);
+                }
                 var counts = table.AsEnumerable().GroupBy(r => r.Field<int>("GenerationNumber")).ToDictionary(g => g.Key, g => g.Count());
                 foreach (DataGridViewRow row in dgvBankFiles.Rows)
                 {
@@ -268,7 +276,7 @@ namespace DCCollections.Gui
         /// </summary>
         private void MatchBankFilesToLibrary()
         {
-            if (!dgvBankFiles.Columns.Contains(ImportColumnName))
+            if (!dgvBankFiles.Columns.Contains(ImportColumnName) || !dgvBankFiles.Columns.Contains("Path"))
                 return;
             foreach (DataGridViewRow row in dgvBankFiles.Rows)
             {
@@ -285,6 +293,7 @@ namespace DCCollections.Gui
                     cell.Value = string.Empty;
                     cell.Tag = null;
                 }
+                row.Cells["Path"].Value = hasFile ? path : string.Empty;
             }
         }
 
@@ -297,8 +306,8 @@ namespace DCCollections.Gui
             LockTab(tabBankFiles);
             try
             {
-                var files = await Task.Run(() => _libraryPaths.Where(Directory.Exists)
-                    .SelectMany(p => Directory.EnumerateFiles(p, "*", SearchOption.AllDirectories))
+                var files = await Task.Run(() => _libraryPaths.Where(p => Directory.Exists(p.Path))
+                    .SelectMany(p => Directory.EnumerateFiles(p.Path, "*", p.IncludeSubfolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                     .GroupBy(Path.GetFileName)
                     .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase));
                 _libraryFiles = files;
@@ -1110,12 +1119,15 @@ namespace DCCollections.Gui
             LockTab(tabLibrary);
             try
             {
-                var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<string>()).Where(Directory.Exists).ToList());
+                var paths = await Task.Run(() => (_settings.LibraryPaths ?? new List<UserSettings.LibraryPathEntry>()).Where(p => Directory.Exists(p.Path)).ToList());
                 _libraryPaths = paths;
-                lbLibraryFolders.Items.Clear();
+                lvLibraryFolders.Items.Clear();
                 foreach (var path in paths)
-                    lbLibraryFolders.Items.Add(path);
-                lbLibraryFolders.Enabled = true;
+                {
+                    var item = new ListViewItem(path.Path) { Checked = path.IncludeSubfolders };
+                    lvLibraryFolders.Items.Add(item);
+                }
+                lvLibraryFolders.Enabled = true;
                 pnlLibraryButtons.Enabled = true;
                 await ScanLibraryFilesAsync();
             }
@@ -1136,10 +1148,12 @@ namespace DCCollections.Gui
             using var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                if (!_libraryPaths.Contains(fbd.SelectedPath))
+                if (!_libraryPaths.Any(p => p.Path == fbd.SelectedPath))
                 {
-                    _libraryPaths.Add(fbd.SelectedPath);
-                    lbLibraryFolders.Items.Add(fbd.SelectedPath);
+                    var entry = new UserSettings.LibraryPathEntry { Path = fbd.SelectedPath, IncludeSubfolders = true };
+                    _libraryPaths.Add(entry);
+                    var item = new ListViewItem(entry.Path) { Checked = entry.IncludeSubfolders };
+                    lvLibraryFolders.Items.Add(item);
                     _settings.LibraryPaths = _libraryPaths;
                     _settings.Save();
                     await ScanLibraryFilesAsync();
@@ -1155,10 +1169,25 @@ namespace DCCollections.Gui
         /// <param name="e">An EventArgs that contains the event data.</param>
         private async void btnLibraryRemove_Click(object? sender, EventArgs e)
         {
-            if (lbLibraryFolders.SelectedItem is string path)
+            if (lvLibraryFolders.SelectedItems.Count > 0)
             {
-                _libraryPaths.Remove(path);
-                lbLibraryFolders.Items.Remove(path);
+                var path = lvLibraryFolders.SelectedItems[0].Text;
+                var entry = _libraryPaths.FirstOrDefault(p => p.Path == path);
+                if (entry != null)
+                    _libraryPaths.Remove(entry);
+                lvLibraryFolders.Items.Remove(lvLibraryFolders.SelectedItems[0]);
+                _settings.LibraryPaths = _libraryPaths;
+                _settings.Save();
+                await ScanLibraryFilesAsync();
+            }
+        }
+
+        private async void lvLibraryFolders_ItemChecked(object? sender, ItemCheckedEventArgs e)
+        {
+            var entry = _libraryPaths.FirstOrDefault(p => p.Path == e.Item.Text);
+            if (entry != null)
+            {
+                entry.IncludeSubfolders = e.Item.Checked;
                 _settings.LibraryPaths = _libraryPaths;
                 _settings.Save();
                 await ScanLibraryFilesAsync();

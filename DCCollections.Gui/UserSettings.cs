@@ -1,5 +1,7 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DCCollections.Gui
 {
@@ -10,7 +12,17 @@ namespace DCCollections.Gui
         public string? LiveOutputFolderPath { get; set; }
         public string? TestOutputFolderPath { get; set; }
         public string? ImportFolderPath { get; set; }
-        public List<string> LibraryPaths { get; set; } = new();
+
+        public class LibraryPathEntry
+        {
+            public string Path { get; set; } = string.Empty;
+            public bool IncludeSubfolders { get; set; } = true;
+        }
+
+        [JsonIgnore]
+        public List<string>? LegacyLibraryPaths { get; set; }
+
+        public List<LibraryPathEntry> LibraryPaths { get; set; } = new();
         public int ImportSortColumn { get; set; }
         public bool ImportSortDescending { get; set; }
 
@@ -30,7 +42,16 @@ namespace DCCollections.Gui
                     var json = File.ReadAllText(SettingsFile);
                     var settings = JsonSerializer.Deserialize<UserSettings>(json);
                     if (settings != null)
+                    {
+                        if ((settings.LibraryPaths == null || settings.LibraryPaths.Count == 0) && settings.LegacyLibraryPaths != null && settings.LegacyLibraryPaths.Count > 0)
+                        {
+                            settings.LibraryPaths = settings.LegacyLibraryPaths.Select(p => new LibraryPathEntry { Path = p, IncludeSubfolders = true }).ToList();
+                            settings.LegacyLibraryPaths = null;
+                        }
+                        if (settings.LibraryPaths == null)
+                            settings.LibraryPaths = new();
                         return settings;
+                    }
                 }
             }
             catch { }
