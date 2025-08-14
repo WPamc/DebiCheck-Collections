@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using RMCollectionProcessor.Models;
@@ -13,6 +14,7 @@ namespace DCCollections.Gui
         private readonly Button _btnCancel;
         private readonly Button _btnSelectAll;
         private readonly Button _btnSelectNone;
+        private readonly Button _btnExport;
         private readonly TextBox _txtFilter;
         private readonly Label _lblColumns;
         private readonly FlowLayoutPanel _panelTop;
@@ -29,15 +31,17 @@ namespace DCCollections.Gui
             _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Reference" });
             _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Amount" });
             _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Date" });
-            _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Previous" });
+            _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Previous Dates" });
+            _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Previous Amounts" });
             _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Total" });
 
             _btnSelectAll = new Button { Text = "Select All" };
             _btnSelectNone = new Button { Text = "Select None" };
+            _btnExport = new Button { Text = "Export" };
             _txtFilter = new TextBox { Width = 100 };
             _lblColumns = new Label
             {
-                Text = "Include, SubSSN, Reference, Amount, Date, Previous, Total",
+                Text = "Include, SubSSN, Reference, Amount, Date, Previous Dates, Previous Amounts, Total",
                 Dock = DockStyle.Top,
                 AutoSize = true
             };
@@ -46,12 +50,14 @@ namespace DCCollections.Gui
             _panelTop.Controls.Add(_txtFilter);
             _panelTop.Controls.Add(_btnSelectAll);
             _panelTop.Controls.Add(_btnSelectNone);
+            _panelTop.Controls.Add(_btnExport);
 
             _btnOk = new Button { Text = "OK", DialogResult = DialogResult.OK, Dock = DockStyle.Bottom, Height = 30 };
             _btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Dock = DockStyle.Bottom, Height = 30 };
             _btnOk.Click += BtnOk_Click;
             _btnSelectAll.Click += BtnSelectAll_Click;
             _btnSelectNone.Click += BtnSelectNone_Click;
+            _btnExport.Click += BtnExport_Click;
             _txtFilter.TextChanged += FilterRows;
 
             Controls.Add(_grid);
@@ -67,18 +73,16 @@ namespace DCCollections.Gui
             foreach (var col in collections)
             {
                 string sub = "MGS" + col.ContractReference;
-                string hist = string.Empty;
+                string histDates = string.Empty;
+                string histAmounts = string.Empty;
                 decimal total = col.InstructedAmount;
                 if (existing.TryGetValue(sub, out var list) && list.Any())
                 {
-                    hist = string.Join(", ", list.Select(r => r.DateRequested.ToString("yyyy-MM-dd")));
-                    total += list.Sum(
-                        r => 
-                        decimal.TryParse(
-                            r.AmountRequested, out var a
-                            ) ? a : 0m);
+                    histDates = string.Join(", ", list.Select(r => r.DateRequested.ToString("yyyy-MM-dd")));
+                    histAmounts = string.Join(", ", list.Select(r => decimal.TryParse(r.AmountRequested, out var a) ? a.ToString("F2") : "0.00"));
+                    total += list.Sum(r => decimal.TryParse(r.AmountRequested, out var a) ? a : 0m);
                 }
-                _grid.Rows.Add(true, sub, col.ContractReference, col.InstructedAmount.ToString("F2"), col.RequestedCollectionDate.ToString("yyyy-MM-dd"), hist, total.ToString("F2"));
+                _grid.Rows.Add(true, sub, col.ContractReference, col.InstructedAmount.ToString("F2"), col.RequestedCollectionDate.ToString("yyyy-MM-dd"), histDates, histAmounts, total.ToString("F2"));
             }
         }
 
@@ -106,6 +110,22 @@ namespace DCCollections.Gui
             {
                 if (row.Visible)
                     row.Cells[0].Value = false;
+            }
+        }
+
+        private void BtnExport_Click(object? sender, EventArgs e)
+        {
+            using var sfd = new SaveFileDialog { Filter = "CSV Files|*.csv" };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                using var sw = new StreamWriter(sfd.FileName);
+                var headers = _grid.Columns.Cast<DataGridViewColumn>().Select(c => c.HeaderText);
+                sw.WriteLine(string.Join(",", headers));
+                foreach (DataGridViewRow row in _grid.Rows)
+                {
+                    var cells = row.Cells.Cast<DataGridViewCell>().Select(c => Convert.ToString(c.Value));
+                    sw.WriteLine(string.Join(",", cells));
+                }
             }
         }
 
