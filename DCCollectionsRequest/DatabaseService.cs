@@ -182,7 +182,6 @@ FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DATEREQUESTED BETWEEN @start AND @end 
                 string? subSsn = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN"));
                 string? reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE"));
                 string? deductionReference = reader.IsDBNull(reader.GetOrdinal("DEDUCTIONREFERENCE")) ? null : reader.GetString(reader.GetOrdinal("DEDUCTIONREFERENCE"));
-                object? amountRequested = reader.IsDBNull(reader.GetOrdinal("AMOUNTREQUESTED")) ? null : (reader.GetOrdinal("AMOUNTREQUESTED"));
                 var req = new BillingCollectionRequest
                 {
                     RowId = rowId,
