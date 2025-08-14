@@ -80,8 +80,20 @@ public class EFTService
         var contraRecord = CreateContraRecord(totalDebitValue, currentSequenceNumber, _deductionDate);
         records.Add(contraRecord);
         homingAccountHash += long.Parse(_creditorAccount);
+        if (homingAccountHash.ToString().Length > 12)
+        {
+         
+        }
 
-        records.Add(CreateUserTrailer(firstSequenceNumber, currentSequenceNumber, _deductionDate, transactions.Count, totalDebitValue, homingAccountHash));
+        string hashAsString = homingAccountHash.ToString();
+        string finalHashForFile = hashAsString;
+        if (hashAsString.Length > 12)
+        {
+            // If the total is longer than 12 digits, take the last 12 characters.
+            // This is equivalent to taking the "twelve least significant digits".
+            finalHashForFile = hashAsString.Substring(hashAsString.Length - 12);
+        }
+        records.Add(CreateUserTrailer(firstSequenceNumber, currentSequenceNumber, _deductionDate, transactions.Count, totalDebitValue, finalHashForFile));
 
         records.Add(CreateTransmissionTrailer(records.Count + 1));
 
@@ -118,7 +130,7 @@ public class EFTService
         {
             RecordIdentifier = "000",
             RecordStatus = _recordStatus,
-            TransmissionDate = _deductionDate.ToString("yyyyMMdd"),
+            TransmissionDate = DateTime.Now.AddDays(1).ToString("yyyyMMdd"), // _deductionDate.ToString("yyyyMMdd"),
             ClientCode = _clientCode.PadLeft(5, '0'),
             ClientName = _clientName.PadRight(30),
             TransmissionNumber = transmissionNumber.ToString().PadLeft(7, '0'),
@@ -225,7 +237,7 @@ public class EFTService
         };
     }
 
-    private EftUserTrailer001 CreateUserTrailer(long firstSeq, long lastSeq, DateTime actionDate, int debitCount, decimal totalDebit, long hash)
+    private EftUserTrailer001 CreateUserTrailer(long firstSeq, long lastSeq, DateTime actionDate, int debitCount, decimal totalDebit, string hash)
     {
         long totalDebitInCents = (long)(totalDebit * 100);
         return new EftUserTrailer001
@@ -306,7 +318,7 @@ public class EFTService
         if (isTest)
         {
             generationNumber = db.PeekGenerationNumber() + 1;
-            startSequenceNumber = db.PeekDailyCounter(deductionDate) + 1;
+            startSequenceNumber = db.PeekDailyCounter(DateTime.Today) + 1;
         }
         else
         {

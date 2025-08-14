@@ -72,7 +72,11 @@ namespace DCCollections.Gui
                 if (existing.TryGetValue(sub, out var list) && list.Any())
                 {
                     hist = string.Join(", ", list.Select(r => r.DateRequested.ToString("yyyy-MM-dd")));
-                    total += list.Sum(r => decimal.TryParse(r.AmountRequested, out var a) ? a : 0m);
+                    total += list.Sum(
+                        r => 
+                        decimal.TryParse(
+                            r.AmountRequested, out var a
+                            ) ? a : 0m);
                 }
                 _grid.Rows.Add(true, sub, col.ContractReference, col.InstructedAmount.ToString("F2"), col.RequestedCollectionDate.ToString("yyyy-MM-dd"), hist, total.ToString("F2"));
             }

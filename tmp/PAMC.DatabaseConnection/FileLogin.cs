@@ -112,45 +112,49 @@ namespace PAMC.DatabaseConnection
                     string username = "";
                     string database = "";
 
+
                     try
                     {
-                        string conName = details[0];
-                        server = Sugoi.Security.Rijndael.Decrypt(details[4]);
-                        bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
-                        username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
-                        string password = string.IsNullOrEmpty(details[2]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[2]);
-                        database = Sugoi.Security.Rijndael.Decrypt(details[3]);
+                        if (details.Length>4)
+                        {
+                            string conName = details[0];
+                            server = Sugoi.Security.Rijndael.Decrypt(details[4]);
+                            bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
+                            username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
+                            string password = string.IsNullOrEmpty(details[2]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[2]);
+                            database = Sugoi.Security.Rijndael.Decrypt(details[3]);
 
-                        string cnString = integratedSecurity
-                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
-                            : $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; Encrypt=True;TrustServerCertificate=True;";
-                        FileLogin._databaseConnections[item.ToString()] = integratedSecurity
-                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
-                            : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
+                            string cnString = integratedSecurity
+                                ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                                : $"Server = {server}; Database = {database}; User Id = {username}; Password = \"{password}\"; Encrypt=True;TrustServerCertificate=True;";
+                            FileLogin._databaseConnections[item.ToString()] = integratedSecurity
+                                ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                                : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
 
-                        cn = new SqlConnection(cnString);
-                        cn.Open();
+                            cn = new SqlConnection(cnString);
+                            cn.Open();
 
-                        connectionMsg += $"CONNECTION SUCCESS : {server} - User : {username} - Database : {database}. ";
-                        if (item.ToString().ToUpper() == "DEFAULT")
-                        {
-                            _cn = cn;
-                            _cnString = cnString;
-                        }
-                        else if (item.ToString().ToUpper() == "REPORTING")
-                        {
-                            _cnRep = cn;
-                            _cnRepString = cnString;
-                        }
-                        else if (item.ToString().ToUpper() == "PORTAL")
-                        {
-                            _cnPort = cn;
-                            _cnPortString = cnString;
-                        }
-                        else if (item.ToString().ToUpper() == "CPSREPORTS")
-                        {
-                            _cnCpsRep = cn;
-                            _cnCpsRepString = cnString;
+                            connectionMsg += $"CONNECTION SUCCESS : {server} - User : {username} - Database : {database}. ";
+                            if (item.ToString().ToUpper() == "DEFAULT")
+                            {
+                                _cn = cn;
+                                _cnString = cnString;
+                            }
+                            else if (item.ToString().ToUpper() == "REPORTING")
+                            {
+                                _cnRep = cn;
+                                _cnRepString = cnString;
+                            }
+                            else if (item.ToString().ToUpper() == "PORTAL")
+                            {
+                                _cnPort = cn;
+                                _cnPortString = cnString;
+                            }
+                            else if (item.ToString().ToUpper() == "CPSREPORTS")
+                            {
+                                _cnCpsRep = cn;
+                                _cnCpsRepString = cnString;
+                            } 
                         }
                     }
                     catch (Exception ex)
@@ -192,15 +196,19 @@ namespace PAMC.DatabaseConnection
 
                     try
                     {
-                        string conName = details[0];
-                        server = Sugoi.Security.Rijndael.Decrypt(details[4]);
-                        bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
-                        username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
-                        database = Sugoi.Security.Rijndael.Decrypt(details[3]);
+                        if (details.Length>4)
+                        {
 
-                        FileLogin._databaseConnections[item.ToString()] = integratedSecurity
-                            ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
-                            : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;";
+                            string conName = details[0];
+                            server = Sugoi.Security.Rijndael.Decrypt(details[4]);
+                            bool integratedSecurity = details.Length > 5 && details[5].Equals("True", StringComparison.OrdinalIgnoreCase);
+                            username = string.IsNullOrEmpty(details[1]) ? "" : Sugoi.Security.Rijndael.Decrypt(details[1]);
+                            database = Sugoi.Security.Rijndael.Decrypt(details[3]);
+
+                            FileLogin._databaseConnections[item.ToString()] = integratedSecurity
+                                ? $"Server = {server}; Database = {database}; Integrated Security=True; Encrypt=True;TrustServerCertificate=True;"
+                                : $"Server = {server}; Database = {database}; User Id = {username}; Encrypt=True;TrustServerCertificate=True;"; 
+                        }
 
                     }
                     catch (Exception ex)

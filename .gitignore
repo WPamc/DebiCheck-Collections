@@ -413,3 +413,4 @@ appsettings*.json
 /ExampleFiles
 /.env
 /tmp/PAMC.DatabaseConnection/appsettings.json
+/DCCollectionsRequest/ZR07675.AUL.DATA.250725.173034.txt

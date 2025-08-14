@@ -168,7 +168,8 @@ TrackingPeriod Object: '{trackingPeriodObj}'
         try
         {
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DATEREQUESTED BETWEEN @start AND @end ORDER BY DATEREQUESTED", conn);
+            using var cmd = new SqlCommand(@"SELECT ROWID, DATEREQUESTED, SUBSSN, REFERENCE, DEDUCTIONREFERENCE, AMOUNTREQUESTED 
+FROM dbo.BILLING_COLLECTIONREQUESTS WHERE DATEREQUESTED BETWEEN @start AND @end ORDER BY DATEREQUESTED", conn);
             cmd.Parameters.Add(new SqlParameter("@start", SqlDbType.DateTime) { Value = startDate });
             cmd.Parameters.Add(new SqlParameter("@end", SqlDbType.DateTime) { Value = endDate });
             conn.Open();
@@ -176,6 +177,7 @@ TrackingPeriod Object: '{trackingPeriodObj}'
             while (reader.Read())
             {
                 int rowId = reader.GetInt32(reader.GetOrdinal("ROWID"));
+                decimal amt = reader.GetDecimal(reader.GetOrdinal("AMOUNTREQUESTED"));
                 DateTime dateRequested = reader.GetDateTime(reader.GetOrdinal("DATEREQUESTED"));
                 string? subSsn = reader.IsDBNull(reader.GetOrdinal("SUBSSN")) ? null : reader.GetString(reader.GetOrdinal("SUBSSN"));
                 string? reference = reader.IsDBNull(reader.GetOrdinal("REFERENCE")) ? null : reader.GetString(reader.GetOrdinal("REFERENCE"));
@@ -188,7 +190,7 @@ TrackingPeriod Object: '{trackingPeriodObj}'
                     SubSSN = subSsn,
                     Reference = reference,
                     DeductionReference = deductionReference,
-                    AmountRequested = amountRequested.ToString()
+                    AmountRequested = amt.ToString()
                 };
                 list.Add(req);
             }
