@@ -9,9 +9,12 @@ FROM   (SELECT MEMBID, BANK, BRANCHCODE, ACCNR, ACCTYPE, ACCHOLDNAME, DEDUCTIOND
                            DATEADD(month, CASE WHEN DAY(GETDATE()) <= DEDUCTIONDAY THEN 0 ELSE 1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS base_month
              FROM    MEMB_MANDATEHIST) AS mmb INNER JOIN
              MEMB_MASTERS AS mm ON mmb.MEMBID = mm.MEMBID AND GETDATE() BETWEEN mmb.FROMDATE AND ISNULL(mmb.TODATE, GETDATE()) INNER JOIN
-             MEMB_HPHISTS AS mh ON mm.MEMBID = mh.MEMBID AND GETDATE() BETWEEN mh.OPFROMDT AND ISNULL(mh.OPTHRUDT, GETDATE())
+             MEMB_HPHISTS AS mh ON mm.MEMBID = mh.MEMBID 
 
 			LEFT OUTER JOIN SUBSSN_LAST_BILLING_AMOUNT SM ON MM.SUBSSN = SM.SUBSSN 
 WHERE (mmb.DEDUCTIONDAY =@DeductionDay) and isnull(mmb.AUTHORISATIONREF,'') <> ''
-and @EffectiveBillingsDate   between opfromdt and isnull(opthrudt,@EffectiveBillingsDate)
---and sm.TOTAL  is not null
+and
+(
+(term_code = 'fin' and mh.CURRHIST = 'C' and opthrudt < @EffectiveBillingsDate) or (@EffectiveBillingsDate   between opfromdt and isnull(opthrudt,@EffectiveBillingsDate))
+
+)
